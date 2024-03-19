@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@include file="parts/header.jsp" %>
-<body>
 <div class="container">
     <form class="form-horizontal" method="post"
           action="edit-user?id=${requestScope.user.id==null?0:requestScope.user.id}"
@@ -85,5 +84,5 @@
     </form>
 </div>
 <%@include file="parts/footer.jsp" %>
-</body>
+
 

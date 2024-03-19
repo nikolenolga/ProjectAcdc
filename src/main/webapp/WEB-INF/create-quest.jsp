@@ -10,8 +10,8 @@
         </div>
 
         <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Содержимое квеста</label>
-            <textarea name="text" class="form-control" id="exampleFormControlTextarea1" rows="10"
+            <label for="questTextareaDomId" class="form-label">Содержимое квеста</label>
+            <textarea name="text" class="form-control" id="questTextareaDomId" rows="10"
                       placeholder="<%@include file="./parts/quest-demo.jsp" %>"></textarea>
         </div>
 
@@ -19,10 +19,25 @@
             <label class="col-md-4 control-label" for="submit"></label>
             <div class="col-md-4">
                 <button id="submit" name="create"
-                        class="btn btn-success">Создать квест</button>
+                        class="btn btn-success">Создать квест
+                </button>
+                <button id="jruDemo" name="create"
+                        class="btn btn-danger">Заполнить пример
+                </button>
             </div>
         </div>
     </form>
 </div>
+
+    <script>
+        //это чисто для отладки фрагмент
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('jruDemo').addEventListener('click', function(event) {
+                event.preventDefault(); // Предотвращаем отправку формы и заполняем форму примерными данными
+                document.getElementById('quest-name').value = 'JRU квест';
+                document.getElementById('questTextareaDomId').value =`<%@include file="./parts/quest-jru.txt"%>`;
+            });
+        });
+    </script>
 <c:import url="parts/footer.jsp"/>
 

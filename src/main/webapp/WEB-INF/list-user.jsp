@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@include file="parts/header.jsp" %>
-<body>
 <div class="container">
 
 
@@ -17,5 +16,4 @@
 
 </div>
 <%@include file="parts/footer.jsp" %>
-</body>
 
