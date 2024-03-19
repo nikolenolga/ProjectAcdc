@@ -4,6 +4,6 @@
 <h1><%= "Hello World!" %>
 </h1>
 <br/>
-<a href="list-user">List Users</a>
+<h3>TODO: Тут будет карта квестов</h3>
 <%@include file="parts/footer.jsp" %>
 </body>

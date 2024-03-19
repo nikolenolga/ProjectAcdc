@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 public class EditUser implements Command {
 
     private final UserService userService;

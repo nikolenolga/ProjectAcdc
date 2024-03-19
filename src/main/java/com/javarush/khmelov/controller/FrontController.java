@@ -3,6 +3,7 @@ package com.javarush.khmelov.controller;
 import com.javarush.khmelov.cmd.Command;
 import com.javarush.khmelov.config.Winter;
 import com.javarush.khmelov.entity.Role;
+import com.javarush.khmelov.util.Go;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -17,14 +18,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @MultipartConfig(fileSizeThreshold = 1 << 20)
-@WebServlet({"", "/list-user", "/edit-user", "/home"})
+@WebServlet({
+        Go.INDEX, Go.HOME,
+        Go.SIGNUP, Go.LOGIN, Go.LOGOUT,
+        Go.LIST_USER, Go.PROFILE, Go.EDIT_USER,
+})
 public class FrontController extends HttpServlet {
 
 
     private HttpResolver httpResolver;
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(ServletConfig config) {
         httpResolver = Winter.find(HttpResolver.class);
         config.getServletContext().setAttribute("roles", Role.values());
     }

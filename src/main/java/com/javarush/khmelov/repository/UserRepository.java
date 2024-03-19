@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Stream;
 
 public class UserRepository implements Repository<User> {
 
@@ -46,5 +47,18 @@ public class UserRepository implements Repository<User> {
     @Override
     public void delete(User entity) {
         map.remove(entity.getId());
+    }
+
+    public Stream<User> find(User pattern) {
+        return map.values()
+                .stream()
+                .filter(u -> nullOrEquals(pattern.getId(), u.getId()))
+                .filter(u -> nullOrEquals(pattern.getLogin(), u.getLogin()))
+                .filter(u -> nullOrEquals(pattern.getPassword(), u.getPassword()))
+                .filter(u -> nullOrEquals(pattern.getRole(), u.getRole()));
+    }
+
+    protected boolean nullOrEquals(Object patternField, Object repoField) {
+        return patternField == null || patternField.equals(repoField);
     }
 }

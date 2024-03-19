@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
 
+@SuppressWarnings("unused")
 public class ListUser implements Command {
     private final UserService userService;
 
