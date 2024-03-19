@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
         Go.SIGNUP, Go.LOGIN, Go.LOGOUT,
         Go.LIST_USER, Go.PROFILE, Go.EDIT_USER,
         Go.CREATE_QUEST, Go.QUEST,
-        Go.GAME,
+        Go.PLAY,
         Go.STAT
 })
 public class FrontController extends HttpServlet {
@@ -48,13 +48,17 @@ public class FrontController extends HttpServlet {
             cmdName = matcher.group();
         }
         Command command = httpResolver.resolve(cmdName);
-        if (req.getMethod().equalsIgnoreCase("post")) {
+        if (req.getMethod().equalsIgnoreCase("get")) {
+            String view = command.doGet(req, resp);
+            if (view.contains(".jsp")) {
+                RequestDispatcher requestDispatcher = req.getRequestDispatcher(view);
+                requestDispatcher.forward(req, resp);
+            } else {
+                resp.sendRedirect(view);
+            }
+        } else if (req.getMethod().equalsIgnoreCase("post")) {
             String redirect = command.doPost(req, resp);
             resp.sendRedirect(redirect);
-        } else if (req.getMethod().equalsIgnoreCase("get")) {
-            String view = command.doGet(req, resp);
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher(view);
-            requestDispatcher.forward(req, resp);
         } else {
             throw new UnsupportedOperationException(req.getMethod());
         }
