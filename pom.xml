@@ -7,7 +7,7 @@
     <groupId>com.javarush.quest.khmelov</groupId>
     <artifactId>project-acdc</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>ProjectAcdc</name>
+    <name>project-ac-dc</name>
     <packaging>war</packaging>
 
     <properties>

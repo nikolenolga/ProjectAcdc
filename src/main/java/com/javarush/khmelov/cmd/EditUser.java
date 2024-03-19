@@ -52,6 +52,6 @@ public class EditUser implements Command {
             userService.update(user);
             imageService.uploadImage(req, user.getImage());
         }
-        return getPage()+"?id="+user.getId();
+        return getPage() + "?id=" + user.getId();
     }
 }

@@ -12,9 +12,8 @@
             <div class="form-group">
 
                 <label class="col-md-4 control-label" for="image">
-                    <div class="form-group">
-                        <img id="previewId" src="images/${user.image}" width="150" alt="${user.image}">
-                    </div>
+                    <img id="previewId" src="images/${requestScope.user.image}" width="150"
+                         alt="${requestScope.user.image}">
                     Нажмите чтобы изменить
                 </label>
                 <div class="col-md-4">
@@ -26,7 +25,7 @@
 
             <script type="text/javascript">
                 function PreviewImage(inputFileId, imageId) {
-                    var oFReader = new FileReader();
+                    let oFReader = new FileReader();
                     oFReader.readAsDataURL(document.getElementById(inputFileId).files[0]);
                     oFReader.onload = function (oFREvent) {
                         document.getElementById(imageId).src = oFREvent.target.result;

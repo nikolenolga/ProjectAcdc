@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@include file="parts/header.jsp" %>
 <body>
 <div class="container">
@@ -51,7 +51,7 @@
                            placeholder="your password"
                            class="form-control input-md"
                            required="">
-                    <span class="help-block">min 8 symb</span>
+                    <span class="help-block">min 8 symbols</span>
                 </div>
             </div>
 
@@ -78,7 +78,6 @@
                     <c:if test="${requestScope.user!=null}">
                         <button id="update" name="update" class="btn btn-primary">Update</button>
                     </c:if>
-
                 </div>
             </div>
 

@@ -11,19 +11,6 @@ public class HttpResolver {
 
     private final Map<String, Command> commandMap = new HashMap<>();
 
-    @SneakyThrows
-    public Command resolve(String name) {
-        if (commandMap.get(name) == null) {
-            String simpleName = convertSnakeStyleToCamelCase(name);
-            String className = "com.javarush.khmelov.cmd." + simpleName;
-            Class<?> aClass = Class.forName(className);
-            Command command = (Command) Winter.find(aClass);
-            commandMap.put(name, command);
-        }
-        return commandMap.get(name);
-    }
-
-
     private static String convertSnakeStyleToCamelCase(String input) {
         StringBuilder result = new StringBuilder();
         boolean capitalizeNext = true;
@@ -40,5 +27,17 @@ public class HttpResolver {
             }
         }
         return result.toString();
+    }
+
+    @SneakyThrows
+    public Command resolve(String name) {
+        if (commandMap.get(name) == null) {
+            String simpleName = convertSnakeStyleToCamelCase(name);
+            String className = "com.javarush.khmelov.cmd." + simpleName;
+            Class<?> aClass = Class.forName(className);
+            Command command = (Command) Winter.find(aClass);
+            commandMap.put(name, command);
+        }
+        return commandMap.get(name);
     }
 }

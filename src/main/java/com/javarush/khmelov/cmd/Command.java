@@ -10,25 +10,6 @@ import java.util.stream.Stream;
 
 public interface Command {
 
-    default String doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        return getJspPage();
-    }
-
-    default String getJspPage() {
-        return "WEB-INF/%s.jsp".formatted(getPage());
-    }
-
-
-
-    default String doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        return getPage();
-    }
-
-    default String getPage() {
-        String simpleName = this.getClass().getSimpleName();
-        return convertCamelCaseToSnakeStyle(simpleName);
-    }
-
     private static String convertCamelCaseToSnakeStyle(String string) {
         String snakeName = string.chars()
                 .mapToObj(s -> String.valueOf((char) s))
@@ -40,5 +21,22 @@ public interface Command {
         return snakeName.startsWith("-")
                 ? snakeName.substring(1)
                 : snakeName;
+    }
+
+    default String doGet(HttpServletRequest req, HttpServletResponse resp) {
+        return getJspPage();
+    }
+
+    default String getJspPage() {
+        return "WEB-INF/%s.jsp".formatted(getPage());
+    }
+
+    default String doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        return getPage();
+    }
+
+    default String getPage() {
+        String simpleName = this.getClass().getSimpleName();
+        return convertCamelCaseToSnakeStyle(simpleName);
     }
 }

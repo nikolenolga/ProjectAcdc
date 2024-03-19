@@ -1,5 +1,6 @@
 package com.javarush.khmelov.exception;
 
+@SuppressWarnings("unused")
 public class AppException extends RuntimeException {
 
     public AppException() {

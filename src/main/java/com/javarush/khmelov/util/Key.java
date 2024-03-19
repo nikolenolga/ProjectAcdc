@@ -1,5 +1,6 @@
 package com.javarush.khmelov.util;
 
+@SuppressWarnings("unused")
 public class Key {
     public static final String INDEX = "index";
 
