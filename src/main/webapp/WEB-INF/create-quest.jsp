@@ -22,7 +22,7 @@
                         class="btn btn-success">Создать квест
                 </button>
                 <button id="jruDemo" name="create"
-                        class="btn btn-danger">Заполнить пример
+                        class="btn btn-danger">Хочу этот пример!
                 </button>
             </div>
         </div>
@@ -34,8 +34,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('jruDemo').addEventListener('click', function(event) {
                 event.preventDefault(); // Предотвращаем отправку формы и заполняем форму примерными данными
-                document.getElementById('quest-name').value = 'JRU квест';
-                document.getElementById('questTextareaDomId').value =`<%@include file="./parts/quest-jru.txt"%>`;
+                document.getElementById('quest-name').value = 'Проверим твои знания арифметики';
+                document.getElementById('questTextareaDomId').value =`<%@include file="./parts/quest-math.txt"%>`;
             });
         });
     </script>

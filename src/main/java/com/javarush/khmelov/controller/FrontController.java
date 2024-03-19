@@ -23,7 +23,9 @@ import java.util.regex.Pattern;
         Go.INDEX, Go.HOME,
         Go.SIGNUP, Go.LOGIN, Go.LOGOUT,
         Go.LIST_USER, Go.PROFILE, Go.EDIT_USER,
-        Go.CREATE_QUEST,
+        Go.CREATE_QUEST, Go.QUEST,
+        Go.GAME,
+        Go.STAT
 })
 public class FrontController extends HttpServlet {
 
