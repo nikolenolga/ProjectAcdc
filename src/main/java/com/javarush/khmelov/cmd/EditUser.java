@@ -2,6 +2,7 @@ package com.javarush.khmelov.cmd;
 
 import com.javarush.khmelov.entity.Role;
 import com.javarush.khmelov.entity.User;
+import com.javarush.khmelov.service.ImageService;
 import com.javarush.khmelov.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,13 +14,15 @@ import java.util.Optional;
 public class EditUser implements Command {
 
     private final UserService userService;
+    private final ImageService imageService;
 
-    public EditUser(UserService userService) {
+    public EditUser(UserService userService, ImageService imageService) {
         this.userService = userService;
+        this.imageService = imageService;
     }
 
     @Override
-    public String doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String doGet(HttpServletRequest req, HttpServletResponse resp) {
         String stringId = req.getParameter("id");
         if (stringId != null) {
             long id = Long.parseLong(stringId);
@@ -41,9 +44,12 @@ public class EditUser implements Command {
                 .build();
         if (req.getParameter("create") != null) {
             userService.create(user);
+            imageService.uploadImage(req, user.getImage());
+
         } else if (req.getParameter("update") != null) {
             user.setId(Long.parseLong(req.getParameter("id")));
             userService.update(user);
+            imageService.uploadImage(req, user.getImage());
         }
         return getPage()+"?id="+user.getId();
     }

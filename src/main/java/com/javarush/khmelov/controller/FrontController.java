@@ -6,6 +6,7 @@ import com.javarush.khmelov.entity.Role;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +16,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+@MultipartConfig(fileSizeThreshold = 1 << 20)
 @WebServlet({"", "/list-user", "/edit-user", "/home"})
 public class FrontController extends HttpServlet {
 
