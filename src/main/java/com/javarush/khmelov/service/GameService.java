@@ -18,7 +18,6 @@ public class GameService {
 
     public Optional<Game> getGame(Long questId, Long userId) {
         Game gamePattern = Game.builder().questId(questId).build();
-        gamePattern.setGameState(GameState.PLAY);
         gamePattern.setUserId(userId);
         Optional<Game> currentGame = gameRepository
                 .find(gamePattern)
@@ -47,7 +46,7 @@ public class GameService {
         return newGame;
     }
 
-    public Optional<Game> checkAnswer(Long gameId, Long answerId) {
+    public Optional<Game> processOneStep(Long gameId, Long answerId) {
         Game game = gameRepository.get(gameId);
         if (game.getGameState() == GameState.PLAY) {
             Answer answer = answerRepository.get(answerId);

@@ -18,7 +18,7 @@
         <p class="lead mb-2">
 
         <h1>${question.text}</h1>
-        <form action="play?id=${game.id}" method="post">
+        <form action="play-game?id=${game.id}" method="post">
             <ul>
                 <c:forEach var="answer" items="${question.answers}">
                     <div class="form-check">

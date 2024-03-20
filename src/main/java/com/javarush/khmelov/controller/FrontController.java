@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
         Go.SIGNUP, Go.LOGIN, Go.LOGOUT,
         Go.LIST_USER, Go.PROFILE, Go.EDIT_USER,
         Go.CREATE_QUEST, Go.QUEST,
-        Go.PLAY,
+        Go.PLAY_GAME,
         Go.STAT
 })
 public class FrontController extends HttpServlet {
@@ -50,12 +50,8 @@ public class FrontController extends HttpServlet {
         Command command = httpResolver.resolve(cmdName);
         if (req.getMethod().equalsIgnoreCase("get")) {
             String view = command.doGet(req, resp);
-            if (view.contains(".jsp")) {
-                RequestDispatcher requestDispatcher = req.getRequestDispatcher(view);
-                requestDispatcher.forward(req, resp);
-            } else {
-                resp.sendRedirect(view);
-            }
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher(view);
+            requestDispatcher.forward(req, resp);
         } else if (req.getMethod().equalsIgnoreCase("post")) {
             String redirect = command.doPost(req, resp);
             resp.sendRedirect(redirect);

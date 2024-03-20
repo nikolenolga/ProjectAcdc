@@ -14,12 +14,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @SuppressWarnings("unused")
-public class Play implements Command {
+public class PlayGame implements Command {
 
     private final GameService gameService;
     private final QuestionService questionService;
 
-    public Play(GameService gameService, QuestionService questionService) {
+    public PlayGame(GameService gameService, QuestionService questionService) {
         this.gameService = gameService;
         this.questionService = questionService;
     }
@@ -30,11 +30,10 @@ public class Play implements Command {
         Optional<User> user = Parser.getUser(request.getSession());
         if (user.isPresent()) {
             Long userId = user.get().getId();
-            Optional<com.javarush.khmelov.entity.Game> game = gameService.getGame(questId, userId);
+            Optional<Game> game = gameService.getGame(questId, userId);
             if (game.isPresent()) {
                 showOneQuestion(request, game.get());
-                Long gameId = game.get().getId();
-                return "%s?questId=%d&id=%d".formatted(getJspPage(), questId, gameId);
+                return getJspPage();
             } else {
                 createError(request, "Нет незавершенной игры");
                 return Go.HOME;
@@ -49,14 +48,13 @@ public class Play implements Command {
     public String doPost(HttpServletRequest request, HttpServletResponse response) {
         Long gameId = Parser.getId(request);
         Long answerId = Parser.getId(request, Key.ANSWER);
-        Optional<com.javarush.khmelov.entity.Game> game = gameService.checkAnswer(gameId, answerId);
+        Optional<Game> game = gameService.processOneStep(gameId, answerId);
         if (game.isPresent()) {
-            com.javarush.khmelov.entity.Game gameDto = game.get();
             if (answerId == 0) {
                 createError(request, "Нужно выбрать какой-то ответ");
             }
-            showOneQuestion(request, gameDto);
-            return "%s?questId=%d&id=%d".formatted(Go.PLAY, game.get().getQuestId(), gameId);
+            Game currentGame = game.get();
+            return "%s?questId=%d&id=%d".formatted(Go.PLAY_GAME, game.get().getQuestId(), game.get().getId());
         } else {
             createError(request, "Нет такой игры");
             return Go.HOME;
