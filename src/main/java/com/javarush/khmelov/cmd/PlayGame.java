@@ -7,7 +7,7 @@ import com.javarush.khmelov.service.GameService;
 import com.javarush.khmelov.service.QuestionService;
 import com.javarush.khmelov.util.Go;
 import com.javarush.khmelov.util.Key;
-import com.javarush.khmelov.util.Parser;
+import com.javarush.khmelov.service.RequestService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -27,7 +27,7 @@ public class PlayGame implements Command {
     @Override
     public String doGet(HttpServletRequest request, HttpServletResponse response) {
         Long questId = Long.parseLong(request.getParameter(Key.QUEST_ID));
-        Optional<User> user = Parser.getUser(request.getSession());
+        Optional<User> user = RequestService.getUser(request.getSession());
         if (user.isPresent()) {
             Long userId = user.get().getId();
             Optional<Game> game = gameService.getGame(questId, userId);
@@ -35,28 +35,28 @@ public class PlayGame implements Command {
                 showOneQuestion(request, game.get());
                 return getJspPage();
             } else {
-                Parser.sendError(request, "Нет незавершенной игры");
+                RequestService.setError(request, "Нет незавершенной игры");
                 return Go.HOME;
             }
         } else {
-            Parser.sendError(request, "Сначала нужно войти в аккаунт");
+            RequestService.setError(request, "Сначала нужно войти в аккаунт");
             return Go.LOGIN;
         }
     }
 
     @Override
     public String doPost(HttpServletRequest request, HttpServletResponse response) {
-        Long gameId = Parser.getId(request);
-        Long answerId = Parser.getId(request, Key.ANSWER);
+        Long gameId = RequestService.getId(request);
+        Long answerId = RequestService.getId(request, Key.ANSWER);
         Optional<Game> game = gameService.processOneStep(gameId, answerId);
         if (game.isPresent()) {
             if (answerId == 0) {
-                Parser.sendError(request, "Нужно выбрать какой-то ответ");
+                RequestService.setError(request, "Нужно выбрать какой-то ответ");
             }
             Game currentGame = game.get();
             return "%s?questId=%d&id=%d".formatted(Go.PLAY_GAME, game.get().getQuestId(), game.get().getId());
         } else {
-            Parser.sendError(request, "Нет такой игры");
+            RequestService.setError(request, "Нет такой игры");
             return Go.HOME;
         }
     }

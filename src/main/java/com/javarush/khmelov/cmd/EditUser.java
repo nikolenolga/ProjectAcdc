@@ -4,7 +4,7 @@ import com.javarush.khmelov.entity.Role;
 import com.javarush.khmelov.entity.User;
 import com.javarush.khmelov.service.ImageService;
 import com.javarush.khmelov.service.UserService;
-import com.javarush.khmelov.util.Parser;
+import com.javarush.khmelov.service.RequestService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,7 +45,7 @@ public class EditUser implements Command {
                 .role(Role.valueOf(req.getParameter("role")))
                 .build();
 
-        user.setId(Parser.getId(req));
+        user.setId(RequestService.getId(req));
         userService.update(user);
         imageService.uploadImage(req, user.getImage());
 

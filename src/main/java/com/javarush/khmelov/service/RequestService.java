@@ -1,7 +1,8 @@
-package com.javarush.khmelov.util;
+package com.javarush.khmelov.service;
 
 import com.javarush.khmelov.entity.User;
 import com.javarush.khmelov.exception.AppException;
+import com.javarush.khmelov.util.Key;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.experimental.UtilityClass;
@@ -11,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @UtilityClass
-public class Parser {
+public class RequestService {
 
     public static final Pattern CMD_URI_PATTERN = Pattern.compile(".*(/[a-z-]*)");
 
@@ -50,7 +51,7 @@ public class Parser {
                 : Optional.empty();
     }
 
-    public static void sendError(HttpServletRequest request, String errorMessage) {
+    public void setError(HttpServletRequest request, String errorMessage) {
         request.getSession().setAttribute(Key.ERROR_MESSAGE, errorMessage);
     }
 }

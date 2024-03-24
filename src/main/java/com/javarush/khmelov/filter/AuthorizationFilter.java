@@ -3,7 +3,7 @@ package com.javarush.khmelov.filter;
 import com.javarush.khmelov.entity.Role;
 import com.javarush.khmelov.entity.User;
 import com.javarush.khmelov.util.Go;
-import com.javarush.khmelov.util.Parser;
+import com.javarush.khmelov.service.RequestService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
@@ -43,15 +43,15 @@ public class AuthorizationFilter extends HttpFilter {
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        Optional<User> user = Parser.getUser(req.getSession());
+        Optional<User> user = RequestService.getUser(req.getSession());
         Role role = user.isEmpty()
                 ? Role.GUEST
                 : user.get().getRole();
-        String cmdUri = Parser.getCommand(req);
+        String cmdUri = RequestService.getCommand(req);
         if (uriMap.get(role).contains(cmdUri)) {
             chain.doFilter(req, res);
         } else {
-            Parser.sendError(req, "Недостаточно прав для этой операции. Текущая роль: " + role);
+            RequestService.setError(req, "Недостаточно прав для этой операции. Текущая роль: " + role);
             res.sendRedirect(Go.LOGIN);
         }
     }

@@ -8,7 +8,7 @@ import com.javarush.khmelov.service.QuestService;
 import com.javarush.khmelov.service.QuestionService;
 import com.javarush.khmelov.util.Go;
 import com.javarush.khmelov.util.Key;
-import com.javarush.khmelov.util.Parser;
+import com.javarush.khmelov.service.RequestService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,7 +34,7 @@ public class Quest implements Command {
 
     @Override
     public String doGet(HttpServletRequest req, HttpServletResponse resp) {
-        long id = Parser.getId(req);
+        long id = RequestService.getId(req);
         Optional<com.javarush.khmelov.entity.Quest> quest = questService.get(id);
         req.setAttribute(QUEST, quest.orElseThrow());
         return getJspPage();
@@ -42,10 +42,10 @@ public class Quest implements Command {
 
     @Override
     public String doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Optional<User> editor = Parser.getUser(req.getSession());
+        Optional<User> editor = RequestService.getUser(req.getSession());
         if (editor.isPresent() && editor.get().getRole() == Role.ADMIN) {
-            Long id = Parser.getId(req);
-            Long questionId = Parser.getId(req, "questionId");
+            Long id = RequestService.getId(req);
+            Long questionId = RequestService.getId(req, "questionId");
             String text = req.getParameter(Key.TEXT);
             Optional<Question> question = questionService.update(questionId, text);
             if (question.isPresent()) {

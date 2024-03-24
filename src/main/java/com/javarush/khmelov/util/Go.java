@@ -1,7 +1,5 @@
 package com.javarush.khmelov.util;
 
-import java.util.List;
-
 @SuppressWarnings("unused")
 public class Go {
     public static final String INDEX = "";

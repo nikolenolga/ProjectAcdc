@@ -5,6 +5,7 @@ import com.javarush.khmelov.config.Config;
 import com.javarush.khmelov.config.Winter;
 import com.javarush.khmelov.entity.Role;
 import com.javarush.khmelov.util.Go;
+import com.javarush.khmelov.service.RequestService;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -15,8 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @MultipartConfig(fileSizeThreshold = 1 << 20)
 @WebServlet({
@@ -41,12 +40,10 @@ public class FrontController extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String uri = req.getRequestURI();
-        Matcher matcher = Pattern.compile("[a-z-]+").matcher(uri);
-        String cmdName = "home";
-        if (matcher.find()) {
-            cmdName = matcher.group();
-        }
+        String uriCommand = RequestService.getCommand(req);
+        String cmdName = uriCommand.equals("/")
+                ? "home"
+                : uriCommand.substring(1);
         Command command = httpResolver.resolve(cmdName);
         if (req.getMethod().equalsIgnoreCase("get")) {
             String view = command.doGet(req, resp);
