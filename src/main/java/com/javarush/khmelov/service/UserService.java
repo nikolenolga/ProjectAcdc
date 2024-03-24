@@ -22,10 +22,6 @@ public class UserService {
         userRepository.update(user);
     }
 
-    public void delete(User user) {
-        userRepository.delete(user);
-    }
-
     public Collection<User> getAll() {
         return userRepository.getAll();
     }

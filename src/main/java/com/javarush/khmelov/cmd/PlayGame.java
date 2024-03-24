@@ -35,11 +35,11 @@ public class PlayGame implements Command {
                 showOneQuestion(request, game.get());
                 return getJspPage();
             } else {
-                createError(request, "Нет незавершенной игры");
+                Parser.sendError(request, "Нет незавершенной игры");
                 return Go.HOME;
             }
         } else {
-            createError(request, "Сначала нужно войти в аккаунт");
+            Parser.sendError(request, "Сначала нужно войти в аккаунт");
             return Go.LOGIN;
         }
     }
@@ -51,12 +51,12 @@ public class PlayGame implements Command {
         Optional<Game> game = gameService.processOneStep(gameId, answerId);
         if (game.isPresent()) {
             if (answerId == 0) {
-                createError(request, "Нужно выбрать какой-то ответ");
+                Parser.sendError(request, "Нужно выбрать какой-то ответ");
             }
             Game currentGame = game.get();
             return "%s?questId=%d&id=%d".formatted(Go.PLAY_GAME, game.get().getQuestId(), game.get().getId());
         } else {
-            createError(request, "Нет такой игры");
+            Parser.sendError(request, "Нет такой игры");
             return Go.HOME;
         }
     }
@@ -67,7 +67,4 @@ public class PlayGame implements Command {
         request.setAttribute(Key.QUESTION, question.orElseThrow());
     }
 
-    private static void createError(HttpServletRequest request, String errorMessage) {
-        request.getSession().setAttribute(Key.ERROR_MESSAGE, errorMessage);
-    }
 }

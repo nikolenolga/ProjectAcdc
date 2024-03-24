@@ -13,9 +13,11 @@ import java.util.regex.Pattern;
 @UtilityClass
 public class Parser {
 
+    public static final Pattern CMD_URI_PATTERN = Pattern.compile(".*(/[a-z-]*)");
+
     public String getCommand(HttpServletRequest request) {
         String uri = request.getRequestURI();
-        Matcher matcher = Pattern.compile(".*(/[a-z-]*)").matcher(uri);
+        Matcher matcher = CMD_URI_PATTERN.matcher(uri);
         if (matcher.find()) {
             return matcher.group(1);
         } else {
@@ -46,5 +48,9 @@ public class Parser {
         return user != null
                 ? Optional.of((User) user)
                 : Optional.empty();
+    }
+
+    public static void sendError(HttpServletRequest request, String errorMessage) {
+        request.getSession().setAttribute(Key.ERROR_MESSAGE, errorMessage);
     }
 }
