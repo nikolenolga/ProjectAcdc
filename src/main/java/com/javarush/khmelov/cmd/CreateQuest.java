@@ -4,7 +4,7 @@ import com.javarush.khmelov.entity.User;
 import com.javarush.khmelov.service.QuestService;
 import com.javarush.khmelov.util.Go;
 import com.javarush.khmelov.util.Key;
-import com.javarush.khmelov.service.RequestService;
+import com.javarush.khmelov.util.RequestHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -23,7 +23,7 @@ public class CreateQuest implements Command {
     public String doPost(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter(Key.NAME);
         String text = request.getParameter(Key.TEXT);
-        Optional<User> optionalUser = RequestService.getUser(request.getSession());
+        Optional<User> optionalUser = RequestHelper.getUser(request.getSession());
         optionalUser.ifPresent(user -> questService.create(name, text, user.getId()));
         return Go.HOME;
     }

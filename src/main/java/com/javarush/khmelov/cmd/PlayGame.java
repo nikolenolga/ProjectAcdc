@@ -7,7 +7,7 @@ import com.javarush.khmelov.service.GameService;
 import com.javarush.khmelov.service.QuestionService;
 import com.javarush.khmelov.util.Go;
 import com.javarush.khmelov.util.Key;
-import com.javarush.khmelov.service.RequestService;
+import com.javarush.khmelov.util.RequestHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -27,7 +27,7 @@ public class PlayGame implements Command {
     @Override
     public String doGet(HttpServletRequest request, HttpServletResponse response) {
         Long questId = Long.parseLong(request.getParameter(Key.QUEST_ID));
-        Optional<User> user = RequestService.getUser(request.getSession());
+        Optional<User> user = RequestHelper.getUser(request.getSession());
         if (user.isPresent()) {
             Long userId = user.get().getId();
             Optional<Game> game = gameService.getGame(questId, userId);
@@ -35,28 +35,28 @@ public class PlayGame implements Command {
                 showOneQuestion(request, game.get());
                 return getJspPage();
             } else {
-                RequestService.setError(request, "Нет незавершенной игры");
+                RequestHelper.setError(request, "Нет незавершенной игры");
                 return Go.HOME;
             }
         } else {
-            RequestService.setError(request, "Сначала нужно войти в аккаунт");
+            RequestHelper.setError(request, "Сначала нужно войти в аккаунт");
             return Go.LOGIN;
         }
     }
 
     @Override
     public String doPost(HttpServletRequest request, HttpServletResponse response) {
-        Long gameId = RequestService.getId(request);
-        Long answerId = RequestService.getId(request, Key.ANSWER);
-        Optional<Game> game = gameService.processOneStep(gameId, answerId);
-        if (game.isPresent()) {
+        Long gameId = RequestHelper.getId(request);
+        Long answerId = RequestHelper.getId(request, Key.ANSWER);
+        Optional<Game> gameOptional = gameService.processOneStep(gameId, answerId);
+        if (gameOptional.isPresent()) {
             if (answerId == 0) {
-                RequestService.setError(request, "Нужно выбрать какой-то ответ");
+                RequestHelper.setError(request, "Нужно выбрать какой-то ответ");
             }
-            Game currentGame = game.get();
-            return "%s?questId=%d&id=%d".formatted(Go.PLAY_GAME, game.get().getQuestId(), game.get().getId());
+            Game game = gameOptional.get();
+            return "%s?questId=%d&id=%d".formatted(Go.PLAY_GAME, game.getQuestId(), game.getId());
         } else {
-            RequestService.setError(request, "Нет такой игры");
+            RequestHelper.setError(request, "Нет такой игры");
             return Go.HOME;
         }
     }

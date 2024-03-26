@@ -5,7 +5,7 @@ import com.javarush.khmelov.config.Config;
 import com.javarush.khmelov.config.Winter;
 import com.javarush.khmelov.entity.Role;
 import com.javarush.khmelov.util.Go;
-import com.javarush.khmelov.service.RequestService;
+import com.javarush.khmelov.util.RequestHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -28,7 +28,6 @@ import java.io.IOException;
 })
 public class FrontController extends HttpServlet {
 
-
     private HttpResolver httpResolver;
 
     @Override
@@ -40,7 +39,7 @@ public class FrontController extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String uriCommand = RequestService.getCommand(req);
+        String uriCommand = RequestHelper.getCommand(req);
         String cmdName = uriCommand.equals("/")
                 ? "home"
                 : uriCommand.substring(1);
