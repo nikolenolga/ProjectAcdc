@@ -10,9 +10,6 @@
     <p>
         <a href="signup" class="top-nav">Create new user</a>
     </p>
-
-    <h3>TODO: Тут еще нужно будет подключить безопасность</h3>
-
 </div>
 <%@include file="parts/footer.jsp" %>
 
