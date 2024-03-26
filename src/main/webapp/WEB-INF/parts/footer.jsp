@@ -26,3 +26,20 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 </script>
+
+<script type="text/javascript">
+    function loadImageFile(inputFileId, imageId) {
+        let fileInput = document.getElementById(inputFileId);
+        fileInput.click();
+        fileInput.onchange = function () {
+            let file = fileInput.files[0];
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                let image = document.getElementById(imageId);
+                image.src = e.target.result;
+                document.getElementById('hiddenField').value = file.name;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+</script>

@@ -24,7 +24,7 @@ import java.io.IOException;
         Go.LIST_USER, Go.PROFILE, Go.EDIT_USER,
         Go.CREATE_QUEST, Go.QUEST,
         Go.PLAY_GAME,
-        Go.STAT
+        Go.STATISTICS
 })
 public class FrontController extends HttpServlet {
 

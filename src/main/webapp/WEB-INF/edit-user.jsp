@@ -12,15 +12,17 @@
 
             <!-- File Button -->
             <div class="form-group">
+
                 <label class="col-md-4 control-label" for="image">
-                    <img id="previewId"
-                         src="images/${requestScope.user.image}"
-                         width="150"
+                    <img id="previewId" src="images/${requestScope.user.image}" width="150"
                          alt="${requestScope.user.image}">
-                    <input id="image"
-                           name="image"
-                           class="input-file" type="file"/>
+                    Нажмите чтобы изменить
                 </label>
+                <div class="col-md-4">
+                    <input onchange="loadImageFile('image','previewId');" id="image" name="image"
+                           style="visibility:hidden;"
+                           class="input-file" type="file">
+                </div>
             </div>
 
             <!-- Text input-->

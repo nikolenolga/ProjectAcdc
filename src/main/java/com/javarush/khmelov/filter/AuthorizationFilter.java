@@ -23,20 +23,20 @@ import java.util.Optional;
         Go.LIST_USER, Go.PROFILE, Go.EDIT_USER,
         Go.CREATE_QUEST, Go.QUEST,
         Go.PLAY_GAME,
-        Go.STAT
+        Go.STATISTICS
 })
 public class AuthorizationFilter extends HttpFilter {
 
     private final Map<Role, List<String>> uriMap = Map.of(
             Role.GUEST, List.of(
-                    Go.HOME, Go.INDEX, Go.LOGIN, Go.SIGNUP
+                    Go.HOME, Go.INDEX, Go.LOGIN, Go.SIGNUP, Go.STATISTICS
             ),
             Role.USER, List.of(
-                    Go.HOME, Go.INDEX, Go.LOGIN, Go.SIGNUP,
+                    Go.HOME, Go.INDEX, Go.LOGIN, Go.SIGNUP, Go.STATISTICS,
                     Go.PROFILE, Go.LOGOUT, Go.EDIT_USER, Go.PLAY_GAME, Go.QUEST
             ),
             Role.ADMIN, List.of(
-                    Go.HOME, Go.INDEX, Go.LOGIN, Go.SIGNUP,
+                    Go.HOME, Go.INDEX, Go.LOGIN, Go.SIGNUP, Go.STATISTICS,
                     Go.PROFILE, Go.LOGOUT, Go.EDIT_USER, Go.PLAY_GAME, Go.QUEST,
                     Go.LIST_USER, Go.CREATE_QUEST)
     );
