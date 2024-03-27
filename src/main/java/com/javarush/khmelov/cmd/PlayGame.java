@@ -49,7 +49,7 @@ public class PlayGame implements Command {
         Long answerId = RequestHelper.getId(request, Key.ANSWER);
         Optional<Game> gameOptional = gameService.processOneStep(gameId, answerId);
         if (gameOptional.isPresent()) {
-            if (answerId == 0) {
+            if (answerId == 0 && request.getParameter("new-game") == null) {
                 RequestHelper.setError(request, "Нужно выбрать какой-то ответ");
             }
             Game game = gameOptional.get();

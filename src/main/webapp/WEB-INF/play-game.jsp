@@ -39,7 +39,7 @@
                             <button id="submit" class="btn btn-success">Отправить</button>
                         </c:when>
                         <c:otherwise>
-                            <button id="submit" class="btn btn-warning">Новая игра</button>
+                            <button name="new-game" id="submit" class="btn btn-warning">Новая игра</button>
                         </c:otherwise>
                     </c:choose>
                 </div>
