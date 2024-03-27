@@ -23,7 +23,7 @@ class SignupIT extends BaseIT {
         Mockito.when(request.getParameter(Key.PASSWORD)).thenReturn("newTestPassword");
         Mockito.when(request.getParameter(Key.ROLE)).thenReturn("GUEST");
 
-        String uri = signup.doPost(request, response);
+        String uri = signup.doPost(request);
         Assertions.assertEquals(Go.LIST_USER, uri);
         Assertions.assertTrue(repository.getAll().toString().contains("newTestLogin"));
     }

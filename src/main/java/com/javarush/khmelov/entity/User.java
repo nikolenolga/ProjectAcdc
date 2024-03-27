@@ -12,19 +12,14 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User implements AbstractEntity{
-
-    private Long id;
-
-    private String login;
-
-    private String password;
-
-    private Role role;
+public class User implements AbstractEntity {
 
     private final Collection<Quest> quests = new ArrayList<>();
-
     private final Collection<Game> games = new ArrayList<>();
+    private Long id;
+    private String login;
+    private String password;
+    private Role role;
 
     public String getImage() { //TODO move to DTO
         return "user-" + id;

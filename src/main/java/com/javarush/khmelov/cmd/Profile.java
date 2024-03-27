@@ -4,14 +4,13 @@ import com.javarush.khmelov.entity.User;
 import com.javarush.khmelov.util.Go;
 import com.javarush.khmelov.util.Key;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @SuppressWarnings("unused")
 public class Profile implements Command {
 
     @Override
-    public String doPost(HttpServletRequest request, HttpServletResponse response) {
+    public String doPost(HttpServletRequest request) {
         if (request.getParameter(Key.LOGOUT) == null) {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("user");

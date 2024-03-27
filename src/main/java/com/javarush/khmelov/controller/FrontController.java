@@ -45,11 +45,11 @@ public class FrontController extends HttpServlet {
                 : uriCommand.substring(1);
         Command command = httpResolver.resolve(cmdName);
         if (req.getMethod().equalsIgnoreCase("get")) {
-            String view = command.doGet(req, resp);
+            String view = command.doGet(req);
             RequestDispatcher requestDispatcher = req.getRequestDispatcher(view);
             requestDispatcher.forward(req, resp);
         } else if (req.getMethod().equalsIgnoreCase("post")) {
-            String redirect = command.doPost(req, resp);
+            String redirect = command.doPost(req);
             resp.sendRedirect(redirect);
         } else {
             throw new UnsupportedOperationException(req.getMethod());

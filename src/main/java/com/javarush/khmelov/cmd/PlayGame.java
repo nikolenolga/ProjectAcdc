@@ -9,7 +9,6 @@ import com.javarush.khmelov.util.Go;
 import com.javarush.khmelov.util.Key;
 import com.javarush.khmelov.util.RequestHelper;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.Optional;
 
@@ -25,7 +24,7 @@ public class PlayGame implements Command {
     }
 
     @Override
-    public String doGet(HttpServletRequest request, HttpServletResponse response) {
+    public String doGet(HttpServletRequest request) {
         Long questId = Long.parseLong(request.getParameter(Key.QUEST_ID));
         Optional<User> user = RequestHelper.getUser(request.getSession());
         if (user.isPresent()) {
@@ -45,7 +44,7 @@ public class PlayGame implements Command {
     }
 
     @Override
-    public String doPost(HttpServletRequest request, HttpServletResponse response) {
+    public String doPost(HttpServletRequest request) {
         Long gameId = RequestHelper.getId(request);
         Long answerId = RequestHelper.getId(request, Key.ANSWER);
         Optional<Game> gameOptional = gameService.processOneStep(gameId, answerId);

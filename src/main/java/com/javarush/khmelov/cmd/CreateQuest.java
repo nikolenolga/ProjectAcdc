@@ -6,7 +6,6 @@ import com.javarush.khmelov.util.Go;
 import com.javarush.khmelov.util.Key;
 import com.javarush.khmelov.util.RequestHelper;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.Optional;
 
@@ -20,7 +19,7 @@ public class CreateQuest implements Command {
     }
 
     @Override
-    public String doPost(HttpServletRequest request, HttpServletResponse response) {
+    public String doPost(HttpServletRequest request) {
         String name = request.getParameter(Key.NAME);
         String text = request.getParameter(Key.TEXT);
         Optional<User> optionalUser = RequestHelper.getUser(request.getSession());

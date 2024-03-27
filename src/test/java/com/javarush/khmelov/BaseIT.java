@@ -20,9 +20,9 @@ public class BaseIT {
     protected final Config config;
     protected final ServletConfig servletConfig;
     protected final ServletContext servletContext;
-    protected User testAdmin;
-    protected User testUser;
-    protected User testGuest;
+    protected final User testAdmin;
+    protected final User testUser;
+    protected final User testGuest;
 
     protected BaseIT() {
         //app config

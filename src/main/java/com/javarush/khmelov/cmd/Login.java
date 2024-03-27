@@ -5,7 +5,6 @@ import com.javarush.khmelov.service.UserService;
 import com.javarush.khmelov.util.Go;
 import com.javarush.khmelov.util.Key;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.Optional;
@@ -20,7 +19,7 @@ public class Login implements Command {
     }
 
     @Override
-    public String doPost(HttpServletRequest request, HttpServletResponse response) {
+    public String doPost(HttpServletRequest request) {
         String login = request.getParameter(Key.LOGIN);
         String password = request.getParameter(Key.PASSWORD);
         Optional<User> user = userService.get(login, password);

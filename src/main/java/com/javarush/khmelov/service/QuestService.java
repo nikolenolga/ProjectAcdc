@@ -22,7 +22,7 @@ public class QuestService {
     public static final String LINK_SYMBOL = "<";
     public static final String DIGITS = "\\d+";
 
-    private final UserRepository userRepository ;
+    private final UserRepository userRepository;
     private final QuestRepository questRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
@@ -42,7 +42,6 @@ public class QuestService {
     public Optional<Quest> get(long id) {
         return Optional.ofNullable(questRepository.get(id));
     }
-
 
     public Optional<Quest> create(String name, String text, Long userId) {
         Map<Long, Question> map = fillDraftMap(text);

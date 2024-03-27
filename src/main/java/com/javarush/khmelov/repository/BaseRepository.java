@@ -3,16 +3,14 @@ package com.javarush.khmelov.repository;
 import com.javarush.khmelov.entity.AbstractEntity;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class BaseRepository<T extends AbstractEntity> implements Repository<T> {
 
-    protected final Map<Long, T> map = new ConcurrentHashMap<>();
-
     public final AtomicLong id = new AtomicLong(0L);
+    protected final Map<Long, T> map = new ConcurrentHashMap<>();
 
     @Override
     public Collection<T> getAll() {

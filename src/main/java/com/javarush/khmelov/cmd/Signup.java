@@ -8,7 +8,6 @@ import com.javarush.khmelov.util.Go;
 import com.javarush.khmelov.util.Key;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
@@ -24,7 +23,7 @@ public class Signup implements Command {
     }
 
     @Override
-    public String doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String doPost(HttpServletRequest request) throws ServletException, IOException {
         User user = User.builder()
                 .id(0L)
                 .login(request.getParameter(Key.LOGIN))

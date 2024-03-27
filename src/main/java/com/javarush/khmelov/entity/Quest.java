@@ -13,16 +13,11 @@ import java.util.Collection;
 @AllArgsConstructor
 @Builder
 public class Quest implements AbstractEntity {
-    private Long id;
-
-    private String name;
-
-    private String text;
-
-    private Long authorId;
-
-    private Long startQuestionId;
-
     private final Collection<Question> questions = new ArrayList<>();
+    private Long id;
+    private String name;
+    private String text;
+    private Long authorId;
+    private Long startQuestionId;
 
 }

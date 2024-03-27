@@ -15,14 +15,14 @@ class ProfileIT extends BaseIT {
     @Test
     void whenClickEditInProfile_thenGoToEditUserPage() {
         Mockito.when(session.getAttribute(Key.USER)).thenReturn(testUser);
-        String uri = profile.doPost(request, response);
+        String uri = profile.doPost(request);
         Assertions.assertEquals(Go.EDIT_USER + "?id=" + testUser.getId(), uri);
     }
 
     @Test
     void whenClickLogout_thenGoLogout() {
         Mockito.when(request.getParameter(Key.LOGOUT)).thenReturn("true");
-        String uri = profile.doPost(request, response);
+        String uri = profile.doPost(request);
         Assertions.assertEquals(Go.LOGOUT, uri);
     }
 }

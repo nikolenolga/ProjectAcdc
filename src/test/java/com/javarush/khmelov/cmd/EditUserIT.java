@@ -23,7 +23,7 @@ class EditUserIT extends BaseIT {
         User user = userService.getAll().stream().findFirst().orElseThrow();
         when(request.getParameter(Key.ID)).thenReturn(user.getId().toString());
 
-        String jspView = editUser.doGet(request, response);
+        String jspView = editUser.doGet(request);
         assertEquals("WEB-INF/edit-user.jsp", jspView);
         verify(request).setAttribute(eq(Key.USER), eq(user));
     }
@@ -35,7 +35,7 @@ class EditUserIT extends BaseIT {
         when(request.getParameter(Key.ROLE)).thenReturn(Role.GUEST.toString());
         final String ID = "1";
         when(request.getParameter(Key.ID)).thenReturn(ID);
-        String redirectUri = editUser.doPost(request, response);
+        String redirectUri = editUser.doPost(request);
 
         assertTrue(redirectUri.endsWith("?id=" + ID));
     }

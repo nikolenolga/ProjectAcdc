@@ -18,14 +18,14 @@ class QuestIT extends BaseIT {
     @Test
     void whenOpenQuestPageWithCorrectId_thenGetJsp() {
         Mockito.when(request.getParameter(Key.ID)).thenReturn("1");
-        String jsp = quest.doGet(request, response);
+        String jsp = quest.doGet(request);
         Assertions.assertEquals("WEB-INF/quest.jsp", jsp);
-    }    
-    
+    }
+
     @Test
     void whenAnonymousPostQuest_thenRedirectBackward() throws ServletException, IOException {
         Mockito.when(request.getParameter(Key.ID)).thenReturn("1");
-        String uri = quest.doPost(request, response);
+        String uri = quest.doPost(request);
         Assertions.assertEquals(Go.QUEST, uri);
     }
 
@@ -33,7 +33,7 @@ class QuestIT extends BaseIT {
     void whenNonAdminPostQuest_thenRedirectBackward() throws ServletException, IOException {
         Mockito.when(session.getAttribute(Key.USER)).thenReturn(testGuest);
         Mockito.when(request.getParameter(Key.ID)).thenReturn("1");
-        String uri = quest.doPost(request, response);
+        String uri = quest.doPost(request);
         Assertions.assertEquals(Go.QUEST, uri);
     }
 
@@ -44,7 +44,7 @@ class QuestIT extends BaseIT {
         Mockito.when(request.getParameter(Key.QUEST_ID)).thenReturn("1");
         Mockito.when(request.getParameter(Key.QUESTION_ID)).thenReturn("1");
         Mockito.when(request.getParameter(Key.TEXT)).thenReturn("newTestTextQuestion");
-        String actualUri = quest.doPost(request, response);
+        String actualUri = quest.doPost(request);
         String expectedUri = "%s?id=%d#bookmark%d".formatted(Go.QUEST, 1, 1);
         Assertions.assertEquals(expectedUri, actualUri);
     }

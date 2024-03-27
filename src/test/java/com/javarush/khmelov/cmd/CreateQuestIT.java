@@ -26,7 +26,7 @@ class CreateQuestIT extends BaseIT {
         when(request.getParameter(Key.TEXT)).thenReturn("1: Test OK?\n2< Да\n3< Нет\n2+ win\n3- lost\n");
 
         int count = questService.getAll().size();
-        assertEquals(Go.HOME, createQuest.doPost(request, response));
+        assertEquals(Go.HOME, createQuest.doPost(request));
         assertEquals(count + 1, questService.getAll().size());
     }
 

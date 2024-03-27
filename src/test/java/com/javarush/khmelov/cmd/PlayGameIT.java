@@ -18,7 +18,7 @@ class PlayGameIT extends BaseIT {
     void whenStartGame_thenSetGameAndQuestionInRequest() {
         when(session.getAttribute(Key.USER)).thenReturn(testUser);
         when(request.getParameter(Key.QUEST_ID)).thenReturn("1");
-        String jspPage = playGame.doGet(request, response);
+        String jspPage = playGame.doGet(request);
 
         assertEquals("WEB-INF/play-game.jsp", jspPage);
         verify(request).setAttribute(eq(Key.GAME), any(Game.class));

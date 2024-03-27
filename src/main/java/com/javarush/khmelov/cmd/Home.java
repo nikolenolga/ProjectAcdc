@@ -2,7 +2,6 @@ package com.javarush.khmelov.cmd;
 
 import com.javarush.khmelov.service.QuestService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import static com.javarush.khmelov.util.Key.QUESTS;
 
@@ -16,7 +15,7 @@ public class Home implements Command {
     }
 
     @Override
-    public String doGet(HttpServletRequest req, HttpServletResponse resp) {
+    public String doGet(HttpServletRequest req) {
         req.setAttribute(QUESTS, questService.getAll());
         return getJspPage();
     }

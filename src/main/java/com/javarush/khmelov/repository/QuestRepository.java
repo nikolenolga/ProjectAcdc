@@ -16,5 +16,5 @@ public class QuestRepository extends BaseRepository<Quest> {
                 .filter(u -> nullOrEquals(pattern.getAuthorId(), u.getAuthorId()))
                 .filter(u -> nullOrEquals(pattern.getStartQuestionId(), u.getStartQuestionId()));
     }
-    
+
 }

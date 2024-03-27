@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.stream.Stream;
-
 class UserRepositoryTest {
 
     private final UserRepository userRepository = new UserRepository();
@@ -39,7 +37,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    void update(){
+    void update() {
         admin.setLogin("newLogin");
         userRepository.update(admin);
         User user = userRepository.get(1L);
@@ -47,7 +45,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    void delete(){
+    void delete() {
         userRepository.delete(admin);
         Assertions.assertEquals(0, userRepository.getAll().size());
     }

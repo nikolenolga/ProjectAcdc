@@ -4,7 +4,6 @@ import com.javarush.khmelov.entity.User;
 import com.javarush.khmelov.service.UserService;
 import com.javarush.khmelov.util.Key;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.Collection;
 
@@ -17,7 +16,7 @@ public class ListUser implements Command {
     }
 
     @Override
-    public String doGet(HttpServletRequest req, HttpServletResponse resp) {
+    public String doGet(HttpServletRequest req) {
         Collection<User> users = userService.getAll();
         req.setAttribute(Key.USERS, users);
         return getJspPage();

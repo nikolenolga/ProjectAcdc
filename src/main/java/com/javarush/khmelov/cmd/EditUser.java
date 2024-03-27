@@ -7,7 +7,6 @@ import com.javarush.khmelov.service.UserService;
 import com.javarush.khmelov.util.RequestHelper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -24,7 +23,7 @@ public class EditUser implements Command {
     }
 
     @Override
-    public String doGet(HttpServletRequest req, HttpServletResponse resp) {
+    public String doGet(HttpServletRequest req) {
         String stringId = req.getParameter("id");
         if (stringId != null) {
             long id = Long.parseLong(stringId);
@@ -38,7 +37,7 @@ public class EditUser implements Command {
     }
 
     @Override
-    public String doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String doPost(HttpServletRequest req) throws ServletException, IOException {
         User user = User.builder()
                 .login(req.getParameter("login"))
                 .password(req.getParameter("password"))

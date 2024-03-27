@@ -11,10 +11,10 @@ import java.util.regex.Pattern;
 
 public class RequestHelper {
 
+    public static final Pattern CMD_URI_PATTERN = Pattern.compile(".*(/[a-z-]*)");
+
     private RequestHelper() {
     }
-
-    public static final Pattern CMD_URI_PATTERN = Pattern.compile(".*(/[a-z-]*)");
 
     public static String getCommand(HttpServletRequest request) {
         String uri = request.getRequestURI();
@@ -34,13 +34,6 @@ public class RequestHelper {
         String id = req.getParameter(key);
         return id != null && !id.isBlank()
                 ? Long.parseLong(id)
-                : 0L;
-    }
-
-    public static Long getId(HttpSession session) {
-        Object user = session.getAttribute(Key.USER);
-        return user != null
-                ? ((User) user).getId()
                 : 0L;
     }
 

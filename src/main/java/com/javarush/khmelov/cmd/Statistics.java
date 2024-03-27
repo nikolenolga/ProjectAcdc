@@ -2,9 +2,9 @@ package com.javarush.khmelov.cmd;
 
 import com.javarush.khmelov.service.StatService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
-import static com.javarush.khmelov.util.Key.*;
+import static com.javarush.khmelov.util.Key.LIST_USER_STATISTICS;
+import static com.javarush.khmelov.util.Key.TOTAL_USER_STATISTICS;
 
 @SuppressWarnings("unused")
 public class Statistics implements Command {
@@ -16,7 +16,7 @@ public class Statistics implements Command {
     }
 
     @Override
-    public String doGet(HttpServletRequest req, HttpServletResponse resp) {
+    public String doGet(HttpServletRequest req) {
         req.setAttribute(LIST_USER_STATISTICS, statService.getUserStatistics());
         req.setAttribute(TOTAL_USER_STATISTICS, statService.getTotalUserStatistics());
         return getJspPage();

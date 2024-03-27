@@ -1,12 +1,9 @@
 package com.javarush.khmelov.service;
 
-import com.javarush.khmelov.entity.Game;
-import com.javarush.khmelov.entity.GameState;
 import com.javarush.khmelov.entity.User;
 import com.javarush.khmelov.repository.UserRepository;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 public class UserService {

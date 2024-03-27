@@ -11,7 +11,6 @@ import com.javarush.khmelov.util.Key;
 import com.javarush.khmelov.util.RequestHelper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -33,7 +32,7 @@ public class Quest implements Command {
     }
 
     @Override
-    public String doGet(HttpServletRequest req, HttpServletResponse resp) {
+    public String doGet(HttpServletRequest req) {
         long id = RequestHelper.getId(req);
         Optional<com.javarush.khmelov.entity.Quest> quest = questService.get(id);
         req.setAttribute(QUEST, quest.orElseThrow());
@@ -41,7 +40,7 @@ public class Quest implements Command {
     }
 
     @Override
-    public String doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String doPost(HttpServletRequest req) throws IOException, ServletException {
         Optional<User> editor = RequestHelper.getUser(req.getSession());
         if (editor.isPresent() && editor.get().getRole() == Role.ADMIN) {
             Long id = RequestHelper.getId(req);

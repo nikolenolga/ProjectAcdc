@@ -11,7 +11,7 @@ class LogoutIT extends BaseIT {
 
     @Test
     void whenOpenPage_thenInvalidateSession() {
-        logout.doGet(request, response);
+        logout.doGet(request);
         Mockito.verify(session).invalidate();
     }
 
