@@ -36,11 +36,7 @@ public class QuestService {
     }
 
     public long getCurrentQuestionId(long id) {
-        Optional<Quest> optionalQuest = get(id);
-        long result = optionalQuest.isPresent()
-                ? optionalQuest.get().getId()
-                : 0;
-        return result;
+        return get(id).map(Quest::getCurrentQuestionId).orElse(0L);
     }
 
 

@@ -32,4 +32,24 @@ public class AnswerService {
     public Optional<Answer> get(long id) {
         return answerRepository.get(id);
     }
+
+    public boolean hasOnlyNextQuestionLogic(long id) {
+        Optional<Answer> optionalAnswer = get(id);
+        return optionalAnswer.isPresent() && optionalAnswer.get().hasOnlyNextQuestionLogic();
+    }
+
+    public boolean hasFinalMessage(long id) {
+        Optional<Answer> optionalAnswer = get(id);
+        return optionalAnswer.isPresent() && optionalAnswer.get().hasFinalMessage();
+    }
+
+    public boolean isFinal(long id) {
+        Optional<Answer> optionalAnswer = get(id);
+        return optionalAnswer.isPresent() && optionalAnswer.get().isFinal();
+    }
+
+    public long getNextQuestionId(long id) {
+        Optional<Answer> optionalAnswer = get(id);
+        return optionalAnswer.map(Answer::getNextQuestionId).orElse(0L);
+    }
 }

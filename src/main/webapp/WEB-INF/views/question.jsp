@@ -12,10 +12,10 @@
 
         <!-- Multiple Radios  -->
         <div id="radios">
-                <c:forEach var="answer" items="${requestScope.answers}">
+                <c:forEach var="answer" items="${requestScope.answers}" varStatus="status">
                     <p>
-                        <input type="radio" name="answerId" value="${answer.id}" checked="checked">
-                        ${answer.answerMessage}
+                        <input type="radio" name="answerId" value="${answer.id}" ${status.first ? 'checked' : ''}>
+                        <label>${answer.answerMessage}</label>
                     </p>
                 </c:forEach>
         </div>

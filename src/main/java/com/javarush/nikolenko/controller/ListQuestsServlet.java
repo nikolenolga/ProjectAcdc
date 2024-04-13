@@ -32,7 +32,7 @@ public class ListQuestsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Collection<Quest> quests = questService.getAll();
         req.setAttribute("quests", quests);
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/list-quests.jsp");
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/views/list-quests.jsp");
         requestDispatcher.forward(req, resp);
     }
     

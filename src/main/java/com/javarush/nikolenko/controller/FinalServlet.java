@@ -5,6 +5,8 @@ import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.service.AnswerService;
+import com.javarush.nikolenko.service.QuestService;
+import com.javarush.nikolenko.service.QuestionService;
 import com.javarush.nikolenko.utils.RequestHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
@@ -19,13 +21,15 @@ import lombok.SneakyThrows;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet(urlPatterns = {"/answer"})
-public class AnswerServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/final"})
+public class FinalServlet extends HttpServlet {
+    private QuestService questService;
     private AnswerService answerService;
 
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
+        questService = ServiceLocator.getService(QuestService.class);
         answerService = ServiceLocator.getService(AnswerService.class);
     }
 
@@ -39,14 +43,21 @@ public class AnswerServlet extends HttpServlet {
         Answer answer = optionalAnswer.get();
         req.setAttribute("answer", answer);
 
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/views/answer.jsp");
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/views/final.jsp");
         requestDispatcher.forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long answerId = RequestHelper.getLongValue(req, "answerId");
-        long redirectId = answerService.getNextQuestionId(answerId);
-        resp.sendRedirect("question?currentQuestionId=" + redirectId);
+        String redirect = "";
+        if(req.getParameter("button-again") != null) {
+            HttpSession httpSession = req.getSession(false);
+            long questId = RequestHelper.getLongValue(httpSession, "questId");
+            long questionId = questService.getCurrentQuestionId(questId);
+            redirect = "question?currentQuestionId=" + questionId;
+        } else if (req.getParameter("button-quests") != null) {
+            redirect = "list-quests";
+        }
+        resp.sendRedirect(redirect);
     }
 }

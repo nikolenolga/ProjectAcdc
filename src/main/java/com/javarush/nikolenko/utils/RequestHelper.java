@@ -8,9 +8,26 @@ public class RequestHelper {
 
     public static long getLongValue(HttpServletRequest request, String name) {
         String value = request.getParameter(name);
-        return value != null && !value.isBlank()
-                ? Long.parseLong(value)
-                : 0L;
+        return getLong(value);
+    }
+
+    public static long getLongValue(HttpSession currentSession, String name) {
+        try {
+            Long value = (Long) currentSession.getAttribute(name);
+            return value != null ? value : 0L;
+        } catch (NumberFormatException e) {
+            throw new QuestException("Can't execute the request");
+        }
+    }
+
+    public static long getLong(String value) {
+        try {
+            return value != null && !value.isBlank()
+                    ? Long.parseLong(value)
+                    : 0L;
+        } catch (NumberFormatException e) {
+            throw new QuestException("Can't execute the request");
+        }
     }
 
     public static <T> T extractAttribute(HttpSession currentSession, String name, Class<T> clazz) throws QuestException {
@@ -21,12 +38,5 @@ public class RequestHelper {
         }
         return (T) attribute;
     }
-//  исправить метод
-//    public static <T> T extractAttribute(HttpServletRequest request, String name, Class<T> clazz) {
-//        String parameter = request.getParameter(name);
-//        if (parameter == null || clazz != parameter.getClass()) {
-//            throw new QuestException("Request is broken, try one more time");
-//        }
-//        return (T) parameter;
-//    }
+
 }

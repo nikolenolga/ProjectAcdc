@@ -36,10 +36,13 @@ public class GameStartServlet extends HttpServlet {
         if (optionalQuest.isEmpty()) {
             throw new QuestException("Quest not found");
         }
-        HttpSession session = req.getSession();
         Quest quest = optionalQuest.get();
-        session.setAttribute("quest", quest);
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/game-start.jsp");
+        req.setAttribute("quest", quest);
+
+        HttpSession session = req.getSession();
+        session.setAttribute("questId", questId);
+
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/views/game-start.jsp");
         requestDispatcher.forward(req, resp);
     }
 
@@ -47,9 +50,6 @@ public class GameStartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long questId = RequestHelper.getLongValue(req, "questId");
         long currentQuestionId = questService.getCurrentQuestionId(questId);
-        if (currentQuestionId == 0) {
-            throw new QuestException("First quest question not found");
-        }
         resp.sendRedirect("question?currentQuestionId=" + currentQuestionId);
     }
 }

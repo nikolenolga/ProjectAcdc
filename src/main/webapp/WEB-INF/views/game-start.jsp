@@ -5,8 +5,8 @@
     <title>${requestScope.quest.name}</title>
 </head>
 <body>
-<h1>${sessionScope.quest.name}</h1>
-<p>${sessionScope.quest.description}</p>
+<h1>${requestScope.quest.name}</h1>
+<p>${requestScope.quest.description}</p>
 <div>
     <form method="post">
         <button>Start</button>

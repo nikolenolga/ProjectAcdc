@@ -54,7 +54,7 @@ public class Answer extends AbstractComponent {
         return gameState == GameState.LOSE;
     }
 
-    public boolean hasNextQuestionLogic() {
+    public boolean hasOnlyNextQuestionLogic() {
         return !hasFinalMessage() && !isFinal() && hasNextQuestion();
     }
 

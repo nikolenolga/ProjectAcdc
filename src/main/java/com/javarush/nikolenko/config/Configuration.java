@@ -19,8 +19,6 @@ public class Configuration {
         configureQuests();
     }
 
-
-
     public void configureQuests() {
         defaultQuest();
         exampleQuest();

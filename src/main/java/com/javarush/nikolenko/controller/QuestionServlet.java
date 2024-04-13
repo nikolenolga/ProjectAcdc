@@ -4,6 +4,7 @@ import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.entity.Question;
 import com.javarush.nikolenko.exception.QuestException;
+import com.javarush.nikolenko.service.AnswerService;
 import com.javarush.nikolenko.service.QuestionService;
 import com.javarush.nikolenko.utils.RequestHelper;
 import jakarta.servlet.RequestDispatcher;
@@ -22,11 +23,13 @@ import java.util.Optional;
 @WebServlet(urlPatterns = "/question")
 public class QuestionServlet extends HttpServlet {
     private QuestionService questionService;
+    private AnswerService answerService;
 
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
         questionService = ServiceLocator.getService(QuestionService.class);
+        answerService =ServiceLocator.getService(AnswerService.class);
     }
 
     @Override
@@ -45,16 +48,21 @@ public class QuestionServlet extends HttpServlet {
 
         req.setAttribute("question", question);
         req.setAttribute("answers", answers);
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/question.jsp");
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/views/question.jsp");
         requestDispatcher.forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long answerId = RequestHelper.getLongValue(req, "answerId");
-        if(answerId == 0){
-            throw new QuestException("Peeked answer not found.");
+        String redirectPath;
+        if(answerService.isFinal(answerId)) {
+            redirectPath = "final?answerId=" + answerId;
+        } else if (answerService.hasFinalMessage(answerId)) {
+            redirectPath = "answer?answerId=" + answerId;
+        } else {
+            redirectPath = "question?currentQuestionId=" + answerService.getNextQuestionId(answerId);
         }
-        resp.sendRedirect("answer?answerId=" + answerId);
+        resp.sendRedirect(redirectPath);
     }
 }

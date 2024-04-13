@@ -7,18 +7,16 @@ import java.util.List;
 public class Quest extends AbstractComponent {
     private String name;
     private final List<Question> questions = new ArrayList<>();
-    private long currentQuestionId;
+    private long firstQuestionId;
     private String description;
-    private GameState gameState;
 
     public Quest() {};
 
-    public Quest(long id, String name, long currentQuestionId, String description) {
+    public Quest(long id, String name, long firstQuestionId, String description) {
         super(id);
         this.name = name;
-        this.currentQuestionId = currentQuestionId;
+        this.firstQuestionId = firstQuestionId;
         this.description = description;
-        gameState = GameState.GAME;
     }
 
     public void addQuestion(Question question) {
@@ -34,38 +32,30 @@ public class Quest extends AbstractComponent {
     }
 
     public long getCurrentQuestionId() {
-        return currentQuestionId;
+        return firstQuestionId;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public GameState getGameState() {
-        return gameState;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setCurrentQuestionId(long currentQuestionId) {
-        this.currentQuestionId = currentQuestionId;
+    public void setFirstQuestionId(long firstQuestionId) {
+        this.firstQuestionId = firstQuestionId;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-
     @Override
     public String toString() {
         return "Quest{" +
                 "name='" + name + '\'' +
-                ", currentQuestionId=" + currentQuestionId +
+                ", firstQuestionId=" + firstQuestionId +
                 ", id=" + id +
                 ", description='" + description + '\'' +
                 ", questions=" + questions.size() +
