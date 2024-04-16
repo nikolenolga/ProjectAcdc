@@ -5,6 +5,7 @@ import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.service.AnswerService;
+import com.javarush.nikolenko.service.GameService;
 import com.javarush.nikolenko.utils.RequestHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
@@ -21,11 +22,13 @@ import java.util.Optional;
 
 @WebServlet(urlPatterns = {"/answer"})
 public class AnswerServlet extends HttpServlet {
+    private GameService gameService;
     private AnswerService answerService;
 
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
+        gameService = ServiceLocator.getService(GameService.class);
         answerService = ServiceLocator.getService(AnswerService.class);
     }
 
@@ -45,8 +48,19 @@ public class AnswerServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long answerId = RequestHelper.getLongValue(req, "answerId");
-        long redirectId = answerService.getNextQuestionId(answerId);
-        resp.sendRedirect("question?currentQuestionId=" + redirectId);
+        String redirectAddress = "";
+        if (req.getParameter("next") != null) {
+            redirectAddress = "question";
+        }
+        if(req.getParameter("button-again") != null) {
+            HttpSession session = req.getSession(false);
+            long gameId = RequestHelper.getLongValue(session, "gameId");
+            gameService.restartGame(gameId);
+            redirectAddress = "question";
+        }
+        if (req.getParameter("button-quests") != null) {
+            redirectAddress = "quests";
+        }
+        resp.sendRedirect(redirectAddress);
     }
 }

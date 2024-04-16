@@ -6,15 +6,17 @@ import java.util.List;
 
 public class Quest extends AbstractComponent {
     private String name;
+    private long userAuthorId;
     private final List<Question> questions = new ArrayList<>();
     private long firstQuestionId;
     private String description;
 
     public Quest() {};
 
-    public Quest(long id, String name, long firstQuestionId, String description) {
-        super(id);
+    public Quest(String name, long userAuthorId, long firstQuestionId, String description) {
+        super(0L);
         this.name = name;
+        this.userAuthorId = userAuthorId;
         this.firstQuestionId = firstQuestionId;
         this.description = description;
     }
@@ -31,7 +33,7 @@ public class Quest extends AbstractComponent {
         return name;
     }
 
-    public long getCurrentQuestionId() {
+    public long getFirstQuestionId() {
         return firstQuestionId;
     }
 
@@ -51,15 +53,11 @@ public class Quest extends AbstractComponent {
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return "Quest{" +
-                "name='" + name + '\'' +
-                ", firstQuestionId=" + firstQuestionId +
-                ", id=" + id +
-                ", description='" + description + '\'' +
-                ", questions=" + questions.size() +
-                '}';
+    public long getUserAuthorId() {
+        return userAuthorId;
     }
 
+    public void setUserAuthorId(long userAuthorId) {
+        this.userAuthorId = userAuthorId;
+    }
 }

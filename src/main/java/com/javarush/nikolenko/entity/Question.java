@@ -10,8 +10,8 @@ public class Question extends AbstractComponent {
 
     public Question() {}
 
-    public Question(long id, String questionMessage) {
-        super(id);
+    public Question(String questionMessage) {
+        super(0L);
         this.questionMessage = questionMessage;
     }
 
@@ -27,4 +27,7 @@ public class Question extends AbstractComponent {
         return questionMessage;
     }
 
+    public void setQuestionMessage(String questionMessage) {
+        this.questionMessage = questionMessage;
+    }
 }

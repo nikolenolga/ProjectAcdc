@@ -1,11 +1,9 @@
 package com.javarush.nikolenko.service;
 
 import com.javarush.nikolenko.entity.Quest;
-import com.javarush.nikolenko.entity.Question;
 import com.javarush.nikolenko.repository.QuestRepository;
 
 import java.util.Collection;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class QuestService {
@@ -35,11 +33,8 @@ public class QuestService {
         return questRepository.get(id);
     }
 
-    public long getCurrentQuestionId(long id) {
-        return get(id).map(Quest::getCurrentQuestionId).orElse(0L);
+    public long getFirstQuestionId(long id) {
+        return get(id).map(Quest::getFirstQuestionId).orElse(0L);
     }
-
-
-
 
 }

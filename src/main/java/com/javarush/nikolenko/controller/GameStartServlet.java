@@ -2,9 +2,14 @@ package com.javarush.nikolenko.controller;
 
 import com.javarush.nikolenko.config.Configuration;
 import com.javarush.nikolenko.config.ServiceLocator;
+import com.javarush.nikolenko.entity.Game;
 import com.javarush.nikolenko.entity.Quest;
+import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.exception.QuestException;
+import com.javarush.nikolenko.service.GameService;
 import com.javarush.nikolenko.service.QuestService;
+import com.javarush.nikolenko.service.UserService;
+import com.javarush.nikolenko.utils.AppStaticComponents;
 import com.javarush.nikolenko.utils.RequestHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
@@ -22,11 +27,13 @@ import java.util.Optional;
 @WebServlet(urlPatterns = "/game-start")
 public class GameStartServlet extends HttpServlet {
     private QuestService questService;
+    private GameService gameService;
 
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
         questService = ServiceLocator.getService(QuestService.class);
+        gameService = ServiceLocator.getService(GameService.class);
     }
 
     @Override
@@ -38,9 +45,7 @@ public class GameStartServlet extends HttpServlet {
         }
         Quest quest = optionalQuest.get();
         req.setAttribute("quest", quest);
-
-        HttpSession session = req.getSession();
-        session.setAttribute("questId", questId);
+        req.setAttribute("questId", questId);
 
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/views/game-start.jsp");
         requestDispatcher.forward(req, resp);
@@ -48,8 +53,18 @@ public class GameStartServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+        long userId = RequestHelper.getLongValue(session, "userId");
         long questId = RequestHelper.getLongValue(req, "questId");
-        long currentQuestionId = questService.getCurrentQuestionId(questId);
-        resp.sendRedirect("question?currentQuestionId=" + currentQuestionId);
+        long firstQuestionId = questService.getFirstQuestionId(questId);
+
+        Game game = gameService.initGame(userId, questId, firstQuestionId);
+        session.setAttribute("game", game);
+        session.setAttribute("gameId", game.getId());
+
+        String redirectAddress = req.getParameter("start") != null
+                ? "question"
+                : "game-start?questId=" + questId;
+        resp.sendRedirect(redirectAddress);
     }
 }

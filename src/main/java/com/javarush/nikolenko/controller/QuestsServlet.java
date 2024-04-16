@@ -1,6 +1,5 @@
 package com.javarush.nikolenko.controller;
 
-import com.javarush.nikolenko.config.Configuration;
 import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.service.QuestService;
@@ -16,15 +15,13 @@ import lombok.SneakyThrows;
 import java.io.IOException;
 import java.util.Collection;
 
-@WebServlet(urlPatterns = "/list-quests")
-public class ListQuestsServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/quests"})
+public class QuestsServlet extends HttpServlet {
     private QuestService questService;
-    private Configuration configuration;
 
     @SneakyThrows
     @Override
     public void init(ServletConfig config) {
-        configuration = ServiceLocator.getService(Configuration.class);
         questService = ServiceLocator.getService(QuestService.class);
     }
 
@@ -32,7 +29,7 @@ public class ListQuestsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Collection<Quest> quests = questService.getAll();
         req.setAttribute("quests", quests);
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/views/list-quests.jsp");
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/views/quests.jsp");
         requestDispatcher.forward(req, resp);
     }
     

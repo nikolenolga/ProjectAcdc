@@ -6,12 +6,11 @@ public class Answer extends AbstractComponent {
     private long nextQuestionId;
     private String finalMessage;
 
-
     public Answer() {
     }
 
-    public Answer(long id, String answerMessage, GameState gameState, long nextQuestionId, String finalMessage) {
-        super(id);
+    public Answer(String answerMessage, GameState gameState, long nextQuestionId, String finalMessage) {
+        super(0L);
         this.answerMessage = answerMessage;
         this.gameState = gameState;
         this.nextQuestionId = nextQuestionId;
@@ -32,6 +31,22 @@ public class Answer extends AbstractComponent {
 
     public String getFinalMessage() {
         return finalMessage;
+    }
+
+    public void setAnswerMessage(String answerMessage) {
+        this.answerMessage = answerMessage;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public void setNextQuestionId(long nextQuestionId) {
+        this.nextQuestionId = nextQuestionId;
+    }
+
+    public void setFinalMessage(String finalMessage) {
+        this.finalMessage = finalMessage;
     }
 
     public boolean isFinal() {
@@ -58,4 +73,11 @@ public class Answer extends AbstractComponent {
         return !hasFinalMessage() && !isFinal() && hasNextQuestion();
     }
 
+    @Override
+    public String getImage() {
+        String parentResult = super.getImage();
+        if(isWin()) parentResult += "-win";
+        if(isLose()) parentResult += "-lose";
+        return parentResult;
+    }
 }
