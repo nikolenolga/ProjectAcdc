@@ -23,10 +23,14 @@ public class Configuration {
         userService = ServiceLocator.getService(UserService.class);
         userService.create(AppStaticComponents.ADMIN);
         userService.create(AppStaticComponents.ANONYMOUS);
-        configureQuests();
+        configDefaultQuests();
+        configDefaultQuests();
+        configDefaultQuests();
+        configDefaultQuests();
+        configDefaultQuests();
     }
 
-    public void configureQuests() {
+    private void configDefaultQuests() {
         defaultQuest();
         exampleQuest();
     }
@@ -63,7 +67,7 @@ public class Configuration {
         question2.addPossibleAnswer(answer5);
         question2.addPossibleAnswer(answer6);
 
-        Quest quest = new Quest("Не останься голодным.", AppStaticComponents.ADMIN.getId(), question.getId(), "Вы пришли домой после тяжелого рабочего дня, вам срочно исправить ошибку в проекте, но вы очень голодны.");
+        Quest quest = new Quest("Example. Не останься голодным.", AppStaticComponents.ADMIN.getId(), question.getId(), "Вы пришли домой после тяжелого рабочего дня, вам срочно исправить ошибку в проекте, но вы очень голодны.");
         quest.addQuestion(question);
         quest.addQuestion(question1);
         quest.addQuestion(question2);

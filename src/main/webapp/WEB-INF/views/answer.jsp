@@ -1,5 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="parts/head-part.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<c:choose>
+    <c:when test="${sessionScope.authorized}">
+        <%@ include file="parts/header-authorized.jsp"%>
+    </c:when>
+    <c:otherwise>
+        <%@ include file="parts/header.jsp"%>
+    </c:otherwise>
+</c:choose>
 
 <div class="base">
     <div class="base-border">
@@ -21,11 +30,11 @@
                 <form method="post">
                     <c:choose>
                         <c:when test="${requestScope.answer.isFinal()}">
-                            <button class="base-button" name="button-again">Начать заново</button>
+                            <button class="base-button" name="button-restart">Начать заново</button>
                             <button class="base-button" name="button-quests">К списку квестов</button>
                         </c:when>
                         <c:otherwise>
-                            <button class="base-button" name="next">Дальше</button>
+                            <button class="base-button" name="button-next">Дальше</button>
                         </c:otherwise>
                     </c:choose>
                 </form>

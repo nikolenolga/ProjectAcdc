@@ -6,7 +6,9 @@ import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.service.AnswerService;
 import com.javarush.nikolenko.service.GameService;
+import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.RequestHelper;
+import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -20,7 +22,7 @@ import lombok.SneakyThrows;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet(urlPatterns = {"/answer"})
+@WebServlet(urlPatterns = {UrlHelper.ANSWER})
 public class AnswerServlet extends HttpServlet {
     private GameService gameService;
     private AnswerService answerService;
@@ -34,32 +36,32 @@ public class AnswerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long answerId = RequestHelper.getLongValue(req, "answerId");
+        long answerId = RequestHelper.getLongValue(req, Key.ANSWER_ID);
         Optional<Answer> optionalAnswer = answerService.get(answerId);
         if (optionalAnswer.isEmpty()) {
             throw new QuestException("Answer not found");
         }
         Answer answer = optionalAnswer.get();
-        req.setAttribute("answer", answer);
+        req.setAttribute(Key.ANSWER, answer);
 
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/views/answer.jsp");
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher(UrlHelper.getJspPath(UrlHelper.ANSWER));
         requestDispatcher.forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String redirectAddress = "";
-        if (req.getParameter("next") != null) {
-            redirectAddress = "question";
+        String redirectAddress = UrlHelper.INDEX;
+        if (req.getParameter(Key.BUTTON_NEXT) != null) {
+            redirectAddress = UrlHelper.QUESTION;
         }
-        if(req.getParameter("button-again") != null) {
+        if(req.getParameter(Key.BUTTON_RESTART) != null) {
             HttpSession session = req.getSession(false);
-            long gameId = RequestHelper.getLongValue(session, "gameId");
+            long gameId = RequestHelper.getLongValue(session, Key.GAME_ID);
             gameService.restartGame(gameId);
-            redirectAddress = "question";
+            redirectAddress = UrlHelper.QUESTION;
         }
-        if (req.getParameter("button-quests") != null) {
-            redirectAddress = "quests";
+        if (req.getParameter(Key.BUTTON_QUESTS) != null) {
+            redirectAddress = UrlHelper.QUESTS;
         }
         resp.sendRedirect(redirectAddress);
     }

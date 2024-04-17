@@ -1,10 +1,7 @@
 package com.javarush.nikolenko.controller;
 
-import com.javarush.nikolenko.config.Configuration;
 import com.javarush.nikolenko.config.ServiceLocator;
-import com.javarush.nikolenko.entity.Quest;
-import com.javarush.nikolenko.service.QuestService;
-import com.javarush.nikolenko.utils.Key;
+import com.javarush.nikolenko.service.UserService;
 import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
@@ -16,24 +13,20 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
-import java.util.Collection;
 
-@WebServlet(urlPatterns = {UrlHelper.INDEX, UrlHelper.QUESTS})
-public class QuestsServlet extends HttpServlet {
-    private QuestService questService;
+@WebServlet(urlPatterns = {UrlHelper.LOGIN})
+public class LoginServlet extends HttpServlet {
+    private UserService userService;
 
     @SneakyThrows
     @Override
-    public void init(ServletConfig config) {
-        ServiceLocator.getService(Configuration.class);
-        questService = ServiceLocator.getService(QuestService.class);
+    public void init(ServletConfig config) throws ServletException {
+        userService = ServiceLocator.getService(UserService.class);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Collection<Quest> quests = questService.getAll();
-        req.setAttribute(Key.QUESTS, quests);
-        String jspPath = UrlHelper.getJspPath(UrlHelper.QUESTS);
+        String jspPath = UrlHelper.getJspPath(UrlHelper.LOGIN);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher(jspPath);
         requestDispatcher.forward(req, resp);
     }
@@ -42,4 +35,5 @@ public class QuestsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
     }
+
 }

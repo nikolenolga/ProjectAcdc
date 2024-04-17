@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="../parts/head-part.jsp"%>
+<%@ include file="../parts/header-authorized.jsp"%>
 
 <div class="block">
     <form method="post">

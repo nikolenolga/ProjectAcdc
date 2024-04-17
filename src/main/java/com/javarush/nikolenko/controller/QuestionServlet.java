@@ -7,7 +7,9 @@ import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.service.AnswerService;
 import com.javarush.nikolenko.service.GameService;
 import com.javarush.nikolenko.service.QuestionService;
+import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.RequestHelper;
+import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -22,7 +24,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
-@WebServlet(urlPatterns = "/question")
+@WebServlet(urlPatterns = {UrlHelper.QUESTION})
 public class QuestionServlet extends HttpServlet {
     private GameService gameService;
     private QuestionService questionService;
@@ -39,7 +41,7 @@ public class QuestionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
-        long gameId = RequestHelper.getLongValue(session, "gameId");
+        long gameId = RequestHelper.getLongValue(session, Key.GAME_ID);
         long currentQuestionId = gameService.getCurrentQuestionId(gameId);
         Optional<Question> optionalQuestion = questionService.get(currentQuestionId);
         if (optionalQuestion.isEmpty()) {
@@ -52,23 +54,23 @@ public class QuestionServlet extends HttpServlet {
             throw new QuestException("No answers found for question with id %d".formatted(currentQuestionId));
         }
 
-        req.setAttribute("question", question);
-        req.setAttribute("answers", answers);
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/views/question.jsp");
+        req.setAttribute(Key.QUESTION, question);
+        req.setAttribute(Key.ANSWERS, answers);
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher(UrlHelper.getJspPath(UrlHelper.QUESTION));
         requestDispatcher.forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long answerId = RequestHelper.getLongValue(req, "answerId");
+        long answerId = RequestHelper.getLongValue(req, Key.ANSWER_ID);
         HttpSession session = req.getSession(false);
-        long gameId = RequestHelper.getLongValue(session, "gameId");
+        long gameId = RequestHelper.getLongValue(session, Key.GAME_ID);
         long nextQuestionId = answerService.getNextQuestionId(answerId);
         gameService.setNextQuestion(gameId, nextQuestionId);
 
         String redirectPath = answerService.hasFinalMessage(answerId)
-                ? "answer?answerId=" + answerId
-                : "question";
+                ? UrlHelper.getUrlWithParameter(UrlHelper.ANSWER, Key.ANSWER_ID) + answerId
+                : UrlHelper.QUESTION;
         resp.sendRedirect(redirectPath);
     }
 }

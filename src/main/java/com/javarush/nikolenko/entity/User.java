@@ -8,7 +8,6 @@ import java.util.List;
 public class User extends AbstractComponent {
     private String name;
     private String login;
-    private int age;
     private String password;
     private final List<Quest> createdQuests = new ArrayList<>();
     private final List<Game> playedGames = new ArrayList<>();
@@ -20,11 +19,10 @@ public class User extends AbstractComponent {
         this.name = name;
     }
 
-    public User(String name, String login, int age, String password) {
+    public User(String name, String login, String password) {
         super(0L);
         this.name = name;
         this.login = login;
-        this.age = age;
         this.password = password;
     }
 
@@ -58,14 +56,6 @@ public class User extends AbstractComponent {
 
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public String getPassword() {
