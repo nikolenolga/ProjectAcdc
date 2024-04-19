@@ -18,7 +18,16 @@
     <nav class="menu">
         <ul>
             <li><a href="/quests">Квесты</a></li>
-            <li><a class="active" href="/user-quests">Редактор квестов</a></li>
+            <li>
+                <div class="dropdown">
+                    <a class="dropbtn" href="/user-quests">Редактор квестов</a>
+                    <div class="dropdown-content">
+                        <a href="/create-quest">Создать квест</a>
+                        <a href="/user-quests">Редактировать квест</a>
+                        <a href="/load-quest">Загрузить квест</a>
+                    </div>
+                </div>
+            </li>
         </ul>
     </nav>
     <div class="authorize-block">

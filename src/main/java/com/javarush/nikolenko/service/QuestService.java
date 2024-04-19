@@ -37,4 +37,7 @@ public class QuestService {
         return get(id).map(Quest::getFirstQuestionId).orElse(0L);
     }
 
+    public Collection<Quest> getUserQuests(long id) {
+        return questRepository.getUserQuests(id);
+    }
 }

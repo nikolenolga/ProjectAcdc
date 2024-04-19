@@ -43,16 +43,8 @@ public class QuestionServlet extends HttpServlet {
         HttpSession session = req.getSession(false);
         long gameId = RequestHelper.getLongValue(session, Key.GAME_ID);
         long currentQuestionId = gameService.getCurrentQuestionId(gameId);
-        Optional<Question> optionalQuestion = questionService.get(currentQuestionId);
-        if (optionalQuestion.isEmpty()) {
-            throw new QuestException("No question found with id %d".formatted(currentQuestionId));
-        }
-
-        Question question = optionalQuestion.get();
+        Question question = questionService.get(currentQuestionId).get();
         Collection<Answer> answers = questionService.getAnswersByQuestionId(currentQuestionId);
-        if(answers.isEmpty()){
-            throw new QuestException("No answers found for question with id %d".formatted(currentQuestionId));
-        }
 
         req.setAttribute(Key.QUESTION, question);
         req.setAttribute(Key.ANSWERS, answers);

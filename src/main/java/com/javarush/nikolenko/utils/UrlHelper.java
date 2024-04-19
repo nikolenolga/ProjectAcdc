@@ -7,7 +7,7 @@ public final class UrlHelper {
     public static final String QUESTION = "/question";
     public static final String ANSWER = "/answer";
     public static final String LOGIN = "/login";
-    public static final String REGISTER = "/registration";
+    public static final String REGISTRATION = "/registration";
     public static final String EDIT_USER = "/edit-user";
     public static final String EDIT_QUEST = "/edit-quest";
     public static final String USER_QUESTS = "/user-quests";

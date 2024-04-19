@@ -2,6 +2,7 @@ package com.javarush.nikolenko.service;
 
 import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.repository.UserRepository;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -13,12 +14,20 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void create(User user) {
-        userRepository.create(user);
+    public Optional<User> create(User user) {
+        if(ObjectUtils.allNotNull(user.getName(), user.getLogin(), user.getPassword())) {
+            userRepository.create(user);
+            return Optional.of(user);
+        }
+        return Optional.empty();
     }
 
-    public void update(User user) {
-        userRepository.update(user);
+    public Optional<User> update(User user) {
+        if(ObjectUtils.allNotNull(user.getName(), user.getLogin(), user.getPassword())) {
+            userRepository.update(user);
+            return Optional.of(user);
+        }
+        return Optional.empty();
     }
 
     public void delete(User user) {
@@ -33,8 +42,12 @@ public class UserService {
         return userRepository.get(id);
     }
 
-//    public long getCurrentQuestionId(long id) {
-//        return get(id).map(User::getFirstQuestionId).orElse(0L);
-//    }
+    public boolean userExist(String currentLogin) {
+        return userRepository.userExist(currentLogin);
+    }
+
+    public Optional<User> getUser(String currentLogin, String currentPassword) {
+        return userRepository.getUser(currentLogin, currentPassword);
+    }
 
 }

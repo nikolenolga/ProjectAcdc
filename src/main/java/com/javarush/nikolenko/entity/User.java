@@ -14,11 +14,6 @@ public class User extends AbstractComponent {
 
     public User() {}
 
-    public User(String name) {
-        super(0L);
-        this.name = name;
-    }
-
     public User(String name, String login, String password) {
         super(0L);
         this.name = name;

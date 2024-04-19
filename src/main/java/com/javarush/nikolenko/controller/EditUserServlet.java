@@ -4,6 +4,7 @@ import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.service.UserService;
 import com.javarush.nikolenko.utils.Key;
+import com.javarush.nikolenko.utils.RequestHelper;
 import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
@@ -19,8 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet(urlPatterns = {UrlHelper.LOGIN})
-public class LoginServlet extends HttpServlet {
+@WebServlet(urlPatterns = {UrlHelper.EDIT_USER})
+public class EditUserServlet extends HttpServlet {
     private UserService userService;
 
     @SneakyThrows
@@ -31,7 +32,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String jspPath = UrlHelper.getJspPath(UrlHelper.LOGIN);
+        String jspPath = UrlHelper.getJspPath(UrlHelper.EDIT_USER);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher(jspPath);
         requestDispatcher.forward(req, resp);
     }
@@ -39,19 +40,21 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        String login = req.getParameter(Key.LOGIN);
+        long userId = RequestHelper.getLongValue(session, Key.USER_ID);
+        String name = req.getParameter(Key.NAME);
         String password = req.getParameter(Key.PASSWORD);
-        Optional<User> optionalUser = userService.getUser(login, password);
 
-        if (optionalUser.isPresent()) {
+        Optional<User> optionalUser = userService.get(userId);
+        if(optionalUser.isPresent() && !StringUtils.isAnyBlank(name, password)) {
             User user = optionalUser.get();
+            user.setName(name);
+            user.setPassword(password);
+            userService.update(user);
+
             session.setAttribute(Key.USER, user);
-            session.setAttribute(Key.USER_ID, user.getId());
-            session.setAttribute(Key.IS_AUTHORIZED, true);
             resp.sendRedirect(UrlHelper.EDIT_USER);
         } else {
-            resp.sendRedirect(UrlHelper.LOGIN + "?" + Key.ALERT + "=" + Key.WRONG_USER_DATA);
+            resp.sendRedirect(UrlHelper.EDIT_USER  + "?" + Key.ALERT + "=" + Key.CANT_UPDATE);
         }
     }
-
 }

@@ -14,13 +14,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet(urlPatterns = {UrlHelper.LOGIN})
-public class LoginServlet extends HttpServlet {
+@WebServlet(urlPatterns = UrlHelper.REGISTRATION)
+public class RegistrationServlet extends HttpServlet {
     private UserService userService;
 
     @SneakyThrows
@@ -31,7 +31,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String jspPath = UrlHelper.getJspPath(UrlHelper.LOGIN);
+        String jspPath = UrlHelper.getJspPath(UrlHelper.REGISTRATION);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher(jspPath);
         requestDispatcher.forward(req, resp);
     }
@@ -40,18 +40,20 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         String login = req.getParameter(Key.LOGIN);
-        String password = req.getParameter(Key.PASSWORD);
-        Optional<User> optionalUser = userService.getUser(login, password);
 
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
+        if(!userService.userExist(login)) {
+            User user = new User(req.getParameter(Key.NAME),
+                    login,
+                    req.getParameter(Key.PASSWORD));
+            Optional<User> optionalUser = userService.create(user);
+
             session.setAttribute(Key.USER, user);
             session.setAttribute(Key.USER_ID, user.getId());
-            session.setAttribute(Key.IS_AUTHORIZED, true);
+            session.setAttribute(Key.IS_AUTHORIZED, optionalUser.isPresent());
+
             resp.sendRedirect(UrlHelper.EDIT_USER);
         } else {
-            resp.sendRedirect(UrlHelper.LOGIN + "?" + Key.ALERT + "=" + Key.WRONG_USER_DATA);
+            resp.sendRedirect(UrlHelper.REGISTRATION  + "?" + Key.ALERT + "=" + Key.USER_EXIST);
         }
     }
-
 }

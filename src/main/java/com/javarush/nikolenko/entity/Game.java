@@ -17,6 +17,7 @@ public class Game extends AbstractComponent {
     }
 
     public void restart() {
+        this.gameState = GameState.GAME;
         this.currentQuestionId = this.firstQuestionId;
     }
 

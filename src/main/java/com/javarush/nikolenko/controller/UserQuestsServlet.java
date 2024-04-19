@@ -1,9 +1,12 @@
 package com.javarush.nikolenko.controller;
-
 import com.javarush.nikolenko.config.ServiceLocator;
-import com.javarush.nikolenko.entity.User;
+import com.javarush.nikolenko.entity.Quest;
+import com.javarush.nikolenko.service.AnswerService;
+import com.javarush.nikolenko.service.QuestService;
+import com.javarush.nikolenko.service.QuestionService;
 import com.javarush.nikolenko.service.UserService;
 import com.javarush.nikolenko.utils.Key;
+import com.javarush.nikolenko.utils.RequestHelper;
 import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
@@ -14,44 +17,31 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.util.Optional;
+import java.util.Collection;
 
-@WebServlet(urlPatterns = {UrlHelper.LOGIN})
-public class LoginServlet extends HttpServlet {
+@WebServlet(urlPatterns={UrlHelper.USER_QUESTS})
+public class UserQuestsServlet extends HttpServlet {
+    private QuestService questService;
     private UserService userService;
 
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
+        questService = ServiceLocator.getService(QuestService.class);
         userService = ServiceLocator.getService(UserService.class);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String jspPath = UrlHelper.getJspPath(UrlHelper.LOGIN);
+        HttpSession session = req.getSession();
+        long userId = RequestHelper.getLongValue(session, Key.USER_ID);
+        Collection<Quest> quests = questService.getUserQuests(userId);
+        req.setAttribute(Key.QUESTS, quests);
+
+        String jspPath = UrlHelper.getJspPath(UrlHelper.USER_QUESTS);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher(jspPath);
         requestDispatcher.forward(req, resp);
     }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        String login = req.getParameter(Key.LOGIN);
-        String password = req.getParameter(Key.PASSWORD);
-        Optional<User> optionalUser = userService.getUser(login, password);
-
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            session.setAttribute(Key.USER, user);
-            session.setAttribute(Key.USER_ID, user.getId());
-            session.setAttribute(Key.IS_AUTHORIZED, true);
-            resp.sendRedirect(UrlHelper.EDIT_USER);
-        } else {
-            resp.sendRedirect(UrlHelper.LOGIN + "?" + Key.ALERT + "=" + Key.WRONG_USER_DATA);
-        }
-    }
-
 }
