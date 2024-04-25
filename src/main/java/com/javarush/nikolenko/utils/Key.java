@@ -22,6 +22,13 @@ public class Key {
     public static final String NAME = "name";
     public static final String PASSWORD = "password";
     public static final String LOGIN = "login";
+    public static final String DESCRIPTION = "description";
+    public static final String QUESTION_MESSAGE = "questionMessage";
+    public static final String ANSWER_MESSAGE = "answerMessage";
+
+    public static final String NEXT_QUESTION_ID = "nextQuestionId";
+    public static final String FIRST_QUESTION_ID = "firstQuestionId";
+    public static final String FINAL_MESSAGE = "finalMessage";
 
     public static final String BUTTON_NEXT = "button-next";
     public static final String BUTTON_START = "button-start";
@@ -34,12 +41,24 @@ public class Key {
     public static final String BUTTON_LOAD_ANSWER_IMAGE = "button-load-answer-image";
     public static final String BUTTON_EDIT_QUEST = "button-edit-quest";
     public static final String BUTTON_EDIT_QUESTION = "button-edit-question";
+    public static final String BUTTON_EDIT_ANSWER = "button-edit-answer";
     public static final String BUTTON_ADD_QUESTION = "button-add-question";
     public static final String BUTTON_ADD_ANSWER = "button-add-answer";
+    public static final String BUTTON_EXIT = "button-exit";
+    public static final String BUTTON_DELETE_QUEST = "button-delete-quest";
+    public static final String BUTTON_DELETE_QUESTION = "button-delete-question";
+    public static final String BUTTON_DELETE_ANSWER = "button-delete-answer";
+    public static final String BUTTON_BACK = "button-back";
+    public static final String BUTTON_ADD_QUEST = "button-add-quest";
+    public static final String BUTTON_EXPORT = "button-export";
+    public static final String BUTTON_RESET = "button-reset";
+    public static final String BUTTON_SAMPLE = "button-sample";
 
     public static final String IS_AUTHORIZED = "authorized";
     public static final String HAS_ALERTS =  "hasAlerts";
     public static final String ALERT =  "alert";
+    public static final String RULES =  "rules";
+
 
     public static final String WRONG_USER_DATA =  "Wrong login or password.";
     public static final String USER_EXIST =  "A user with this login exists.";

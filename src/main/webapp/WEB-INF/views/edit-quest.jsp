@@ -42,8 +42,21 @@
                                       required="">${requestScope.quest.description}</textarea>
                         </div>
 
-                        <button class="buttons-for-edit-quest" name="button-edit-quest">Сохранить</button>
-                        <button class="button-add-components" name="button-add-question">Добавить вопрос</button>
+                        <!-- Text input-->
+                        <div class="horizontal-edit-quest">
+                            <div class="edit-quest-label">
+                                <label class="edit-quest-label">Номер первого вопроса</label>
+                            </div>
+                            <input class="edit-quest-text-input"
+                                   name="firstQuestionId"
+                                   type="text"
+                                   value="${quest.firstQuestionId}"
+                                   >
+                        </div>
+
+                        <button class="three-buttons" name="button-edit-quest">Сохранить</button>
+                        <button class="three-buttons" name="button-delete-quest">Удалить</button>
+                        <button class="three-buttons" name="button-add-question">Добавить вопрос</button>
 
                     </fieldset>
                 </form>
@@ -89,8 +102,9 @@
                                           required="">${question.questionMessage}</textarea>
                             </div>
 
-                            <button class="buttons-for-edit-quest" name="button-edit-question">Сохранить</button>
-                            <button class="button-add-components" name="button-add-answer">Добавить ответ</button>
+                            <button class="three-buttons" name="button-edit-question">Сохранить</button>
+                            <button class="three-buttons" name="button-delete-question">Удалить</button>
+                            <button class="three-buttons" name="button-add-answer">Добавить ответ</button>
                         </div>
                     </fieldset>
                 </form>
@@ -113,6 +127,19 @@
                                 <%-- Блок для редактирования основных свойств квеста: имя, описание --%>
                             <div class="edit-question-inline">
                                 <h2 class="answer-edit-h2">Редактировать ответ:</h2>
+                                <!-- Text input-->
+                                <div class="horizontal-edit-quest">
+                                    <div class="edit-quest-label">
+                                        <label class="edit-quest-label">Номер вопроса</label>
+                                    </div>
+                                    <input class="edit-quest-text-input"
+                                           name="questionId"
+                                           type="text"
+                                           value="${question.id}"
+                                           required=""
+                                           readonly>
+                                </div>
+
                                 <!-- Text input-->
                                 <div class="horizontal-edit-quest">
                                     <div class="edit-quest-label">
@@ -143,7 +170,7 @@
                                     </div>
                                     <textarea class="edit-quest-text-textarea"
                                               name="finalMessage"
-                                              required="">${answer.finalMessage}</textarea>
+                                              >${answer.finalMessage}</textarea>
                                 </div>
 
 
@@ -153,7 +180,7 @@
                                     </div>
                                     <select name="gameState"
                                             class="edit-quest-text-textarea">
-                                        <c:forEach var="gameState" items="${requestScope.gameStates}">
+                                        <c:forEach var="gameState" items="${applicationScope.gameStates}">
                                             <option value="${gameState}" ${gameState == answer.gameState ? "selected" : ""}>${gameState}</option>
                                         </c:forEach>
                                     </select>
@@ -172,9 +199,8 @@
                                     </div>
                                 </c:if>
 
-                                <!-- Button (Double) -->
-                                <button class="buttons-for-edit-answer" name="button-edit-answer">Сохранить изменения
-                                </button>
+                                <button class="buttons-for-edit-quest" name="button-edit-answer">Сохранить</button>
+                                <button class="button-add-components" name="button-delete-answer">Удалить ответ</button>
                             </div>
                         </fieldset>
                     </form>

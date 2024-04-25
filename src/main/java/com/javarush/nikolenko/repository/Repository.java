@@ -12,6 +12,6 @@ public interface Repository<T> {
 
     Collection<T> getAll();
 
-    Optional<T> get(long id);
+    Optional<T> get(Long id);
 
 }

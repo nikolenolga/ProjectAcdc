@@ -12,7 +12,7 @@
 <header>
     <div class="logo">
         <a href="/quests">
-            <img src="${pageContext.request.contextPath}/img/logo.png" width="177px" height="40px"/>
+            <img src="${pageContext.request.contextPath}/img/logo.png" width="177px" height="40px" alt="logo"/>
         </a>
     </div>
     <nav class="menu">
@@ -20,10 +20,11 @@
             <li><a href="/quests">Квесты</a></li>
             <li>
                 <div class="dropdown">
-                    <a class="dropbtn" href="/user-quests">Редактор квестов</a>
+                    <a class="drop" href="/user-quests">Редактор квестов</a>
                     <div class="dropdown-content">
-                        <a href="/create-quest">Создать квест</a>
                         <a href="/user-quests">Редактировать квест</a>
+                        <a href="/create-quest">Создать квест</a>
+                        <a href="/quest-text-editor">Текстовый редактор</a>
                         <a href="/load-quest">Загрузить квест</a>
                     </div>
                 </div>
@@ -35,7 +36,7 @@
     </div>
     <div class="logo">
         <a href="/edit-user">
-            <img class="menu-image" src="${pageContext.request.contextPath}/img/${sessionScope.user.getImage()}.png" alt="user-image">
+            <img class="menu-image" src="${pageContext.request.contextPath}/img/${sessionScope.user.getImage()}.png"  alt="user-image">
         </a>
     </div>
 </header>

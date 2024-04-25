@@ -16,9 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
-
 import java.io.IOException;
-import java.util.Optional;
 
 @WebServlet(urlPatterns = {UrlHelper.EDIT_USER})
 public class EditUserServlet extends HttpServlet {
@@ -43,18 +41,22 @@ public class EditUserServlet extends HttpServlet {
         long userId = RequestHelper.getLongValue(session, Key.USER_ID);
         String name = req.getParameter(Key.NAME);
         String password = req.getParameter(Key.PASSWORD);
+        User user = userService.get(userId).get();
+        String redirectPath = UrlHelper.EDIT_USER;
 
-        Optional<User> optionalUser = userService.get(userId);
-        if(optionalUser.isPresent() && !StringUtils.isAnyBlank(name, password)) {
-            User user = optionalUser.get();
+        if(req.getParameter(Key.BUTTON_USER_IMG_LOAD) != null) {
+        }
+        if(req.getParameter(Key.BUTTON_SUBMIT) != null && !StringUtils.isAnyBlank(name, password)) {
+
             user.setName(name);
             user.setPassword(password);
             userService.update(user);
 
             session.setAttribute(Key.USER, user);
-            resp.sendRedirect(UrlHelper.EDIT_USER);
         } else {
-            resp.sendRedirect(UrlHelper.EDIT_USER  + "?" + Key.ALERT + "=" + Key.CANT_UPDATE);
+            redirectPath += "?" + Key.ALERT + "=" + Key.CANT_UPDATE;
         }
+
+        resp.sendRedirect(redirectPath);
     }
 }

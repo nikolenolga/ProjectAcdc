@@ -1,14 +1,21 @@
 package com.javarush.nikolenko.entity;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
 public class Question extends AbstractComponent {
-    private String questionMessage;
     private final List<Answer> possibleAnswers = new ArrayList<>();
-
-    public Question() {}
+    private String questionMessage;
 
     public Question(String questionMessage) {
         super(0L);
@@ -23,11 +30,7 @@ public class Question extends AbstractComponent {
         possibleAnswers.add(answer);
     }
 
-    public String getQuestionMessage() {
-        return questionMessage;
-    }
-
-    public void setQuestionMessage(String questionMessage) {
-        this.questionMessage = questionMessage;
+    public void removePossibleAnswer(Answer answer) {
+        possibleAnswers.remove(answer);
     }
 }

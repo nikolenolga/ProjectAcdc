@@ -1,18 +1,23 @@
 package com.javarush.nikolenko.entity;
 
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class User extends AbstractComponent {
+    private final List<Quest> createdQuests = new ArrayList<>();
+    private final List<Game> playedGames = new ArrayList<>();
     private String name;
     private String login;
     private String password;
-    private final List<Quest> createdQuests = new ArrayList<>();
-    private final List<Game> playedGames = new ArrayList<>();
-
-    public User() {}
 
     public User(String name, String login, String password) {
         super(0L);
@@ -35,29 +40,5 @@ public class User extends AbstractComponent {
 
     public List<Game> getPlayedGames() {
         return Collections.unmodifiableList(playedGames);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

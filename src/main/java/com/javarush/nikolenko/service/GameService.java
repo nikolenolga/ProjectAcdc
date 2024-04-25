@@ -2,6 +2,7 @@ package com.javarush.nikolenko.service;
 
 import com.javarush.nikolenko.entity.Game;
 import com.javarush.nikolenko.repository.GameRepository;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -13,12 +14,20 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
-    public void create(Game game) {
-        gameRepository.create(game);
+    public Optional<Game> create(Game game) {
+        if (ObjectUtils.allNotNull(game.getUserPlayerId(), game.getQuestId(), game.getCurrentQuestionId(), game.getFirstQuestionId())) {
+            gameRepository.create(game);
+            return Optional.of(game);
+        }
+        return Optional.empty();
     }
 
-    public void update(Game game) {
-        gameRepository.update(game);
+    public Optional<Game> update(Game game) {
+        if (ObjectUtils.allNotNull(game.getUserPlayerId(), game.getQuestId(), game.getCurrentQuestionId(), game.getFirstQuestionId())) {
+            gameRepository.update(game);
+            return Optional.of(game);
+        }
+        return Optional.empty();
     }
 
     public void delete(Game game) {
@@ -39,11 +48,11 @@ public class GameService {
         return game;
     }
 
-    public long getFirstQuestionId(long id) {
+    public Long getFirstQuestionId(long id) {
         return get(id).map(Game::getFirstQuestionId).orElse(0L);
     }
 
-    public long getCurrentQuestionId(long id) {
+    public Long getCurrentQuestionId(long id) {
         return get(id).map(Game::getCurrentQuestionId).orElse(0L);
     }
 

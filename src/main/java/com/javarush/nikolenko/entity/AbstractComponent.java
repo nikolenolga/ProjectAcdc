@@ -1,30 +1,22 @@
 package com.javarush.nikolenko.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public abstract class AbstractComponent {
-    protected long id;
+    protected Long id;
     protected boolean img;
 
     protected AbstractComponent(long id) {
         this.id = id;
     }
 
-    protected AbstractComponent() {
-    }
-
-    public boolean isImg() {
-        return img;
-    }
-
     public void setImg(boolean img) {
         this.img = img;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getImage() {

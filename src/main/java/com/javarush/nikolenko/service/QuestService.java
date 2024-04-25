@@ -2,7 +2,13 @@ package com.javarush.nikolenko.service;
 
 import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.repository.QuestRepository;
+import com.javarush.nikolenko.utils.UrlHelper;
+import org.apache.commons.lang3.ObjectUtils;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -13,12 +19,20 @@ public class QuestService {
         this.questRepository = questRepository;
     }
 
-    public void create(Quest quest) {
-        questRepository.create(quest);
+    public Optional<Quest> create(Quest quest) {
+        if (ObjectUtils.allNotNull(quest.getName(), quest.getUserAuthorId(), quest.getFirstQuestionId(), quest.getDescription())) {
+            questRepository.create(quest);
+            return Optional.of(quest);
+        }
+        return Optional.empty();
     }
 
-    public void update(Quest quest) {
-        questRepository.update(quest);
+    public Optional<Quest> update(Quest quest) {
+        if (ObjectUtils.allNotNull(quest.getName(), quest.getUserAuthorId(), quest.getFirstQuestionId(), quest.getDescription())) {
+            questRepository.update(quest);
+            return Optional.of(quest);
+        }
+        return Optional.empty();
     }
 
     public void delete(Quest quest) {
@@ -33,11 +47,26 @@ public class QuestService {
         return questRepository.get(id);
     }
 
-    public long getFirstQuestionId(long id) {
+    public Long getFirstQuestionId(long id) {
         return get(id).map(Quest::getFirstQuestionId).orElse(0L);
     }
 
     public Collection<Quest> getUserQuests(long id) {
         return questRepository.getUserQuests(id);
     }
+
+    public String loadRules() {
+        StringBuilder fileText = new StringBuilder();
+        try(BufferedReader reader = new BufferedReader(new FileReader(UrlHelper.RULES_FILE))) {
+
+        } catch (FileNotFoundException e) {
+
+        } catch (IOException e) {
+
+        }
+
+        return fileText.toString();
+    }
+
+    public 
 }

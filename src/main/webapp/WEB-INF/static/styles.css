@@ -8,8 +8,8 @@ body {
 
 fieldset {
     border: none;
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
 }
 
 button {
@@ -100,7 +100,7 @@ h3 {
 .block-h2 {
     text-align: left;
     color: #78797e;
-    margin: 0px;
+    margin: 0;
     font-size: 24px;
 }
 
@@ -137,7 +137,7 @@ h3 {
     display: block;
     background-color: #e5e5e5;
     width: 100%;
-    margin: 0px;
+    margin: 0;
 }
 .p-in-img-block {
     display: block;
@@ -159,7 +159,7 @@ h3 {
 }
 
 .base {
-    padding: 0px;
+    padding: 0;
     margin-top: 20px;
     width: 100%;
     height: 600px;
@@ -170,7 +170,7 @@ h3 {
 }
 
 .base-login {
-    padding: 0px;
+    padding: 0;
     margin-top: 20px;
     width: 100%;
     height: 450px;
@@ -181,7 +181,7 @@ h3 {
 }
 
 .base-login-login {
-    padding: 0px;
+    padding: 0;
     margin-top: 20px;
     width: 100%;
     height: 360px;
@@ -214,7 +214,7 @@ h3 {
     height: 50px;
     background-color: #e9e9e9;
     display: block;
-    margin: 0px;
+    margin: 0;
 }
 
 .login-change-reg {
@@ -264,7 +264,7 @@ h3 {
 
     width: 200px;
     height: 35px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     margin-right: 10px;
     padding-right: 10px;
     padding-left: 10px;
@@ -275,8 +275,8 @@ h3 {
 }
 
 .input-label {
-    margin: 0px 0px 10px;
-    padding: 0px;
+    margin: 0 0 10px;
+    padding: 0;
     font-size: 20px;
     text-align: left;
     font-family: "Times New Roman", sans-serif;
@@ -285,10 +285,7 @@ h3 {
 .login-button {
     height: 55px;
     width: 380px;
-    margin-top: 10px;
-    margin-bottom: 0;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 10px 0 0;
     background-color: #f5f5f5;
     border: none;
     padding-left: 15px;
@@ -306,10 +303,7 @@ h3 {
     text-align: center;
     font-size: 18px;
     color: red;
-    margin-top: 20px;
-    margin-bottom: 0px;
-    margin-right: 0px;
-    margin-left: 0px;
+    margin: 20px 0 0;
     width: 100%;
     font-family: "Times New Roman", sans-serif;
 }
@@ -368,8 +362,8 @@ h3 {
 }
 
 .menu-form {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 .list-quest-a {
@@ -486,7 +480,7 @@ h2.login-h2 {
 
 /*edit user*/
 .base-edit {
-    padding: 0px;
+    padding: 0;
     margin-top: 20px;
     width: 100%;
     height: 465px;
@@ -509,7 +503,7 @@ h2.login-h2 {
     width: 778px;
     height: 445px;
     display: block;
-    margin: 0px;
+    margin: 0;
 }
 
 .edit-inline-block {
@@ -537,16 +531,16 @@ h2.login-h2 {
     width: 380px;
     height: 380px;
     background: #e5e5e5;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 .base-user-img {
     display: block;
     width: 380px;
     height: 380px;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 .buttons-edit {
@@ -650,7 +644,7 @@ h2.login-h2 {
     width: 180px;
     height: 180px;
     padding: 0;
-    margin: 0px;
+    margin: 0;
 
     display: block;
     vertical-align: top;
@@ -698,25 +692,25 @@ h2.login-h2 {
 }
 
 .button-edit-quest-load-image {
-    height: 50px;
+    height: 55px;
     width: 200px;
     margin-top: 10px;
     background: #e5e5e5;
     border: none;
-    font-size: 20px;
+    font-size: 22px;
     text-align: center;
     font-family: "Times New Roman", sans-serif;
     display: block;
 }
 
 .buttons-for-edit-quest {
-    height: 50px;
+    height: 55px;
     width: 180px;
     margin-top: 10px;
     margin-right: 10px;
     background: #e5e5e5;
     border: none;
-    font-size: 20px;
+    font-size: 22px;
     text-align: center;
     font-family: "Times New Roman", sans-serif;
     display: inline-block;
@@ -761,24 +755,24 @@ h2.login-h2 {
 }
 
 .button-add-components {
-    height: 50px;
+    height: 55px;
     width: 500px;
     margin-top: 10px;
     background: #e5e5e5;
     border: none;
-    font-size: 20px;
+    font-size: 22px;
     text-align: center;
     font-family: "Times New Roman", sans-serif;
     display: inline-block;
 }
 
 .buttons-for-edit-answer {
-    height: 50px;
+    height: 55px;
     width: 500px;
     margin-top: 10px;
     background: #e5e5e5;
     border: none;
-    font-size: 20px;
+    font-size: 22px;
     text-align: center;
     font-family: "Times New Roman", sans-serif;
     display: inline-block;
@@ -810,17 +804,137 @@ h2.login-h2 {
     margin-top: 10px;
     background-color: #e5e5e5;
     border-radius: 4px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
 .dropdown-content a:hover {background-color: #a5d5d5;}
 
 .dropdown:hover .dropdown-content {display: block;}
 
-.dropdown:hover .dropbtn {
+.dropdown:hover .drop-parent {
     background-color: #a5d5d5;
     border-radius: 4px;
 }
 
+.buttons-user-edit {
+    height: 55px;
+    width: 187px;
+    margin: 10px 0;
+    padding: 0;
+    background: #e5e5e5;
+    border: none;
+    font-size: 22px;
+    text-align: center;
+    font-family: "Times New Roman", sans-serif;
+    display: inline-block;
+    vertical-align: top;
+}
 
 
+.three-buttons {
+    height: 55px;
+    width: 230px;
+    margin: 10px 0;
+    padding: 0;
+    background: #e5e5e5;
+    border: none;
+    font-size: 22px;
+    text-align: center;
+    font-family: "Times New Roman", sans-serif;
+    display: inline-block;
+    vertical-align: top;
+}
+
+
+
+
+
+
+
+
+.center-text-editor {
+    width: 770px;
+    padding: 20px;
+    background-color: white;
+}
+
+.text-editor-block {
+    width: 730px;
+    padding: 20px;
+
+    display: block;
+    vertical-align: top;
+
+    background: #f5f5f5;
+    color: #78797e;
+    font-family: "Times New Roman", sans-serif;
+}
+
+.text-editor-inline {
+    width: 500px;
+    padding: 0;
+    margin: 0 0 0 20px;
+
+    vertical-align: top;
+    display: inline-block;
+}
+
+.block-for-quest-text-editor {
+    font-size: 18px;
+    width: 730px;
+    padding: 0;
+    margin-top: 10px;
+    display: block;
+}
+
+.button-text-editor {
+    height: 55px;
+    width: 179px;
+    margin: 0;
+    padding: 0;
+    background: #e5e5e5;
+    border: none;
+    font-size: 22px;
+    text-align: center;
+    font-family: "Times New Roman", sans-serif;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.form-text-editor {
+    padding: 0;
+    margin: 0;
+}
+
+.text-editor-textarea {
+    width: 730px;
+    max-width: 730px;
+    min-height: 400px;
+    padding: 10px;
+
+    outline: none;
+    border: none;
+    background: #ffffff;
+    color: #78797e;
+    font-size: 18px;
+    font-family: "Times New Roman", sans-serif;
+    text-align: left;
+}
+
+.block-quest-text-label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.quest-text-label {
+    font-size: 20px;
+    text-align: left;
+    display: block;
+    vertical-align: top;
+    margin-right: 20px;
+}
+
+.text-edit-h1 {
+    padding: 0;
+    margin: 0 0 10px;
+}

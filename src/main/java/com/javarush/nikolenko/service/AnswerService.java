@@ -2,6 +2,7 @@ package com.javarush.nikolenko.service;
 
 import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.repository.AnswerRepository;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -13,12 +14,20 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public void create(Answer answer) {
-        answerRepository.create(answer);
+    public Optional<Answer> create(Answer answer) {
+        if (ObjectUtils.allNotNull(answer.getAnswerMessage(), answer.getGameState(), answer.getFinalMessage())) {
+            answerRepository.create(answer);
+            return Optional.of(answer);
+        }
+        return Optional.empty();
     }
 
-    public void update(Answer answer) {
-        answerRepository.update(answer);
+    public Optional<Answer> update(Answer answer) {
+        if (ObjectUtils.allNotNull(answer.getAnswerMessage(), answer.getGameState(), answer.getFinalMessage())) {
+            answerRepository.update(answer);
+            return Optional.of(answer);
+        }
+        return Optional.empty();
     }
 
     public void delete(Answer answer) {
@@ -48,7 +57,7 @@ public class AnswerService {
         return optionalAnswer.isPresent() && optionalAnswer.get().isFinal();
     }
 
-    public long getNextQuestionId(long id) {
+    public Long getNextQuestionId(long id) {
         Optional<Answer> optionalAnswer = get(id);
         return optionalAnswer.map(Answer::getNextQuestionId).orElse(0L);
     }

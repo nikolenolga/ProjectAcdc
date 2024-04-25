@@ -34,7 +34,7 @@ public abstract class BaseRepository<T extends AbstractComponent> implements Rep
     }
 
     @Override
-    public Optional<T> get(long id) {
+    public Optional<T> get(Long id) {
         return Optional.ofNullable(map.get(id));
     }
 

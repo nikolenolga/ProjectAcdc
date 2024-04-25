@@ -1,13 +1,19 @@
 package com.javarush.nikolenko.entity;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Builder
+@Setter
+@Getter
+@NoArgsConstructor
 public class Answer extends AbstractComponent {
     protected String answerMessage;
     protected GameState gameState;
-    private long nextQuestionId;
+    private Long nextQuestionId;
     private String finalMessage;
-
-    public Answer() {
-    }
 
     public Answer(String answerMessage, GameState gameState, long nextQuestionId, String finalMessage) {
         super(0L);
@@ -17,36 +23,12 @@ public class Answer extends AbstractComponent {
         this.finalMessage = finalMessage;
     }
 
-    public String getAnswerMessage() {
-        return answerMessage;
-    }
-
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public long getNextQuestionId() {
-        return nextQuestionId;
-    }
-
-    public String getFinalMessage() {
-        return finalMessage;
-    }
-
-    public void setAnswerMessage(String answerMessage) {
+    public Answer(String answerMessage, GameState gameState, long nextQuestionId) {
+        super(0L);
         this.answerMessage = answerMessage;
-    }
-
-    public void setGameState(GameState gameState) {
         this.gameState = gameState;
-    }
-
-    public void setNextQuestionId(long nextQuestionId) {
         this.nextQuestionId = nextQuestionId;
-    }
-
-    public void setFinalMessage(String finalMessage) {
-        this.finalMessage = finalMessage;
+        this.finalMessage = "";
     }
 
     public boolean isFinal() {
@@ -54,7 +36,7 @@ public class Answer extends AbstractComponent {
     }
 
     public boolean hasNextQuestion() {
-        return nextQuestionId != 0L;
+        return nextQuestionId != null && nextQuestionId != 0L;
     }
 
     public boolean hasFinalMessage() {
@@ -76,8 +58,8 @@ public class Answer extends AbstractComponent {
     @Override
     public String getImage() {
         String parentResult = super.getImage();
-        if(isWin()) parentResult += "-win";
-        if(isLose()) parentResult += "-lose";
+        if (isWin()) parentResult += "-win";
+        if (isLose()) parentResult += "-lose";
         return parentResult;
     }
 }

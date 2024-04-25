@@ -15,7 +15,7 @@ public class UserService {
     }
 
     public Optional<User> create(User user) {
-        if(ObjectUtils.allNotNull(user.getName(), user.getLogin(), user.getPassword())) {
+        if (ObjectUtils.allNotNull(user.getName(), user.getLogin(), user.getPassword())) {
             userRepository.create(user);
             return Optional.of(user);
         }
@@ -23,7 +23,7 @@ public class UserService {
     }
 
     public Optional<User> update(User user) {
-        if(ObjectUtils.allNotNull(user.getName(), user.getLogin(), user.getPassword())) {
+        if (ObjectUtils.allNotNull(user.getName(), user.getLogin(), user.getPassword())) {
             userRepository.update(user);
             return Optional.of(user);
         }

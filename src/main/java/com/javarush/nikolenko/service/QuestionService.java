@@ -3,8 +3,8 @@ package com.javarush.nikolenko.service;
 import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.entity.Question;
 import com.javarush.nikolenko.repository.QuestionRepository;
+import org.apache.commons.lang3.ObjectUtils;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -15,12 +15,20 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void create(Question question) {
-        questionRepository.create(question);
+    public Optional<Question> create(Question question) {
+        if (ObjectUtils.allNotNull(question.getQuestionMessage())) {
+            questionRepository.create(question);
+            return Optional.of(question);
+        }
+        return Optional.empty();
     }
 
-    public void update(Question question) {
-        questionRepository.update(question);
+    public Optional<Question> update(Question question) {
+        if (ObjectUtils.allNotNull(question.getQuestionMessage())) {
+            questionRepository.update(question);
+            return Optional.of(question);
+        }
+        return Optional.empty();
     }
 
     public void delete(Question question) {
@@ -36,12 +44,7 @@ public class QuestionService {
     }
 
     public Collection<Answer> getAnswersByQuestionId(long id) {
-        Collection<Answer> answers;
-        Optional<Question> optionalQuestion = get(id);
-        answers = optionalQuestion.isPresent()
-                ? optionalQuestion.get().getPossibleAnswers()
-                : new ArrayList<>();
-        return answers;
+        return questionRepository.getAnswersByQuestionId(id);
     }
 
 }

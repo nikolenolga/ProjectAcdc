@@ -1,9 +1,7 @@
 package com.javarush.nikolenko.controller;
 import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.entity.Quest;
-import com.javarush.nikolenko.service.AnswerService;
 import com.javarush.nikolenko.service.QuestService;
-import com.javarush.nikolenko.service.QuestionService;
 import com.javarush.nikolenko.service.UserService;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.RequestHelper;

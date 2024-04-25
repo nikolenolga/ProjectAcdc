@@ -71,8 +71,8 @@
                         </div>
 
                         <!-- Button (Double) -->
-                        <button class="buttons-edit" name="button-submit">Сохранить изменения</button>
-
+                        <button class="buttons-user-edit" name="button-submit">Сохранить</button>
+                        <button class="buttons-user-edit" name="button-exit">Выход</button>
                     </fieldset>
                 </form>
                 <c:if test="${requestScope.hasAlerts}">

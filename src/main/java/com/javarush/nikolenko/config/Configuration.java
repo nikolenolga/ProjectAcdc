@@ -5,24 +5,25 @@ import com.javarush.nikolenko.service.AnswerService;
 import com.javarush.nikolenko.service.QuestService;
 import com.javarush.nikolenko.service.QuestionService;
 import com.javarush.nikolenko.service.UserService;
-import com.javarush.nikolenko.utils.AppStaticComponents;
+import lombok.SneakyThrows;
 
-import java.lang.reflect.InvocationTargetException;
 
 public class Configuration {
     private final AnswerService answerService;
     private final QuestionService questionService;
     private final QuestService questService;
     private final UserService userService;
+    private final User admin;
 
 
-    public Configuration() throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    @SneakyThrows
+    public Configuration() throws InstantiationException, IllegalAccessException {
         answerService = ServiceLocator.getService(AnswerService.class);
         questionService = ServiceLocator.getService(QuestionService.class);
         questService = ServiceLocator.getService(QuestService.class);
         userService = ServiceLocator.getService(UserService.class);
-        userService.create(AppStaticComponents.ADMIN);
-        userService.create(AppStaticComponents.ANONYMOUS);
+        admin = new User("Admin", "admin", "admin-admin");
+        userService.create(admin);
         configDefaultQuests();
         configDefaultQuests();
         configDefaultQuests();
@@ -67,7 +68,7 @@ public class Configuration {
         question2.addPossibleAnswer(answer5);
         question2.addPossibleAnswer(answer6);
 
-        Quest quest = new Quest("Example. Не останься голодным.", AppStaticComponents.ADMIN.getId(), question.getId(), "Вы пришли домой после тяжелого рабочего дня, вам срочно исправить ошибку в проекте, но вы очень голодны.");
+        Quest quest = new Quest("Example. Не останься голодным.", admin.getId(), question.getId(), "Вы пришли домой после тяжелого рабочего дня, вам срочно исправить ошибку в проекте, но вы очень голодны.");
         quest.addQuestion(question);
         quest.addQuestion(question1);
         quest.addQuestion(question2);
@@ -94,7 +95,7 @@ public class Configuration {
         question1.addPossibleAnswer(answer2);
         question1.addPossibleAnswer(answer3);
 
-        Quest quest = new Quest("Example. Будильник.", AppStaticComponents.ADMIN.getId(), question.getId(), "Утро, звенит будильник. Как бы не проспать...");
+        Quest quest = new Quest("Example. Будильник.", admin.getId(), question.getId(), "Утро, звенит будильник. Как бы не проспать...");
         quest.addQuestion(question);
         quest.addQuestion(question1);
         questService.create(quest);

@@ -4,8 +4,6 @@ import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.entity.Game;
 import com.javarush.nikolenko.entity.GameState;
-import com.javarush.nikolenko.entity.Quest;
-import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.service.AnswerService;
 import com.javarush.nikolenko.service.GameService;
 import com.javarush.nikolenko.utils.Key;
@@ -20,9 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
-
 import java.io.IOException;
-import java.util.Optional;
 
 @WebServlet(urlPatterns = {UrlHelper.ANSWER})
 public class AnswerServlet extends HttpServlet {
@@ -48,12 +44,13 @@ public class AnswerServlet extends HttpServlet {
             game.setGameState(answer.isWin() ? GameState.WIN : GameState.LOSE);
             gameService.update(game);
         }
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher(UrlHelper.getJspPath(UrlHelper.ANSWER));
+        String jspPath = UrlHelper.getJspPath(UrlHelper.ANSWER);
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher(jspPath);
         requestDispatcher.forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String redirectAddress = UrlHelper.INDEX;
         if (req.getParameter(Key.BUTTON_NEXT) != null) {
             redirectAddress = UrlHelper.QUESTION;
