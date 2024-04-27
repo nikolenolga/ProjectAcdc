@@ -15,7 +15,7 @@
         <div class="base-left">
             <div class="base-item-left">
                 <h2 class="block-h2">${requestScope.quest.name}</h2>
-                <p class="block-p">${requestScope.quest.description}</p>
+                <p class="block-p-description">${requestScope.quest.description}</p>
             </div>
             <div class="base-item-left">
                 <form method="post">

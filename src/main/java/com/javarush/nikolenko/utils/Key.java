@@ -25,6 +25,7 @@ public class Key {
     public static final String DESCRIPTION = "description";
     public static final String QUESTION_MESSAGE = "questionMessage";
     public static final String ANSWER_MESSAGE = "answerMessage";
+    public static final String TEXT = "text";
 
     public static final String NEXT_QUESTION_ID = "nextQuestionId";
     public static final String FIRST_QUESTION_ID = "firstQuestionId";
@@ -52,7 +53,7 @@ public class Key {
     public static final String BUTTON_ADD_QUEST = "button-add-quest";
     public static final String BUTTON_EXPORT = "button-export";
     public static final String BUTTON_RESET = "button-reset";
-    public static final String BUTTON_SAMPLE = "button-sample";
+    public static final String BUTTON_LOAD = "button-load";
 
     public static final String IS_AUTHORIZED = "authorized";
     public static final String HAS_ALERTS =  "hasAlerts";
@@ -64,4 +65,7 @@ public class Key {
     public static final String USER_EXIST =  "A user with this login exists.";
     public static final String CANT_UPDATE =  "Can't update user.";
     public static final String NEED_TO_LOGIN =  "Login to access the resource.";
+    public static final String FILE_NOT_FOUND =  "File not found.";
+    public static final String FILE_LOAD_ERROR =  "Exception while loading file.";
+    public static final String PARSE_EXCEPTION =  "Quest has syntax mistakes, check your text and try again.";
 }

@@ -5,9 +5,15 @@ import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.entity.GameState;
 import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.entity.Question;
+import com.javarush.nikolenko.exception.QuestException;
 import lombok.SneakyThrows;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 public class QuestModifyService {
     QuestService questService;
@@ -131,5 +137,98 @@ public class QuestModifyService {
             questionService.update(question);
             questService.update(quest);
         }
+    }
+
+    public Optional<Quest> parseQuest(long userId, String text) {
+        //parse app entities from text
+        StringBuilder name = new StringBuilder();
+        StringBuilder description = new StringBuilder();
+        Map<Long, Question> questions = new TreeMap<>();
+        long currentQuestionIndex = 0;
+        try(BufferedReader reader = new BufferedReader(new StringReader(text))) {
+            String line;
+            while ((line = reader.readLine()) != null){
+                if (line.startsWith(": name") || line.startsWith(":name")) {
+                    if(!name.isEmpty()) name.append("\r\n");
+                    name.append(line.substring(6).replace(":", "").trim());
+                } else if (line.startsWith(": description") || line.startsWith(":description")) {
+                    if(!description.isEmpty()) description.append("\r\n");
+                    description.append(line.substring(13).replace(":", "").trim());
+                } else if (line.startsWith("?")) {
+                    //question sample line - ? : questionId : questionMessage
+                    String[] questionLine = line.split(":");
+                    long questionId = Long.parseLong(questionLine[1].trim());
+                    String questionMessage = questionLine[2].trim();
+                    Question question = Question.builder()
+                            .questionMessage(questionMessage).build();
+                    questions.put(questionId, question);
+                    currentQuestionIndex = questionId;
+                } else if (line.startsWith("=") || line.startsWith(">") || line.startsWith("<")) {
+                    //answer sample line - gameState : nextQuestionId : answerText : finalMessage
+                    String[] answerLine = line.split(":");
+                    String state = answerLine[0].trim();
+                    GameState gameState = "=".equals(state)
+                            ? GameState.GAME
+                            : ">".equals(state)
+                            ? GameState.WIN
+                            : GameState.LOSE;
+                    long nextQuestionId = Long.parseLong(answerLine[1].trim());
+                    String answerText = answerLine[2].trim();
+                    String finalMessage = answerLine.length > 3 ? answerLine[3].trim() : "";
+
+                    Answer answer = Answer.builder()
+                            .gameState(gameState)
+                            .nextQuestionId(nextQuestionId)
+                            .answerMessage(answerText)
+                            .finalMessage(finalMessage)
+                            .build();
+                    questions.get(currentQuestionIndex).addPossibleAnswer(answer);
+                }
+            }
+
+            Quest quest = Quest.builder()
+                    .name(name.toString())
+                    .userAuthorId(userId)
+                    .firstQuestionId(1L)
+                    .description(description.toString())
+                    .build();
+
+            //save questions to repo & set quest firstQuestionId
+            for (Map.Entry<Long, Question> entry : questions.entrySet()) {
+                Question question = entry.getValue();
+                if (questionService.create(question).isEmpty()) {
+                    throw new QuestException("Question line wrong syntax");
+                }
+                if (entry.getKey() == 1L) {
+                    quest.setFirstQuestionId(question.getId());
+                }
+                quest.addQuestion(question);
+            }
+
+            //set answers nextQuestionId & save answers to repo & question update with changed answers list
+            for (Question question : questions.values()) {
+                for (Answer answer : question.getPossibleAnswers()) {
+                    long parsedQuestionId = answer.getNextQuestionId();
+                    if(parsedQuestionId != 0L) {
+                        Question nextQuestion = questions.get(parsedQuestionId);
+                        long savedQuestionId = nextQuestion.getId();
+                        answer.setNextQuestionId(savedQuestionId);
+                    }
+                    if (answerService.create(answer).isEmpty()) {
+                        throw new QuestException("Answer line wrong syntax");
+                    }
+                }
+                questionService.update(question);
+            }
+
+            Optional<Quest> optionalQuest = questService.create(quest);
+            return optionalQuest;
+        } catch (QuestException e) {
+
+        } catch (Exception e) {
+
+        }
+
+        return Optional.empty();
     }
 }

@@ -1,10 +1,8 @@
 package com.javarush.nikolenko.config;
 
 import com.javarush.nikolenko.entity.*;
-import com.javarush.nikolenko.service.AnswerService;
-import com.javarush.nikolenko.service.QuestService;
-import com.javarush.nikolenko.service.QuestionService;
-import com.javarush.nikolenko.service.UserService;
+import com.javarush.nikolenko.service.*;
+import com.javarush.nikolenko.utils.UrlHelper;
 import lombok.SneakyThrows;
 
 
@@ -12,6 +10,7 @@ public class Configuration {
     private final AnswerService answerService;
     private final QuestionService questionService;
     private final QuestService questService;
+    private final QuestModifyService questModifyService;
     private final UserService userService;
     private final User admin;
 
@@ -21,17 +20,16 @@ public class Configuration {
         answerService = ServiceLocator.getService(AnswerService.class);
         questionService = ServiceLocator.getService(QuestionService.class);
         questService = ServiceLocator.getService(QuestService.class);
+        questModifyService = ServiceLocator.getService(QuestModifyService.class);
         userService = ServiceLocator.getService(UserService.class);
         admin = new User("Admin", "admin", "admin-admin");
         userService.create(admin);
         configDefaultQuests();
-        configDefaultQuests();
-        configDefaultQuests();
-        configDefaultQuests();
-        configDefaultQuests();
     }
 
     private void configDefaultQuests() {
+        String text = questService.loadWebInfTextFile(UrlHelper.EXAMPLE_QUEST);
+        questModifyService.parseQuest(admin.getId(), text);
         defaultQuest();
         exampleQuest();
     }

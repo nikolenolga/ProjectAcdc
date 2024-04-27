@@ -60,7 +60,7 @@ public class QuestionServlet extends HttpServlet {
         long nextQuestionId = answerService.getNextQuestionId(answerId);
         gameService.setNextQuestion(gameId, nextQuestionId);
 
-        String redirectPath = answerService.hasFinalMessage(answerId)
+        String redirectPath = answerService.hasFinalMessage(answerId) || answerService.isFinal(answerId)
                 ? UrlHelper.getUrlWithParameter(UrlHelper.ANSWER, Key.ANSWER_ID) + answerId
                 : UrlHelper.QUESTION;
         resp.sendRedirect(redirectPath);
