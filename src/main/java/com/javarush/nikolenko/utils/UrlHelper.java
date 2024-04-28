@@ -25,6 +25,7 @@ public final class UrlHelper {
     public static final String TWO_PARAM_TEMPLATE = "%s?%s=%s&%s=%s";
     public static final String RULES_FILE = "/static/rules.txt";
     public static final String EXAMPLE_QUEST = "/static/example-quest.txt";
+    public static final String KILLER_QUEST = "/static/killer.txt";
 
     public static String getJspPath(String path) {
         return JSP_DIRECTORY + path + ".jsp";

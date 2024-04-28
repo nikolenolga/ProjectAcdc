@@ -30,6 +30,8 @@ public class Configuration {
     private void configDefaultQuests() {
         String text = questService.loadWebInfTextFile(UrlHelper.EXAMPLE_QUEST);
         questModifyService.parseQuest(admin.getId(), text);
+        text = questService.loadWebInfTextFile(UrlHelper.KILLER_QUEST);
+        questModifyService.parseQuest(admin.getId(), text);
         defaultQuest();
         exampleQuest();
     }
