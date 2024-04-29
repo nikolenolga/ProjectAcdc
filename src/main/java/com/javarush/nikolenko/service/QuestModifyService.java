@@ -1,11 +1,10 @@
 package com.javarush.nikolenko.service;
 
 import com.javarush.nikolenko.config.ServiceLocator;
-import com.javarush.nikolenko.entity.Answer;
-import com.javarush.nikolenko.entity.GameState;
-import com.javarush.nikolenko.entity.Quest;
-import com.javarush.nikolenko.entity.Question;
+import com.javarush.nikolenko.entity.*;
 import com.javarush.nikolenko.exception.QuestException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 
 import java.io.BufferedReader;
@@ -16,16 +15,17 @@ import java.util.Optional;
 import java.util.TreeMap;
 
 public class QuestModifyService {
-    QuestService questService;
-    QuestionService questionService;
-    AnswerService answerService;
-
+    private final QuestService questService;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
+    private final ImageService imageService;
 
     @SneakyThrows
     public QuestModifyService() {
         this.questService = ServiceLocator.getService(QuestService.class);
         this.questionService = ServiceLocator.getService(QuestionService.class);
         this.answerService = ServiceLocator.getService(AnswerService.class);
+        this.imageService = ServiceLocator.getService(ImageService.class);
     }
 
     public void addQuestion(long questId, long questionId) {
@@ -64,7 +64,7 @@ public class QuestModifyService {
     public void deleteQuestion(long questId, long questionId) {
         Optional<Quest> optionalQuest = questService.get(questId);
         Optional<Question> optionalQuestion = questionService.get(questionId);
-        if (optionalQuest.isPresent()) {
+        if (optionalQuest.isPresent() && optionalQuestion.isPresent()) {
             Quest quest = optionalQuest.get();
             Question question = optionalQuestion.get();
             quest.deleteQuestion(question);
@@ -74,7 +74,7 @@ public class QuestModifyService {
     }
 
     private void deleteQuestion(Question question) {
-        question.getPossibleAnswers().forEach(answer -> answerService.delete(answer));
+        question.getPossibleAnswers().forEach(answerService::delete);
         questionService.delete(question);
     }
 
@@ -221,8 +221,7 @@ public class QuestModifyService {
                 questionService.update(question);
             }
 
-            Optional<Quest> optionalQuest = questService.create(quest);
-            return optionalQuest;
+            return questService.create(quest);
         } catch (QuestException e) {
 
         } catch (Exception e) {
@@ -231,4 +230,25 @@ public class QuestModifyService {
 
         return Optional.empty();
     }
+
+    public void loadQuest(long userId, String path) {
+        String text = questService.loadTextFromFile(path);
+        parseQuest(userId, text);
+    }
+
+    public void uploadQuestImage(HttpServletRequest req, long questId) throws ServletException, IOException {
+        Quest quest = questService.get(questId).get();
+        imageService.uploadImage(req, quest.getImage());
+    }
+
+    public void uploadQuestionImage(HttpServletRequest req, long questionId) throws ServletException, IOException {
+        Question question = questionService.get(questionId).get();
+        imageService.uploadImage(req, question.getImage());
+    }
+
+    public void uploadAnswerImage(HttpServletRequest req, long answerId) throws ServletException, IOException {
+        Answer answer = answerService.get(answerId).get();
+        imageService.uploadImage(req, answer.getImage());
+    }
+
 }

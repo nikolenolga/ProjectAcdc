@@ -1,7 +1,15 @@
 package com.javarush.nikolenko.service;
 
+import com.javarush.nikolenko.config.ServiceLocator;
+import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.entity.Game;
+import com.javarush.nikolenko.entity.GameState;
 import com.javarush.nikolenko.repository.GameRepository;
+import com.javarush.nikolenko.utils.Key;
+import com.javarush.nikolenko.utils.RequestHelper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Collection;
@@ -9,9 +17,12 @@ import java.util.Optional;
 
 public class GameService {
     private final GameRepository gameRepository;
+    private AnswerService answerService;
 
+    @SneakyThrows
     public GameService(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
+        answerService = ServiceLocator.getService(AnswerService.class);
     }
 
     public Optional<Game> create(Game game) {
@@ -64,5 +75,17 @@ public class GameService {
     public void restartGame(long gameId) {
         Optional<Game> optionalGame = gameRepository.get(gameId);
         optionalGame.ifPresent(Game::restart);
+    }
+
+    public void checkAnswer(long answerId, HttpServletRequest req) {
+        Optional<Answer> optionalAnswer = answerService.get(answerId);
+        if (optionalAnswer.isPresent() && optionalAnswer.get().isFinal()) {
+            Answer answer = optionalAnswer.get();
+            HttpSession session = req.getSession();
+            long gameId = RequestHelper.getLongValue(session, Key.GAME_ID);
+            Game game = get(gameId).get();
+            game.setGameState(answer.isWin() ? GameState.WIN : GameState.LOSE);
+            update(game);
+        }
     }
 }

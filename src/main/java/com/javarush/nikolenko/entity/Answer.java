@@ -55,11 +55,4 @@ public class Answer extends AbstractComponent {
         return !hasFinalMessage() && !isFinal() && hasNextQuestion();
     }
 
-    @Override
-    public String getImage() {
-        String parentResult = super.getImage();
-        if (isWin()) parentResult += "-win";
-        if (isLose()) parentResult += "-lose";
-        return parentResult;
-    }
 }

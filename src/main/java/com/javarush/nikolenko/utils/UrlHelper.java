@@ -13,19 +13,17 @@ public final class UrlHelper {
     public static final String ADD_QUESTION = "/add-question";
     public static final String ADD_ANSWER = "/add-answer";
     public static final String CREATE_QUEST = "/create-quest";
-    public static final String LOAD_QUEST = "/load-quest";
     public static final String QUEST_TEXT_EDITOR = "/quest-text-editor";
     public static final String USER_QUESTS = "/user-quests";
     public static final String USER_STATISTIC = "/user-statistic";
+    public static final String IMAGES = "/images/*";
+    public static final String UPLOAD_IMAGE = "/uploadImage";
 
-    public static final String QUEST_DIRECTORY = "WEB-INF/quests";
-    public static final String IMAGE_DIRECTORY = "WEB-INF/images";
+    public static final String QUEST_DIRECTORY = "quests";
+    public static final String IMAGE_DIRECTORY = "images";
     public static final String JSP_DIRECTORY = "WEB-INF/views";
     public static final String ONE_PARAM_TEMPLATE = "%s?%s=%s";
     public static final String TWO_PARAM_TEMPLATE = "%s?%s=%s&%s=%s";
-    public static final String RULES_FILE = "/static/rules.txt";
-    public static final String EXAMPLE_QUEST = "/static/example-quest.txt";
-    public static final String KILLER_QUEST = "/static/killer.txt";
 
     public static String getJspPath(String path) {
         return JSP_DIRECTORY + path + ".jsp";

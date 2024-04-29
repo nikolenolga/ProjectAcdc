@@ -9,18 +9,10 @@
         <%@ include file="parts/header.jsp"%>
     </c:otherwise>
 </c:choose>
-
 <div class="block">
     <c:forEach var="quest" items="${requestScope.quests}">
         <div class="block-item">
-            <c:choose>
-                <c:when test="${!quest.img && sessionScope.user.id == quest.userAuthorId}">
-                    <img class="img-in-img-block" src="${pageContext.request.contextPath}/img/quest-created.png">
-                </c:when>
-                <c:otherwise>
-                    <img class="img-in-img-block" src="${pageContext.request.contextPath}/img/${quest.getImage()}.png">
-                </c:otherwise>
-            </c:choose>
+            <img class="img-in-img-block" src="images/${quest.getImage()}">
             <p class="p-in-img-block"><a class="list-quest-a" href="play?questId=${quest.id}">${quest.name}</a></p>
         </div>
     </c:forEach>

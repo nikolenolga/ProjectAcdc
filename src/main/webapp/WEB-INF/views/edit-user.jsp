@@ -9,9 +9,13 @@
         <div class="edit-for-block">
             <div class="edit-inline-block">
                 <div class="base-user-img">
-                    <img class="edit-user-image" src="${pageContext.request.contextPath}/img/${sessionScope.user.getImage()}.png" alt="user-image">
+                    <img class="edit-user-image" id="image" src="images/${sessionScope.user.getImage()}" onclick="selectImage()">
                 </div>
-                <form class="form-edit-img" method="post">
+
+                <form class="form-edit-img"
+                      method="post"
+                      enctype="multipart/form-data">
+                    <input type="file" id="imageFile" name="file" style="display: none">
                     <button class="buttons-edit" name="button-user-img-load">Загрузить изображение</button>
                 </form>
             </div>
@@ -82,6 +86,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    function selectImage() {
+        document.getElementById('imageFile').click();
+    }
+
+    document.getElementById('imageFile').addEventListener('change', function() {
+        var file = this.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            document.getElementById('image').src = e.target.result;
+        }
+
+        reader.readAsDataURL(file);
+    });
+</script>
 
 </body>
 </html>

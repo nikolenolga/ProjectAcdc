@@ -1,10 +1,21 @@
 package com.javarush.nikolenko.utils;
 
+import com.javarush.nikolenko.config.Configuration;
 import com.javarush.nikolenko.exception.QuestException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
+import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
+
 public class RequestHelper {
+    public static final Path WEB_INF = Paths.get(URI.create(
+                    Objects.requireNonNull(
+                            RequestHelper.class.getResource("/")
+                    ).toString()))
+            .getParent();
 
     public static long getLongValue(HttpServletRequest request, String name) {
         String value = request.getParameter(name);

@@ -101,7 +101,8 @@ h3 {
     text-align: left;
     color: #78797e;
     margin: 0;
-    font-size: 24px;
+    font-style: inherit;
+    font-size: 20px;
 }
 
 .block-p {
@@ -530,7 +531,6 @@ h2.login-h2 {
 
     vertical-align: top;
     display: inline-block;
-    /*justify-content: center;*/
 }
 
 .edit-user-image {
@@ -891,7 +891,7 @@ h2.login-h2 {
 
 .button-text-editor {
     height: 55px;
-    width: 179px;
+    width: 362px;
     margin: 0;
     padding: 0;
     background: #e5e5e5;
@@ -930,7 +930,7 @@ h2.login-h2 {
 }
 
 .quest-text-label {
-    font-size: 20px;
+    font-size: 14px;
     text-align: left;
     display: block;
     vertical-align: top;

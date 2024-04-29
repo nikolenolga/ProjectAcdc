@@ -9,9 +9,34 @@
             <div class="edit-image-inline">
                 <div class="border-for-image">
                     <img class="image-in-quest-edit"
-                         src="${pageContext.request.contextPath}/img/${requestScope.quest.getImage()}.png">
+                         id="image-${requestScope.quest.getImage()}"
+                         src="images/${requestScope.quest.getImage()}"
+                         onclick="selectImage('imageFileQuest')">
                 </div>
-                <button class="button-edit-quest-load-image" name="button-load-quest-image">Загрузить</button>
+
+                <form class="form-edit-img"
+                      method="post"
+                      enctype="multipart/form-data">
+                    <input type="text"
+                           name="questId"
+                           value="${requestScope.quest.id}"
+                           style="display: none">
+                    <input type="file" id="imageFileQuest" name="file" style="display: none">
+                    <button class="button-edit-quest-load-image" name="button-load-quest-image">Загрузить</button>
+                </form>
+                <%--  add event listener for img: onclick - selectImage()--%>
+                <script>
+                    document.getElementById('imageFileQuest').addEventListener('change', function() {
+                        var file = this.files[0];
+                        var reader = new FileReader();
+
+                        reader.onload = function(e) {
+                            document.getElementById('image-${requestScope.quest.getImage()}').src = e.target.result;
+                        }
+
+                        reader.readAsDataURL(file);
+                    });
+                </script>
             </div>
             <%-- Блок для редактирования основных свойств квеста: имя, описание --%>
             <div class="edit-question-inline">
@@ -65,18 +90,34 @@
         <c:forEach var="question" items="${requestScope.questions}">
             <%-- Блок для редактирования вопроса--%>
             <div class="edit-block-question">
-                <form class="form-edit-quest" method="post">
+                <form class="form-edit-quest" method="post" enctype="multipart/form-data">
                     <fieldset class="form-edit-quest">
                             <%-- Блок для редактирования изображения к вопросу--%>
                         <div class="edit-image-inline">
                             <div class="border-for-image">
                                 <img class="image-in-quest-edit"
-                                     src="${pageContext.request.contextPath}/img/${question.getImage()}.png">
+                                     id="image-${question.getImage()}"
+                                     src="images/${question.getImage()}"
+                                     onclick="selectImage('imageFileQuestion${question.id}')">
                             </div>
-                            <button class="button-edit-quest-load-image" name="button-load-question-image">Загрузить
-                            </button>
+
+                            <input type="file" id="imageFileQuestion${question.id}" name="file" style="display: none">
+                            <button class="button-edit-quest-load-image" name="button-load-question-image">Загрузить</button>
+                                <%--  add event listener for img: onclick - selectImage()--%>
+                            <script>
+                                document.getElementById('imageFileQuestion${question.id}').addEventListener('change', function() {
+                                    var file = this.files[0];
+                                    var reader = new FileReader();
+
+                                    reader.onload = function(e) {
+                                        document.getElementById('image-${question.getImage()}').src = e.target.result;
+                                    }
+
+                                    reader.readAsDataURL(file);
+                                });
+                            </script>
                         </div>
-                            <%-- Блок для редактирования основных свойств квеста: имя, описание --%>
+                            <%-- Блок для редактирования основных свойств вопроса: имя, описание --%>
                         <div class="edit-question-inline">
                             <h2 class="question-edit-h2">Редактировать вопрос:</h2>
                             <!-- Text input-->
@@ -113,16 +154,33 @@
             <c:forEach var="answer" items="${question.possibleAnswers}">
                 <%-- Блок для редактирования ответа--%>
                 <div class="edit-block-answer">
-                    <form class="form-edit-quest" method="post">
+                    <form class="form-edit-quest" method="post" enctype="multipart/form-data">
                         <fieldset class="form-edit-quest">
                                 <%-- Блок для редактирования изображения к ответу--%>
                             <div class="edit-image-inline">
+
                                 <div class="border-for-image">
                                     <img class="image-in-quest-edit"
-                                         src="${pageContext.request.contextPath}/img/${answer.getImage()}.png">
+                                         id="image-${answer.getImage()}"
+                                         src="images/${answer.getImage()}"
+                                         onclick="selectImage('imageFileAnswer${answer.id}')">
                                 </div>
-                                <button class="button-edit-quest-load-image" name="button-load-answer-image">Загрузить
-                                </button>
+
+                                <input type="file" id="imageFileAnswer${answer.id}" name="file" style="display: none">
+                                <button class="button-edit-quest-load-image" name="button-load-answer-image">Загрузить</button>
+                                <%--  add event listener for img: onclick - selectImage()--%>
+                                <script>
+                                    document.getElementById('imageFileAnswer${answer.id}').addEventListener('change', function() {
+                                        var file = this.files[0];
+                                        var reader = new FileReader();
+
+                                        reader.onload = function(e) {
+                                            document.getElementById('image-${answer.getImage()}').src = e.target.result;
+                                        }
+
+                                        reader.readAsDataURL(file);
+                                    });
+                                </script>
                             </div>
                                 <%-- Блок для редактирования основных свойств квеста: имя, описание --%>
                             <div class="edit-question-inline">
@@ -211,6 +269,10 @@
 
     </div>
 </div>
-
+<script>
+    function selectImage(fileName) {
+        document.getElementById(fileName).click();
+    }
+</script>
 </body>
 </html>

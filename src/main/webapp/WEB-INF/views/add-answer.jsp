@@ -12,7 +12,7 @@
                     <div class="edit-image-inline">
                         <div class="border-for-image">
                             <img class="image-in-quest-edit"
-                                 src="${pageContext.request.contextPath}/img/answer-default.png">
+                                 src="images/answer-default">
                         </div>
                     </div>
                     <%-- Блок для редактирования основных свойств квеста: имя, описание --%>

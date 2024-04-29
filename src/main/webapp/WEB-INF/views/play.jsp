@@ -24,13 +24,11 @@
             </div>
         </div>
     </div>
-    <c:if test="${requestScope.quest.img}">
-        <div class="base-right">
-            <div class="base-item-right">
-                <img class="base-image" src="${pageContext.request.contextPath}/img/${requestScope.quest.getImage()}.png" alt="user-image">
-            </div>
+    <div class="base-right">
+        <div class="base-item-right">
+            <img class="base-image" src="images/${requestScope.quest.getImage()}" alt="user-image">
         </div>
-    </c:if>
+    </div>
 </div>
 
 </body>

@@ -4,15 +4,13 @@
 <html>
 <head>
     <title>Quest</title>
-    <style>
-        <%@ include file="/WEB-INF/static/styles.css" %>
-    </style>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/styles.css">
 </head>
 <body>
 <header>
     <div class="logo">
         <a href="/quests">
-            <img src="${pageContext.request.contextPath}/img/logo.png" width="177px" height="40px"/>
+            <img src="images/logo" width="177px" height="40px" alt="logo"/>
         </a>
     </div>
     <nav class="menu">

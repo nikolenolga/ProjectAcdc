@@ -36,13 +36,11 @@
         </fieldset>
     </form>
 </div>
-<c:if test="${requestScope.question.img}">
     <div class="base-right">
         <div class="base-item-right">
-            <img class="base-image" src="${pageContext.request.contextPath}/img/${requestScope.question.getImage()}.png" alt="user-image">
+            <img class="base-image" src="images/${requestScope.question.getImage()}" alt="user-image">
         </div>
     </div>
-    </div>
-</c:if>
+</div>
 </body>
 </html>

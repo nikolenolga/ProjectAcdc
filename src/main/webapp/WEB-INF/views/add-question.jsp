@@ -11,7 +11,7 @@
                     <div class="edit-image-inline">
                         <div class="border-for-image">
                             <img class="image-in-quest-edit"
-                                 src="${pageContext.request.contextPath}/img/question-default.png">
+                                 src="images/question-default">
                         </div>
                     </div>
                     <div class="edit-question-inline">

@@ -15,16 +15,14 @@
                     <!-- Text input-->
                     <div class="block-for-quest-text-editor">
                         <textarea class="text-editor-textarea"
-                                  id="text"
                                   name="text"
-                                  required=""><c:choose><c:when test="${sessionScope.text != null}">${sessionScope.text}</c:when><c:otherwise><%@ include file="../static/sample.txt" %></c:otherwise></c:choose></textarea>
+                                  required=""
+                        ><c:choose><c:when test="${sessionScope.text != null}">${sessionScope.text}</c:when><c:otherwise><%@ include file="../static/sample.txt" %></c:otherwise></c:choose></textarea>
                     </div>
 
                     <div class="block-for-quest-text-editor">
                         <button class="button-text-editor" name="button-add-quest">Добавить</button>
-                        <button class="button-text-editor" name="button-export">Экспорт</button>
                         <button class="button-text-editor" name="button-reset">Сброс</button>
-                        <button class="button-text-editor" name="button-load">Загрузить</button>
                     </div>
 
                     <div class="block-for-quest-text-editor">

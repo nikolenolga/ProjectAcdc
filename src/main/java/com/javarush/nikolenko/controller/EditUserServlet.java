@@ -2,6 +2,7 @@ package com.javarush.nikolenko.controller;
 
 import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.entity.User;
+import com.javarush.nikolenko.service.ImageService;
 import com.javarush.nikolenko.service.UserService;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.RequestHelper;
@@ -9,23 +10,28 @@ import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 
+@MultipartConfig
 @WebServlet(urlPatterns = {UrlHelper.EDIT_USER})
 public class EditUserServlet extends HttpServlet {
     private UserService userService;
+    private ImageService imageService;
 
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
         userService = ServiceLocator.getService(UserService.class);
+        imageService = ServiceLocator.getService(ImageService.class);
     }
 
     @Override
@@ -44,10 +50,9 @@ public class EditUserServlet extends HttpServlet {
         User user = userService.get(userId).get();
         String redirectPath = UrlHelper.EDIT_USER;
 
-        if(req.getParameter(Key.BUTTON_USER_IMG_LOAD) != null) {
-        }
-        if(req.getParameter(Key.BUTTON_SUBMIT) != null && !StringUtils.isAnyBlank(name, password)) {
-
+        if(req.getParameter(Key.BUTTON_USER_IMG_LOAD) != null){
+            imageService.uploadImage(req, user.getImage());
+        } else if(req.getParameter(Key.BUTTON_SUBMIT) != null && !StringUtils.isAnyBlank(name, password)) {
             user.setName(name);
             user.setPassword(password);
             userService.update(user);

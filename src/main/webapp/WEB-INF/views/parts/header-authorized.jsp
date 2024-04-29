@@ -4,15 +4,13 @@
 <html>
 <head>
     <title>Quest</title>
-    <style>
-        <%@ include file="/WEB-INF/static/styles.css" %>
-    </style>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/styles.css">
 </head>
 <body>
 <header>
     <div class="logo">
         <a href="/quests">
-            <img src="${pageContext.request.contextPath}/img/logo.png" width="177px" height="40px" alt="logo"/>
+            <img src="images/logo" width="177px" height="40px" alt="logo"/>
         </a>
     </div>
     <nav class="menu">
@@ -25,7 +23,6 @@
                         <a href="/user-quests">Редактировать квест</a>
                         <a href="/create-quest">Создать квест</a>
                         <a href="/quest-text-editor">Текстовый редактор</a>
-                        <a href="/load-quest">Загрузить квест</a>
                     </div>
                 </div>
             </li>
@@ -36,7 +33,7 @@
     </div>
     <div class="logo">
         <a href="/edit-user">
-            <img class="menu-image" src="${pageContext.request.contextPath}/img/${sessionScope.user.getImage()}.png"  alt="user-image">
+            <img class="menu-image" src="images/${sessionScope.user.getImage()}"  alt="user-image">
         </a>
     </div>
 </header>

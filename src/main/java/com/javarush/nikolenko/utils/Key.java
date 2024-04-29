@@ -59,6 +59,8 @@ public class Key {
     public static final String HAS_ALERTS =  "hasAlerts";
     public static final String ALERT =  "alert";
     public static final String RULES =  "rules";
+    public static final String FILE =  "file";
+    public static final String IMAGE =  "image";
 
 
     public static final String WRONG_USER_DATA =  "Wrong login or password.";

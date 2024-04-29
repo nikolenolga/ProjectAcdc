@@ -41,13 +41,11 @@
             </div>
         </div>
     </div>
-    <c:if test="${requestScope.answer.img || requestScope.answer.isFinal()}">
-        <div class="base-right">
-            <div class="base-item-right">
-                <img class="base-image" src="${pageContext.request.contextPath}/img/${requestScope.answer.getImage()}.png" alt="user-image">
-            </div>
+    <div class="base-right">
+        <div class="base-item-right">
+            <img class="base-image" src="images/${requestScope.answer.getImage()}" alt="user-image">
         </div>
-    </c:if>
+    </div>
 </div>
 </body>
 </html>
