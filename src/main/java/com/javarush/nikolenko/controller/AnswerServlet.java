@@ -1,9 +1,6 @@
 package com.javarush.nikolenko.controller;
 
 import com.javarush.nikolenko.config.ServiceLocator;
-import com.javarush.nikolenko.entity.Answer;
-import com.javarush.nikolenko.entity.Game;
-import com.javarush.nikolenko.entity.GameState;
 import com.javarush.nikolenko.service.AnswerService;
 import com.javarush.nikolenko.service.GameService;
 import com.javarush.nikolenko.utils.*;

@@ -15,7 +15,6 @@ import java.io.IOException;
 public class AlertsFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        //перенос сообщений из параметров запроса в атрибуты
         if(req.getMethod().equalsIgnoreCase("get") && req.getParameter(Key.ALERT) != null) {
             req.setAttribute(Key.HAS_ALERTS, true);
             String alert = req.getParameter(Key.ALERT);

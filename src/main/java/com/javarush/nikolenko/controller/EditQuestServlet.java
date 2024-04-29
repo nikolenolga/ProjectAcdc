@@ -51,6 +51,7 @@ public class EditQuestServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         long questId = Long.parseLong(req.getParameter(Key.QUEST_ID));
         long questionId = RequestHelper.getLongValue(req, Key.QUESTION_ID);
+        long answerId = RequestHelper.getLongValue(req, Key.ANSWER_ID);
 
         //quest-edit
         if(req.getParameter(Key.BUTTON_LOAD_QUEST_IMAGE) != null){
@@ -74,17 +75,14 @@ public class EditQuestServlet extends HttpServlet {
 
         //answer-edit
         if(req.getParameter(Key.BUTTON_DELETE_ANSWER) != null) {
-            long answerId = RequestHelper.getLongValue(req, Key.ANSWER_ID);
             questModifyService.deleteAnswer(questId, questionId, answerId);
         } else if(req.getParameter(Key.BUTTON_EDIT_ANSWER) != null) {
-            long answerId = RequestHelper.getLongValue(req, Key.ANSWER_ID);
             String answerMessage = req.getParameter(Key.ANSWER_MESSAGE);
             GameState gameState = GameState.valueOf(req.getParameter(Key.GAMESTATE));
             long nextQuestionId = RequestHelper.getLongValue(req, Key.NEXT_QUESTION_ID);
             String finalMessage = req.getParameter(Key.FINAL_MESSAGE);
             questModifyService.updateAnswer(questId, questionId, answerId, answerMessage, gameState, nextQuestionId, finalMessage);
         } else if(req.getParameter(Key.BUTTON_LOAD_ANSWER_IMAGE) != null){
-            long answerId = RequestHelper.getLongValue(req, Key.ANSWER_ID);
             questModifyService.uploadAnswerImage(req, answerId);
         }
 

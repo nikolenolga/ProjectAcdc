@@ -49,7 +49,8 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute(Key.IS_AUTHORIZED, true);
             resp.sendRedirect(UrlHelper.EDIT_USER);
         } else {
-            resp.sendRedirect(UrlHelper.LOGIN + "?" + Key.ALERT + "=" + Key.WRONG_USER_DATA);
+            resp.sendRedirect(UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.LOGIN,
+                    Key.ALERT, Key.WRONG_USER_DATA));
         }
     }
 

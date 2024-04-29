@@ -13,10 +13,9 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter(urlPatterns = {UrlHelper.EDIT_USER})
-public class ExitFilter extends HttpFilter {
+public class LogOutFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        //выход из аакаунта текущего пользователя
         if(req.getParameter(Key.BUTTON_EXIT) != null) {
             HttpSession session = req.getSession(false);
             session.removeAttribute(Key.USER);

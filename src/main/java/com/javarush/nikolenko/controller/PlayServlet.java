@@ -5,9 +5,7 @@ import com.javarush.nikolenko.entity.Game;
 import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.service.GameService;
 import com.javarush.nikolenko.service.QuestService;
-import com.javarush.nikolenko.utils.Key;
-import com.javarush.nikolenko.utils.RequestHelper;
-import com.javarush.nikolenko.utils.UrlHelper;
+import com.javarush.nikolenko.utils.*;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -17,9 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
-
 import java.io.IOException;
-import java.util.Optional;
 
 @WebServlet(urlPatterns = {UrlHelper.PLAY})
 public class PlayServlet extends HttpServlet {
@@ -58,7 +54,7 @@ public class PlayServlet extends HttpServlet {
 
         String redirectAddress = req.getParameter(Key.BUTTON_START) != null
                 ? UrlHelper.QUESTION
-                : UrlHelper.getUrlWithParameter(UrlHelper.PLAY, Key.QUEST_ID) + questId;
+                : UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.PLAY, Key.QUEST_ID, questId);
         resp.sendRedirect(redirectAddress);
     }
 }

@@ -5,12 +5,7 @@ import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.repository.QuestRepository;
 import com.javarush.nikolenko.utils.Key;
 import org.apache.commons.lang3.ObjectUtils;
-
 import java.io.*;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class QuestService {
@@ -61,8 +56,7 @@ public class QuestService {
         try(BufferedReader reader = new BufferedReader(new FileReader(sPath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                fileText.append(line);
-                fileText.append("\r\n");
+                fileText.append(line).append("\r\n");
             }
         } catch (FileNotFoundException e) {
             throw new QuestException(Key.FILE_NOT_FOUND);

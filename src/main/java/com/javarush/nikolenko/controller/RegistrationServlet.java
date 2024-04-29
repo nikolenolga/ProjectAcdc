@@ -52,7 +52,8 @@ public class RegistrationServlet extends HttpServlet {
 
             resp.sendRedirect(UrlHelper.EDIT_USER);
         } else {
-            resp.sendRedirect(UrlHelper.REGISTRATION  + "?" + Key.ALERT + "=" + Key.USER_EXIST);
+            resp.sendRedirect(UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.REGISTRATION,
+                    Key.ALERT,Key.USER_EXIST));
         }
     }
 }

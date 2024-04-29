@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public class GameService {
     private final GameRepository gameRepository;
-    private AnswerService answerService;
+    private final AnswerService answerService;
 
     @SneakyThrows
     public GameService(GameRepository gameRepository) {
@@ -57,10 +57,6 @@ public class GameService {
         Game game = new Game(userPlayerId, questId, currentQuestion);
         gameRepository.create(game);
         return game;
-    }
-
-    public Long getFirstQuestionId(long id) {
-        return get(id).map(Game::getFirstQuestionId).orElse(0L);
     }
 
     public Long getCurrentQuestionId(long id) {

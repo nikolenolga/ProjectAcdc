@@ -4,9 +4,7 @@ import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.service.ImageService;
 import com.javarush.nikolenko.service.UserService;
-import com.javarush.nikolenko.utils.Key;
-import com.javarush.nikolenko.utils.RequestHelper;
-import com.javarush.nikolenko.utils.UrlHelper;
+import com.javarush.nikolenko.utils.*;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -17,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 
@@ -59,7 +56,8 @@ public class EditUserServlet extends HttpServlet {
 
             session.setAttribute(Key.USER, user);
         } else {
-            redirectPath += "?" + Key.ALERT + "=" + Key.CANT_UPDATE;
+            redirectPath = UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.EDIT_USER,
+                    Key.ALERT, Key.CANT_UPDATE);
         }
 
         resp.sendRedirect(redirectPath);

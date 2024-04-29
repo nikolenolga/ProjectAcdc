@@ -16,7 +16,7 @@ import lombok.SneakyThrows;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {UrlHelper.EDIT_USER, UrlHelper.EDIT_QUEST, UrlHelper.USER_QUESTS, UrlHelper.USER_STATISTIC})
+@WebFilter(urlPatterns = {UrlHelper.EDIT_USER, UrlHelper.EDIT_QUEST, UrlHelper.USER_QUESTS, UrlHelper.QUEST_TEXT_EDITOR})
 public class AuthorizationFilter extends HttpFilter {
     @SneakyThrows
     @Override
@@ -29,11 +29,11 @@ public class AuthorizationFilter extends HttpFilter {
         HttpSession session = req.getSession();
         Object authorized = session.getAttribute(Key.IS_AUTHORIZED);
 
-        // если пользователь не авторизован - редирект на страницу регистрации + сообщение об ошибке
         if (authorized != null && (Boolean) authorized) {
             chain.doFilter(req, res);
         } else {
-            res.sendRedirect(UrlHelper.LOGIN + "?" + Key.ALERT + "=" + Key.NEED_TO_LOGIN);
+            res.sendRedirect(UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.LOGIN,
+                    Key.ALERT, Key.NEED_TO_LOGIN));
         }
     }
 }

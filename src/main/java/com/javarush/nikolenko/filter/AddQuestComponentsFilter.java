@@ -2,9 +2,7 @@ package com.javarush.nikolenko.filter;
 
 import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.service.QuestModifyService;
-import com.javarush.nikolenko.utils.Key;
-import com.javarush.nikolenko.utils.RequestHelper;
-import com.javarush.nikolenko.utils.UrlHelper;
+import com.javarush.nikolenko.utils.*;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
@@ -32,7 +30,7 @@ public class AddQuestComponentsFilter extends HttpFilter {
         boolean needToAddAnswer = req.getParameter(Key.BUTTON_ADD_ANSWER) != null;
         boolean needToDeleteQuest = req.getParameter(Key.BUTTON_DELETE_QUEST) != null;
 
-        if(req.getMethod().equalsIgnoreCase("POST")
+        if(req.getMethod().equalsIgnoreCase("post")
                 && (needToAddAnswer || needToAddQuestion || needToDeleteQuest)) {
             long questId = RequestHelper.getLongValue(req, Key.QUEST_ID);
 

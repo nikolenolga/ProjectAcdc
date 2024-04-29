@@ -3,7 +3,6 @@ package com.javarush.nikolenko.utils;
 public class Key {
     public static final String USER = "user";
     public static final String GAME = "game";
-    public static final String GAMES = "games";
     public static final String GAMESTATE = "gameState";
     public static final String GAMESTATES = "gameStates";
     public static final String QUEST = "quest";
@@ -24,8 +23,10 @@ public class Key {
     public static final String LOGIN = "login";
     public static final String DESCRIPTION = "description";
     public static final String QUESTION_MESSAGE = "questionMessage";
+    public static final String ERROR_MESSAGE = "errorMessage";
     public static final String ANSWER_MESSAGE = "answerMessage";
     public static final String TEXT = "text";
+    public static final String ERROR_CODE = "errorCode";
 
     public static final String NEXT_QUESTION_ID = "nextQuestionId";
     public static final String FIRST_QUESTION_ID = "firstQuestionId";
@@ -51,23 +52,23 @@ public class Key {
     public static final String BUTTON_DELETE_ANSWER = "button-delete-answer";
     public static final String BUTTON_BACK = "button-back";
     public static final String BUTTON_ADD_QUEST = "button-add-quest";
-    public static final String BUTTON_EXPORT = "button-export";
     public static final String BUTTON_RESET = "button-reset";
-    public static final String BUTTON_LOAD = "button-load";
 
     public static final String IS_AUTHORIZED = "authorized";
     public static final String HAS_ALERTS =  "hasAlerts";
     public static final String ALERT =  "alert";
-    public static final String RULES =  "rules";
     public static final String FILE =  "file";
     public static final String IMAGE =  "image";
 
-
+    public static final String RANDOM_ERROR =  "Random error";
     public static final String WRONG_USER_DATA =  "Wrong login or password.";
     public static final String USER_EXIST =  "A user with this login exists.";
     public static final String CANT_UPDATE =  "Can't update user.";
     public static final String NEED_TO_LOGIN =  "Login to access the resource.";
     public static final String FILE_NOT_FOUND =  "File not found.";
     public static final String FILE_LOAD_ERROR =  "Exception while loading file.";
+    public static final String BROKEN_SESSION =  "Session is broken, try one more time";
+    public static final String CANT_EXT_REQUEST =  "Can't execute the request";
     public static final String PARSE_EXCEPTION =  "Quest has syntax mistakes, check your text and try again.";
+
 }
