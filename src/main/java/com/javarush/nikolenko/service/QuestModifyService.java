@@ -1,7 +1,10 @@
 package com.javarush.nikolenko.service;
 
 import com.javarush.nikolenko.config.ServiceLocator;
-import com.javarush.nikolenko.entity.*;
+import com.javarush.nikolenko.entity.Answer;
+import com.javarush.nikolenko.entity.GameState;
+import com.javarush.nikolenko.entity.Quest;
+import com.javarush.nikolenko.entity.Question;
 import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.utils.Key;
 import jakarta.servlet.ServletException;
@@ -90,7 +93,7 @@ public class QuestModifyService {
         Optional<Answer> optionalAnswer = answerService.get(answerId);
         Optional<Question> optionalQuestion = questionService.get(questionId);
         Optional<Quest> optionalQuest = questService.get(questId);
-        if(optionalAnswer.isPresent() && optionalQuestion.isPresent() && optionalQuest.isPresent()) {
+        if (optionalAnswer.isPresent() && optionalQuestion.isPresent() && optionalQuest.isPresent()) {
             Answer answer = optionalAnswer.get();
             Question question = optionalQuestion.get();
             Quest quest = optionalQuest.get();
@@ -132,7 +135,7 @@ public class QuestModifyService {
         Optional<Quest> optionalQuest = questService.get(questId);
         Optional<Question> optionalQuestion = questionService.get(questionId);
         Optional<Answer> optionalAnswer = answerService.get(answerId);
-        if(optionalQuest.isPresent() && optionalQuestion.isPresent() && optionalAnswer.isPresent()) {
+        if (optionalQuest.isPresent() && optionalQuestion.isPresent() && optionalAnswer.isPresent()) {
             Quest quest = optionalQuest.get();
             Question question = optionalQuestion.get();
             Answer answer = optionalAnswer.get();
@@ -154,14 +157,14 @@ public class QuestModifyService {
         StringBuilder description = new StringBuilder();
         Map<Long, Question> questions = new TreeMap<>();
         long currentQuestionIndex = 0;
-        try(BufferedReader reader = new BufferedReader(new StringReader(text))) {
+        try (BufferedReader reader = new BufferedReader(new StringReader(text))) {
             String line;
-            while ((line = reader.readLine()) != null){
+            while ((line = reader.readLine()) != null) {
                 if (line.startsWith(": name") || line.startsWith(":name")) {
-                    if(!name.isEmpty()) name.append("\r\n");
+                    if (!name.isEmpty()) name.append("\r\n");
                     name.append(line.substring(6).replace(":", "").trim());
                 } else if (line.startsWith(": description") || line.startsWith(":description")) {
-                    if(!description.isEmpty()) description.append("\r\n");
+                    if (!description.isEmpty()) description.append("\r\n");
                     description.append(line.substring(13).replace(":", "").trim());
                 } else if (line.startsWith("?")) {
                     //question sample line - ? : questionId : questionMessage
@@ -206,7 +209,7 @@ public class QuestModifyService {
             for (Map.Entry<Long, Question> entry : questions.entrySet()) {
                 Question question = entry.getValue();
                 if (questionService.create(question).isEmpty()) {
-                    log.debug("{}: {}", Key.WRONG_SYNTAX_QUESTION, line);
+                    log.debug("Question creation failed - {}", question);
                     throw new QuestException(Key.WRONG_SYNTAX_QUESTION);
                 }
                 if (entry.getKey() == 1L) {
@@ -219,14 +222,14 @@ public class QuestModifyService {
             for (Question question : questions.values()) {
                 for (Answer answer : question.getPossibleAnswers()) {
                     long parsedQuestionId = answer.getNextQuestionId();
-                    if(parsedQuestionId != 0L) {
+                    if (parsedQuestionId != 0L) {
                         Question nextQuestion = questions.get(parsedQuestionId);
                         long savedQuestionId = nextQuestion.getId();
                         answer.setNextQuestionId(savedQuestionId);
                     }
                     if (answerService.create(answer).isEmpty()) {
-                        log.debug("{}: {}", Key.WRONG_SYNTAX_ANSWER, line);
-                        throw new QuestException("Answer line wrong syntax");
+                        log.debug("Answer creation failed - {}", answer);
+                        throw new QuestException(Key.WRONG_SYNTAX_ANSWER);
                     }
                 }
                 questionService.update(question);
@@ -234,7 +237,7 @@ public class QuestModifyService {
 
             return questService.create(quest);
         } catch (Exception e) {
-            log.debug("Quest {} loading failed: {}", name.toString(), e.getMessage());
+            log.debug("Quest {} loading failed: {}", name, e.getMessage());
         }
 
         return Optional.empty();

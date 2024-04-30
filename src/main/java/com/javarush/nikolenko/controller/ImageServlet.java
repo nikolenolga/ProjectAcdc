@@ -1,4 +1,5 @@
 package com.javarush.nikolenko.controller;
+
 import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.service.ImageService;
 import com.javarush.nikolenko.utils.UrlHelper;
@@ -16,7 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 @MultipartConfig
-@WebServlet(value = {UrlHelper.IMAGES, UrlHelper.UPLOAD_IMAGE})
+@WebServlet(value = {UrlHelper.IMAGES_X, UrlHelper.UPLOAD_IMAGE})
 public class ImageServlet extends HttpServlet {
     private ImageService imageService;
 
@@ -29,7 +30,7 @@ public class ImageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String requestURI = req.getRequestURI();
-        String target = req.getContextPath() + "/images/";
+        String target = req.getContextPath() + UrlHelper.IMAGES;
         String nameImage = requestURI.replace(target, "");
         Path path = imageService.getImagePath(nameImage);
         Files.copy(path, resp.getOutputStream());

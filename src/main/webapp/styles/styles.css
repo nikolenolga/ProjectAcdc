@@ -96,7 +96,6 @@ h3 {
 }
 
 
-
 .block-h2 {
     text-align: left;
     color: #78797e;
@@ -158,6 +157,7 @@ h3 {
     width: 100%;
     margin: 0;
 }
+
 .p-in-img-block {
     display: block;
     width: 100%;
@@ -169,7 +169,6 @@ h3 {
 .list-quest-a {
 
 }
-
 
 
 .header {
@@ -219,7 +218,7 @@ h3 {
     background-color: white;
 }
 
-.base-center-login{
+.base-center-login {
     width: 380px;
     height: 320px;
     padding: 10px;
@@ -397,8 +396,6 @@ h3 {
 }
 
 
-
-
 header {
     display: flex;
     flex-flow: row nowrap;
@@ -418,8 +415,7 @@ header {
     background-color: white;
 }
 
-.menu ul
-,.authorize-block ul {
+.menu ul, .authorize-block ul {
     display: flex;
     flex-flow: row nowrap;
     margin: 3px 0 0;
@@ -429,8 +425,7 @@ header {
     list-style: none;
 }
 
-.menu li
-,.authorize-block li{
+.menu li, .authorize-block li {
     margin-right: 20px;
     font-family: "Times New Roman", sans-serif;
     text-align: center;
@@ -452,7 +447,6 @@ header {
     color: #78797e;
     text-decoration: none;
 }
-
 
 
 .authorize-block {
@@ -495,8 +489,6 @@ h2.login-h2 {
 }
 
 
-
-
 /*edit user*/
 .base-edit {
     padding: 0;
@@ -534,6 +526,7 @@ h2.login-h2 {
     vertical-align: top;
     display: inline-block;
 }
+
 .edit-inline-block-right {
     width: 380px;
     height: 445px;
@@ -823,12 +816,16 @@ h2.login-h2 {
     margin-top: 10px;
     background-color: #e5e5e5;
     border-radius: 4px;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
-.dropdown-content a:hover {background-color: #a5d5d5;}
+.dropdown-content a:hover {
+    background-color: #a5d5d5;
+}
 
-.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
 
 .dropdown:hover .drop-parent {
     background-color: #a5d5d5;

@@ -4,7 +4,9 @@ import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.service.ImageService;
 import com.javarush.nikolenko.service.UserService;
-import com.javarush.nikolenko.utils.*;
+import com.javarush.nikolenko.utils.Key;
+import com.javarush.nikolenko.utils.RequestHelper;
+import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -16,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 
 @MultipartConfig
@@ -47,9 +50,9 @@ public class EditUserServlet extends HttpServlet {
         User user = userService.get(userId).get();
         String redirectPath = UrlHelper.EDIT_USER;
 
-        if(req.getParameter(Key.BUTTON_USER_IMG_LOAD) != null){
+        if (req.getParameter(Key.BUTTON_USER_IMG_LOAD) != null) {
             imageService.uploadImage(req, user.getImage());
-        } else if(req.getParameter(Key.BUTTON_SUBMIT) != null && !StringUtils.isAnyBlank(name, password)) {
+        } else if (req.getParameter(Key.BUTTON_SUBMIT) != null && !StringUtils.isAnyBlank(name, password)) {
             user.setName(name);
             user.setPassword(password);
             userService.update(user);

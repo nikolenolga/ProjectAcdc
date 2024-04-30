@@ -40,7 +40,7 @@ public class RegistrationServlet extends HttpServlet {
         HttpSession session = req.getSession();
         String login = req.getParameter(Key.LOGIN);
 
-        if(!userService.userExist(login)) {
+        if (!userService.userExist(login)) {
             User user = new User(req.getParameter(Key.NAME),
                     login,
                     req.getParameter(Key.PASSWORD));
@@ -53,7 +53,7 @@ public class RegistrationServlet extends HttpServlet {
             resp.sendRedirect(UrlHelper.EDIT_USER);
         } else {
             resp.sendRedirect(UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.REGISTRATION,
-                    Key.ALERT,Key.USER_EXIST));
+                    Key.ALERT, Key.USER_EXIST));
         }
     }
 }

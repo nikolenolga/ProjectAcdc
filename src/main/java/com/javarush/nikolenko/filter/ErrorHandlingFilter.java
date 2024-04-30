@@ -3,7 +3,6 @@ package com.javarush.nikolenko.filter;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpFilter;
@@ -18,7 +17,7 @@ import java.io.IOException;
         UrlHelper.QUESTION, UrlHelper.ANSWER, UrlHelper.LOGIN,
         UrlHelper.REGISTRATION, UrlHelper.EDIT_USER, UrlHelper.EDIT_QUEST,
         UrlHelper.ADD_QUESTION, UrlHelper.ADD_ANSWER, UrlHelper.CREATE_QUEST,
-        UrlHelper.QUEST_TEXT_EDITOR, UrlHelper.USER_QUESTS, UrlHelper.IMAGES,
+        UrlHelper.QUEST_TEXT_EDITOR, UrlHelper.USER_QUESTS, UrlHelper.IMAGES_X,
         UrlHelper.UPLOAD_IMAGE, UrlHelper.RANDOM_ERROR, UrlHelper.ERROR_HANDLER})
 public class ErrorHandlingFilter extends HttpFilter {
     @Override

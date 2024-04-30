@@ -3,10 +3,10 @@
 
 <c:choose>
     <c:when test="${sessionScope.authorized}">
-        <%@ include file="parts/header-authorized.jsp"%>
+        <%@ include file="parts/header-authorized.jsp" %>
     </c:when>
     <c:otherwise>
-        <%@ include file="parts/header.jsp"%>
+        <%@ include file="parts/header.jsp" %>
     </c:otherwise>
 </c:choose>
 
@@ -16,7 +16,7 @@
             <div class="login-change-reg">
                 <h2 class="login-h2"><a class="reg-block" href="/login">Вход</a></h2>
             </div>
-            <div class="login-change-reg-picked" name="reg-submit">
+            <div class="login-change-reg-picked">
                 <h2 class="login-h2"><a class="reg-block" href="/registration">Регистрация</a></h2>
             </div>
         </div>

@@ -39,7 +39,7 @@ public class Key {
     public static final String BUTTON_SUBMIT = "button-submit";
     public static final String BUTTON_USER_IMG_LOAD = "button-user-img-load";
     public static final String BUTTON_LOAD_QUEST_IMAGE = "button-load-quest-image";
-    public static final String BUTTON_LOAD_QUESTION_IMAGE= "button-load-question-image";
+    public static final String BUTTON_LOAD_QUESTION_IMAGE = "button-load-question-image";
     public static final String BUTTON_LOAD_ANSWER_IMAGE = "button-load-answer-image";
     public static final String BUTTON_EDIT_QUEST = "button-edit-quest";
     public static final String BUTTON_EDIT_QUESTION = "button-edit-question";
@@ -55,20 +55,20 @@ public class Key {
     public static final String BUTTON_RESET = "button-reset";
 
     public static final String IS_AUTHORIZED = "authorized";
-    public static final String HAS_ALERTS =  "hasAlerts";
-    public static final String ALERT =  "alert";
-    public static final String FILE =  "file";
-    public static final String IMAGE =  "image";
+    public static final String HAS_ALERTS = "hasAlerts";
+    public static final String ALERT = "alert";
+    public static final String FILE = "file";
+    public static final String IMAGE = "image";
 
-    public static final String WRONG_USER_DATA =  "Wrong login or password.";
-    public static final String USER_EXIST =  "A user with this login exists.";
-    public static final String CANT_UPDATE =  "Can't update user.";
-    public static final String NEED_TO_LOGIN =  "Login to access the resource.";
-    public static final String FILE_NOT_FOUND =  "File not found.";
-    public static final String FILE_LOAD_ERROR =  "Exception while loading file.";
-    public static final String BROKEN_SESSION =  "Session is broken, try one more time";
-    public static final String CANT_EXT_REQUEST =  "Can't execute the request";
-    public static final String PARSE_EXCEPTION =  "Quest has syntax mistakes, check your text and try again.";
-    public static final String WRONG_SYNTAX_QUESTION =  "Question line wrong syntax";
-    public static final String WRONG_SYNTAX_ANSWER =  "Answer line wrong syntax";
+    public static final String WRONG_USER_DATA = "Wrong login or password.";
+    public static final String USER_EXIST = "A user with this login exists.";
+    public static final String CANT_UPDATE = "Can't update user.";
+    public static final String NEED_TO_LOGIN = "Login to access the resource.";
+    public static final String FILE_NOT_FOUND = "File not found.";
+    public static final String FILE_LOAD_ERROR = "Exception while loading file.";
+    public static final String BROKEN_SESSION = "Session is broken, try one more time";
+    public static final String CANT_EXT_REQUEST = "Can't execute the request";
+    public static final String PARSE_EXCEPTION = "Quest has syntax mistakes, check your text and try again.";
+    public static final String WRONG_SYNTAX_QUESTION = "Question line wrong syntax";
+    public static final String WRONG_SYNTAX_ANSWER = "Answer line wrong syntax";
 }

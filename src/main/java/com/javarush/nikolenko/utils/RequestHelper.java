@@ -28,7 +28,7 @@ public class RequestHelper {
             Long value = (Long) currentSession.getAttribute(name);
             return value != null ? value : 0L;
         } catch (NumberFormatException e) {
-            log.error("Current session does not contain Long attribute [{}], {}", name,  e.getMessage());
+            log.error("Current session does not contain Long attribute [{}], {}", name, e.getMessage());
             throw new QuestException(Key.CANT_EXT_REQUEST);
         }
     }

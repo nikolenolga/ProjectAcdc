@@ -4,7 +4,9 @@ import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.entity.Question;
 import com.javarush.nikolenko.service.QuestModifyService;
 import com.javarush.nikolenko.service.QuestionService;
-import com.javarush.nikolenko.utils.*;
+import com.javarush.nikolenko.utils.Key;
+import com.javarush.nikolenko.utils.RequestHelper;
+import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -18,8 +20,8 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = {UrlHelper.ADD_QUESTION})
 public class AddQuestionServlet extends HttpServlet {
-    private QuestionService questionService;
     QuestModifyService questModifyService;
+    private QuestionService questionService;
 
     @SneakyThrows
     @Override
@@ -44,7 +46,7 @@ public class AddQuestionServlet extends HttpServlet {
                 UrlHelper.EDIT_QUEST,
                 Key.QUEST_ID, questId);
 
-        if(req.getParameter(Key.BUTTON_ADD_QUESTION) != null) {
+        if (req.getParameter(Key.BUTTON_ADD_QUESTION) != null) {
             String questionMessage = req.getParameter(Key.QUESTION_MESSAGE);
             Question question = Question.builder()
                     .questionMessage(questionMessage)

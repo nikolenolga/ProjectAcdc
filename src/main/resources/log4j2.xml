@@ -6,12 +6,12 @@
     <Appenders>
         <RollingFile name="RollingFile" fileName="${baseDir}/quest.log"
                      filePattern="${baseDir}/quest.%d{yyyy-MM-dd}.log">
-            <PatternLayout pattern="%d %p %c{1}: %msg%n" />
-            <TimeBasedTriggeringPolicy />
+            <PatternLayout pattern="%d %p %c{1}: %msg%n"/>
+            <TimeBasedTriggeringPolicy/>
             <DefaultRolloverStrategy>
-                <Delete basePath="${baseDir}" maxDepth="2" >
-                    <IfFileName glob="*/quest.*.log" />
-                    <IfLastModified age="P7D" />
+                <Delete basePath="${baseDir}" maxDepth="2">
+                    <IfFileName glob="*/quest.*.log"/>
+                    <IfLastModified age="P7D"/>
                 </Delete>
             </DefaultRolloverStrategy>
         </RollingFile>

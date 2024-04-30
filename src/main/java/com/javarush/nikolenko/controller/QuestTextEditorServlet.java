@@ -3,7 +3,6 @@ package com.javarush.nikolenko.controller;
 import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.service.QuestModifyService;
-import com.javarush.nikolenko.service.QuestService;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.RequestHelper;
 import com.javarush.nikolenko.utils.UrlHelper;
@@ -22,13 +21,11 @@ import java.util.Optional;
 
 @WebServlet(urlPatterns = {UrlHelper.QUEST_TEXT_EDITOR})
 public class QuestTextEditorServlet extends HttpServlet {
-    private QuestService questService;
     private QuestModifyService questModifyService;
 
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
-        questService = ServiceLocator.getService(QuestService.class);
         questModifyService = ServiceLocator.getService(QuestModifyService.class);
     }
 
@@ -48,15 +45,15 @@ public class QuestTextEditorServlet extends HttpServlet {
         long userId = RequestHelper.getLongValue(session, Key.USER_ID);
         String redirectPath = UrlHelper.QUEST_TEXT_EDITOR;
 
-        if(req.getParameter(Key.BUTTON_ADD_QUEST) != null) {
+        if (req.getParameter(Key.BUTTON_ADD_QUEST) != null) {
             Optional<Quest> optionalQuest = questModifyService.parseQuest(userId, text);
             redirectPath = optionalQuest.isEmpty()
                     ? UrlHelper.TWO_PARAM_TEMPLATE.formatted(UrlHelper.QUEST_TEXT_EDITOR,
-                            Key.HAS_ALERTS, true,
-                            Key.ALERT, Key.PARSE_EXCEPTION)
+                        Key.HAS_ALERTS, true,
+                        Key.ALERT, Key.PARSE_EXCEPTION)
                     : UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.EDIT_QUEST,
-                            Key.QUEST_ID, optionalQuest.get().getId());
-        } else if(req.getParameter(Key.BUTTON_RESET) != null) {
+                        Key.QUEST_ID, optionalQuest.get().getId());
+        } else if (req.getParameter(Key.BUTTON_RESET) != null) {
             session.removeAttribute(Key.TEXT);
         }
 

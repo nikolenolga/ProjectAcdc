@@ -18,7 +18,7 @@ import java.io.IOException;
 public class LogOutFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        if(req.getParameter(Key.BUTTON_EXIT) != null) {
+        if (req.getParameter(Key.BUTTON_EXIT) != null) {
             HttpSession session = req.getSession(false);
             session.removeAttribute(Key.USER);
             session.removeAttribute(Key.USER_ID);

@@ -29,11 +29,13 @@
         </ul>
     </nav>
     <div class="authorize-block">
-        <ul><li><a href="/edit-user">Личный кабинет</a></li></ul>
+        <ul>
+            <li><a href="/edit-user">Личный кабинет</a></li>
+        </ul>
     </div>
     <div class="logo">
         <a href="/edit-user">
-            <img class="menu-image" src="images/${sessionScope.user.getImage()}"  alt="user-image">
+            <img class="menu-image" src="images/${sessionScope.user.getImage()}" alt="user-image">
         </a>
     </div>
 </header>

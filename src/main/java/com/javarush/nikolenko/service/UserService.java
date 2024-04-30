@@ -28,7 +28,7 @@ public class UserService {
     }
 
     public Optional<User> update(User user) {
-        if (user != null &&  ObjectUtils.allNotNull(user.getName(), user.getLogin(), user.getPassword())) {
+        if (user != null && ObjectUtils.allNotNull(user.getName(), user.getLogin(), user.getPassword())) {
             userRepository.update(user);
             return Optional.of(user);
         }

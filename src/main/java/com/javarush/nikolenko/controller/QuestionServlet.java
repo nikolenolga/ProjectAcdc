@@ -3,7 +3,6 @@ package com.javarush.nikolenko.controller;
 import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.entity.Question;
-import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.service.AnswerService;
 import com.javarush.nikolenko.service.GameService;
 import com.javarush.nikolenko.service.QuestionService;
@@ -22,7 +21,6 @@ import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Optional;
 
 @WebServlet(urlPatterns = {UrlHelper.QUESTION})
 public class QuestionServlet extends HttpServlet {

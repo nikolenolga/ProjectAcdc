@@ -1,7 +1,8 @@
 package com.javarush.nikolenko.config;
 
-import com.javarush.nikolenko.entity.*;
-import com.javarush.nikolenko.service.*;
+import com.javarush.nikolenko.entity.User;
+import com.javarush.nikolenko.service.QuestModifyService;
+import com.javarush.nikolenko.service.UserService;
 import com.javarush.nikolenko.utils.RequestHelper;
 import com.javarush.nikolenko.utils.UrlHelper;
 import lombok.SneakyThrows;

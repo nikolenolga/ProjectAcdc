@@ -3,7 +3,9 @@ package com.javarush.nikolenko.controller;
 import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.service.AnswerService;
 import com.javarush.nikolenko.service.GameService;
-import com.javarush.nikolenko.utils.*;
+import com.javarush.nikolenko.utils.Key;
+import com.javarush.nikolenko.utils.RequestHelper;
+import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -13,8 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
+
 import java.io.IOException;
-import java.util.Optional;
 
 @WebServlet(urlPatterns = {UrlHelper.ANSWER})
 public class AnswerServlet extends HttpServlet {
@@ -45,7 +47,7 @@ public class AnswerServlet extends HttpServlet {
         String redirectAddress = UrlHelper.INDEX;
         if (req.getParameter(Key.BUTTON_NEXT) != null) {
             redirectAddress = UrlHelper.QUESTION;
-        } else if(req.getParameter(Key.BUTTON_RESTART) != null) {
+        } else if (req.getParameter(Key.BUTTON_RESTART) != null) {
             HttpSession session = req.getSession(false);
             long gameId = RequestHelper.getLongValue(session, Key.GAME_ID);
             gameService.restartGame(gameId);

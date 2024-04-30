@@ -3,10 +3,10 @@
 
 <c:choose>
     <c:when test="${sessionScope.authorized}">
-        <%@ include file="parts/header-authorized.jsp"%>
+        <%@ include file="parts/header-authorized.jsp" %>
     </c:when>
     <c:otherwise>
-        <%@ include file="parts/header.jsp"%>
+        <%@ include file="parts/header.jsp" %>
     </c:otherwise>
 </c:choose>
 

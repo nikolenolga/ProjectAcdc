@@ -46,9 +46,9 @@ public class AddAnswerServlet extends HttpServlet {
         String redirectPath = UrlHelper.ONE_PARAM_TEMPLATE.formatted(
                 UrlHelper.EDIT_QUEST,
                 Key.QUEST_ID, questId
-                );
+        );
 
-        if(req.getParameter(Key.BUTTON_ADD_ANSWER) != null) {
+        if (req.getParameter(Key.BUTTON_ADD_ANSWER) != null) {
             long questionId = RequestHelper.getLongValue(req, Key.QUESTION_ID);
             String answerMessage = req.getParameter(Key.ANSWER_MESSAGE);
             GameState gameState = GameState.valueOf(req.getParameter(Key.GAMESTATE));

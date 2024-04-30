@@ -3,16 +3,16 @@
 
 <c:choose>
     <c:when test="${sessionScope.authorized}">
-        <%@ include file="parts/header-authorized.jsp"%>
+        <%@ include file="parts/header-authorized.jsp" %>
     </c:when>
     <c:otherwise>
-        <%@ include file="parts/header.jsp"%>
+        <%@ include file="parts/header.jsp" %>
     </c:otherwise>
 </c:choose>
 <div class="block">
     <c:forEach var="quest" items="${requestScope.quests}">
         <div class="block-item">
-            <img class="img-in-img-block" src="images/${quest.getImage()}">
+            <img class="img-in-img-block" src="images/${quest.getImage()}" alt="questImg">
             <p class="p-in-img-block"><a class="list-quest-a" href="play?questId=${quest.id}">${quest.name}</a></p>
         </div>
     </c:forEach>

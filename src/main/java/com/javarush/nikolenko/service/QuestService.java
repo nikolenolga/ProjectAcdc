@@ -8,8 +8,12 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Optional;
 
 public class QuestService {
     private static final Logger log = LoggerFactory.getLogger(QuestService.class);
@@ -60,7 +64,7 @@ public class QuestService {
 
     public String loadTextFromFile(String sPath) {
         StringBuilder fileText = new StringBuilder();
-        try(BufferedReader reader = new BufferedReader(new FileReader(sPath))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(sPath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 fileText.append(line).append("\r\n");
@@ -74,7 +78,6 @@ public class QuestService {
         }
         return fileText.toString();
     }
-
 
 
 }

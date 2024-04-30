@@ -2,7 +2,9 @@ package com.javarush.nikolenko.filter;
 
 import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.service.QuestModifyService;
-import com.javarush.nikolenko.utils.*;
+import com.javarush.nikolenko.utils.Key;
+import com.javarush.nikolenko.utils.RequestHelper;
+import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
@@ -30,23 +32,23 @@ public class AddQuestComponentsFilter extends HttpFilter {
         boolean needToAddAnswer = req.getParameter(Key.BUTTON_ADD_ANSWER) != null;
         boolean needToDeleteQuest = req.getParameter(Key.BUTTON_DELETE_QUEST) != null;
 
-        if(req.getMethod().equalsIgnoreCase("post")
+        if (req.getMethod().equalsIgnoreCase("post")
                 && (needToAddAnswer || needToAddQuestion || needToDeleteQuest)) {
             long questId = RequestHelper.getLongValue(req, Key.QUEST_ID);
 
 
-            if(needToDeleteQuest) {
+            if (needToDeleteQuest) {
                 questModifyService.deleteQuest(questId);
                 res.sendRedirect(UrlHelper.USER_QUESTS);
             }
 
-            if(needToAddQuestion) {
+            if (needToAddQuestion) {
                 res.sendRedirect(UrlHelper.ONE_PARAM_TEMPLATE.formatted(
                         UrlHelper.ADD_QUESTION,
                         Key.QUEST_ID, questId));
             }
 
-            if(needToAddAnswer) {
+            if (needToAddAnswer) {
                 long questionId = RequestHelper.getLongValue(req, Key.QUESTION_ID);
                 res.sendRedirect(UrlHelper.TWO_PARAM_TEMPLATE.formatted(
                         UrlHelper.ADD_ANSWER,

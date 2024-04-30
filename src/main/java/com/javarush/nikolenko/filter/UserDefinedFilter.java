@@ -39,7 +39,7 @@ public class UserDefinedFilter extends HttpFilter {
             session.setAttribute(Key.USER, anonymous);
             session.setAttribute(Key.USER_ID, anonymous.getId());
             session.setAttribute(Key.IS_AUTHORIZED, false);
-            log.info("Default {[]} user is set", anonymous.getName());
+            log.info("Default [{}] user is set", anonymous.getName());
         }
 
         chain.doFilter(req, res);
