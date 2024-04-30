@@ -9,11 +9,11 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
-import static jakarta.servlet.RequestDispatcher.*;
-
+@Slf4j
 @WebFilter(urlPatterns = {UrlHelper.INDEX, UrlHelper.PLAY, UrlHelper.QUESTS,
         UrlHelper.QUESTION, UrlHelper.ANSWER, UrlHelper.LOGIN,
         UrlHelper.REGISTRATION, UrlHelper.EDIT_USER, UrlHelper.EDIT_QUEST,
@@ -29,6 +29,7 @@ public class ErrorHandlingFilter extends HttpFilter {
             if (t instanceof ServletException) {
                 int errorCode = res.getStatus();
                 req.setAttribute(Key.ERROR_CODE, errorCode);
+                log.error("Error occurred while processing request: {}", t.toString());
             }
             req.setAttribute(Key.DESCRIPTION, t.toString());
             req.setAttribute(Key.ERROR_MESSAGE, t.getMessage());

@@ -3,7 +3,9 @@ package com.javarush.nikolenko.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,11 +23,13 @@ public class Game extends AbstractComponent {
         this.currentQuestionId = currentQuestionId;
         this.firstQuestionId = currentQuestionId;
         this.gameState = GameState.GAME;
+        log.debug("New Game entity created, gameId - {}, questId - {}, userId - {}", id, questId, userPlayerId);
     }
 
     public void restart() {
         this.gameState = GameState.GAME;
         this.currentQuestionId = this.firstQuestionId;
+        log.debug("Game restarted, gameId - {}, questId - {}, userId - {}", id, questId, userPlayerId);
     }
 
     public boolean isFinished() {

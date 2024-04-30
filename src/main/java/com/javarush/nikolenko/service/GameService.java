@@ -10,11 +10,13 @@ import com.javarush.nikolenko.utils.RequestHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Collection;
 import java.util.Optional;
 
+@Slf4j
 public class GameService {
     private final GameRepository gameRepository;
     private final AnswerService answerService;
@@ -23,21 +25,24 @@ public class GameService {
     public GameService(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
         answerService = ServiceLocator.getService(AnswerService.class);
+        log.info("GameService created");
     }
 
     public Optional<Game> create(Game game) {
-        if (ObjectUtils.allNotNull(game.getUserPlayerId(), game.getQuestId(), game.getCurrentQuestionId(), game.getFirstQuestionId())) {
+        if (game != null && ObjectUtils.allNotNull(game.getUserPlayerId(), game.getQuestId(), game.getCurrentQuestionId(), game.getFirstQuestionId())) {
             gameRepository.create(game);
             return Optional.of(game);
         }
+        log.debug("Game creation failed, game - {}", game);
         return Optional.empty();
     }
 
     public Optional<Game> update(Game game) {
-        if (ObjectUtils.allNotNull(game.getUserPlayerId(), game.getQuestId(), game.getCurrentQuestionId(), game.getFirstQuestionId())) {
+        if (game != null && ObjectUtils.allNotNull(game.getUserPlayerId(), game.getQuestId(), game.getCurrentQuestionId(), game.getFirstQuestionId())) {
             gameRepository.update(game);
             return Optional.of(game);
         }
+        log.debug("Game updating failed, game - {}", game);
         return Optional.empty();
     }
 
@@ -82,6 +87,7 @@ public class GameService {
             Game game = get(gameId).get();
             game.setGameState(answer.isWin() ? GameState.WIN : GameState.LOSE);
             update(game);
+            log.info("Game {} finished {} and saved to repository.", game.getId(), game.getGameState());
         }
     }
 }

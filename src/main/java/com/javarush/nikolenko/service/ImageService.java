@@ -1,11 +1,14 @@
 package com.javarush.nikolenko.service;
 
+import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.Part;
 import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +25,7 @@ public class ImageService {
     private static final List<String> EXTENSIONS = List.of(
             ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".webp"
     );
+    private static final Logger log = LoggerFactory.getLogger(ImageService.class);
 
     public final Path WEB_INF = Paths.get(URI.create(
                     Objects.requireNonNull(
@@ -55,6 +59,7 @@ public class ImageService {
             deleteOldFiles(imageId);
             filename = imageId + ext;
             uploadImageInternal(filename, data.getInputStream());
+            log.debug("Image uploaded: {}", filename);
         }
     }
 
@@ -66,7 +71,8 @@ public class ImageService {
                     try {
                         Files.deleteIfExists(p);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        log.error("Deleting old file: {} failed", filename);
+                        throw new QuestException(e);
                     }
                 });
     }

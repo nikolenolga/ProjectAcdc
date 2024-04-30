@@ -3,6 +3,7 @@ package com.javarush.nikolenko.repository;
 import com.javarush.nikolenko.entity.AbstractComponent;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,7 +31,7 @@ public abstract class BaseRepository<T extends AbstractComponent> implements Rep
 
     @Override
     public Collection<T> getAll() {
-        return map.values();
+        return Collections.unmodifiableCollection(map.values());
     }
 
     @Override

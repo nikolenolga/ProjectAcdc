@@ -5,13 +5,14 @@ import com.javarush.nikolenko.service.*;
 import com.javarush.nikolenko.utils.RequestHelper;
 import com.javarush.nikolenko.utils.UrlHelper;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-
+@Slf4j
 public class Configuration {
     private final QuestModifyService questModifyService;
     private final UserService userService;
@@ -26,6 +27,7 @@ public class Configuration {
         admin = new User("Admin", "admin", "admin-admin");
         userService.create(admin);
         configDefaultQuests();
+        log.debug("Application configuration loaded");
     }
 
     private void configDefaultQuests() {
@@ -33,7 +35,7 @@ public class Configuration {
             paths.filter(Files::isRegularFile)
                     .forEach(path -> questModifyService.loadQuest(admin.getId(), String.valueOf(path)));
         } catch (IOException e) {
-
+            log.error("Loading quest file from directory {}, caused exception - {}", questsFolder, e.getMessage());
         }
     }
 

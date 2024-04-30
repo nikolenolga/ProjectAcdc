@@ -2,31 +2,36 @@ package com.javarush.nikolenko.service;
 
 import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.repository.AnswerRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Collection;
 import java.util.Optional;
 
+@Slf4j
 public class AnswerService {
     private final AnswerRepository answerRepository;
 
     public AnswerService(AnswerRepository answerRepository) {
         this.answerRepository = answerRepository;
+        log.info("AnswerService created");
     }
 
     public Optional<Answer> create(Answer answer) {
-        if (ObjectUtils.allNotNull(answer.getAnswerMessage(), answer.getGameState(), answer.getFinalMessage())) {
+        if (answer != null && ObjectUtils.allNotNull(answer.getAnswerMessage(), answer.getGameState(), answer.getFinalMessage())) {
             answerRepository.create(answer);
             return Optional.of(answer);
         }
+        log.debug("Answer can't be created in repository, answer - {}", answer);
         return Optional.empty();
     }
 
     public Optional<Answer> update(Answer answer) {
-        if (ObjectUtils.allNotNull(answer.getAnswerMessage(), answer.getGameState(), answer.getFinalMessage())) {
+        if (answer != null && ObjectUtils.allNotNull(answer.getAnswerMessage(), answer.getGameState(), answer.getFinalMessage())) {
             answerRepository.update(answer);
             return Optional.of(answer);
         }
+        log.debug("Answer can't be updated in repository, answer - {}", answer);
         return Optional.empty();
     }
 
@@ -40,11 +45,6 @@ public class AnswerService {
 
     public Optional<Answer> get(long id) {
         return answerRepository.get(id);
-    }
-
-    public boolean hasOnlyNextQuestionLogic(long id) {
-        Optional<Answer> optionalAnswer = get(id);
-        return optionalAnswer.isPresent() && optionalAnswer.get().hasOnlyNextQuestionLogic();
     }
 
     public boolean hasFinalMessage(long id) {

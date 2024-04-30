@@ -1,10 +1,13 @@
 package com.javarush.nikolenko.config;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public class ServiceLocator {
     private static final Map<Class<?>, Object> servicesWithComponents = new ConcurrentHashMap<>();
 
@@ -19,6 +22,7 @@ public class ServiceLocator {
             }
             Object newInstance = constructor.newInstance(parameters);
             servicesWithComponents.put(clazz, newInstance);
+            log.info("ServiceLocator created new instance of {}", clazz);
         }
 
         return (T) servicesWithComponents.get(clazz);

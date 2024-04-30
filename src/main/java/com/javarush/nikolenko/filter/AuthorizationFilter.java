@@ -13,9 +13,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
+@Slf4j
 @WebFilter(urlPatterns = {UrlHelper.EDIT_USER, UrlHelper.EDIT_QUEST, UrlHelper.USER_QUESTS, UrlHelper.QUEST_TEXT_EDITOR})
 public class AuthorizationFilter extends HttpFilter {
     @SneakyThrows
@@ -34,6 +36,7 @@ public class AuthorizationFilter extends HttpFilter {
         } else {
             res.sendRedirect(UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.LOGIN,
                     Key.ALERT, Key.NEED_TO_LOGIN));
+            log.info("User is not authorized, request {} rejected", req.getRequestURI());
         }
     }
 }

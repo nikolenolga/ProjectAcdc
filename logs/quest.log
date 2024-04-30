@@ -1,0 +1,246 @@
+2024-04-30 01:01:31,901 INFO AnswerService: AnswerService created
+2024-04-30 01:02:11,807 INFO AnswerService: AnswerService created
+2024-04-30 01:04:32,790 INFO AnswerService: AnswerService created
+2024-04-30 01:06:10,459 INFO AnswerService: AnswerService created
+2024-04-30 01:08:09,810 INFO AnswerService: AnswerService created
+2024-04-30 01:08:09,836 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 01:39:32,761 INFO AnswerService: AnswerService created
+2024-04-30 01:39:32,803 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 01:39:32,893 INFO AnswerService: AnswerService created
+2024-04-30 01:39:32,941 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 01:39:32,950 INFO AnswerService: AnswerService created
+2024-04-30 01:39:32,950 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 01:39:33,061 INFO AnswerService: AnswerService created
+2024-04-30 01:39:33,062 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 01:42:12,339 INFO AnswerService: AnswerService created
+2024-04-30 01:42:12,374 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 01:42:12,477 INFO AnswerService: AnswerService created
+2024-04-30 01:42:12,483 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 01:42:12,494 INFO AnswerService: AnswerService created
+2024-04-30 01:42:12,494 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 01:42:12,506 INFO AnswerService: AnswerService created
+2024-04-30 01:42:12,740 INFO AnswerService: AnswerService created
+2024-04-30 01:42:12,740 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 01:44:21,724 INFO AnswerService: AnswerService created
+2024-04-30 01:44:21,765 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 01:44:21,862 INFO AnswerService: AnswerService created
+2024-04-30 01:44:21,870 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 01:44:21,876 INFO AnswerService: AnswerService created
+2024-04-30 01:44:21,876 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 01:44:21,884 INFO AnswerService: AnswerService created
+2024-04-30 01:44:21,885 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 04:03:54,566 INFO AnswerService: AnswerService created
+2024-04-30 04:03:54,651 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 04:03:54,769 INFO AnswerService: AnswerService created
+2024-04-30 04:03:54,809 DEBUG AnswerService: Answer can't be updated in repository, answer - 
+2024-04-30 04:03:54,812 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,050 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,052 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 04:03:55,057 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,058 DEBUG AnswerService: Answer can't be updated in repository, answer - 
+2024-04-30 04:03:55,061 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,066 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,067 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 04:03:55,071 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,078 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,084 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,091 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,138 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,144 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,146 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 04:03:55,148 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,165 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,172 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,179 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,185 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,228 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,234 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,415 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,419 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,424 INFO AnswerService: AnswerService created
+2024-04-30 04:03:55,426 DEBUG AnswerService: Answer can't be updated in repository, answer - 
+2024-04-30 04:05:08,421 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,516 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,525 DEBUG AnswerService: Answer can't be updated in repository, answer - 
+2024-04-30 04:05:08,540 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,624 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,626 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 04:05:08,638 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,641 DEBUG AnswerService: Answer can't be updated in repository, answer - 
+2024-04-30 04:05:08,649 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,658 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,659 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 04:05:08,665 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,675 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,680 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,688 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,694 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,706 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,708 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 04:05:08,712 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,735 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,742 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,752 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,761 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,775 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,780 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,782 DEBUG AnswerService: Answer can't be updated in repository, answer - 
+2024-04-30 04:05:08,789 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,795 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,806 INFO AnswerService: AnswerService created
+2024-04-30 04:05:08,808 DEBUG AnswerService: Answer can't be updated in repository, answer - 
+2024-04-30 04:06:15,353 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,375 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 04:06:15,441 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,448 DEBUG AnswerService: Answer can't be updated in repository, answer - 
+2024-04-30 04:06:15,456 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,524 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,527 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 04:06:15,535 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,536 DEBUG AnswerService: Answer can't be updated in repository, answer - 
+2024-04-30 04:06:15,541 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,558 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,564 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 04:06:15,569 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,578 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,588 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,598 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,605 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,612 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,616 DEBUG AnswerService: Answer can't be created in repository, answer - 
+2024-04-30 04:06:15,620 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,637 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,641 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,652 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,659 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,670 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,680 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,682 DEBUG AnswerService: Answer can't be updated in repository, answer - 
+2024-04-30 04:06:15,688 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,696 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,700 INFO AnswerService: AnswerService created
+2024-04-30 04:06:15,701 DEBUG AnswerService: Answer can't be updated in repository, answer - 
+2024-04-30 04:17:28,907 INFO AnswerService: AnswerService created
+2024-04-30 04:17:28,939 DEBUG AnswerService: Answer can't be created in repository, answer - null
+2024-04-30 04:17:28,997 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,007 DEBUG AnswerService: Answer can't be updated in repository, answer - com.javarush.nikolenko.entity.Answer@28e19366
+2024-04-30 04:17:29,012 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,078 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,080 DEBUG AnswerService: Answer can't be created in repository, answer - com.javarush.nikolenko.entity.Answer@2aa6311a
+2024-04-30 04:17:29,088 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,089 DEBUG AnswerService: Answer can't be updated in repository, answer - com.javarush.nikolenko.entity.Answer@249e0271
+2024-04-30 04:17:29,094 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,103 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,103 DEBUG AnswerService: Answer can't be created in repository, answer - com.javarush.nikolenko.entity.Answer@78525ef9
+2024-04-30 04:17:29,107 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,112 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,121 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,128 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,136 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,143 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,145 DEBUG AnswerService: Answer can't be created in repository, answer - com.javarush.nikolenko.entity.Answer@1b4ae4e0
+2024-04-30 04:17:29,155 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,170 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,177 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,188 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,200 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,210 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,219 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,220 DEBUG AnswerService: Answer can't be updated in repository, answer - null
+2024-04-30 04:17:29,225 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,233 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,238 INFO AnswerService: AnswerService created
+2024-04-30 04:17:29,240 DEBUG AnswerService: Answer can't be updated in repository, answer - com.javarush.nikolenko.entity.Answer@3f92a84e
+2024-04-30 04:19:03,418 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,444 DEBUG AnswerService: Answer can't be created in repository, answer - null
+2024-04-30 04:19:03,496 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,503 DEBUG AnswerService: Answer can't be updated in repository, answer - com.javarush.nikolenko.entity.Answer@75fa1be3
+2024-04-30 04:19:03,507 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,557 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,559 DEBUG AnswerService: Answer can't be created in repository, answer - com.javarush.nikolenko.entity.Answer@6a937336
+2024-04-30 04:19:03,564 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,565 DEBUG AnswerService: Answer can't be updated in repository, answer - com.javarush.nikolenko.entity.Answer@684b31de
+2024-04-30 04:19:03,569 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,576 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,578 DEBUG AnswerService: Answer can't be created in repository, answer - com.javarush.nikolenko.entity.Answer@3f702946
+2024-04-30 04:19:03,583 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,590 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,597 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,602 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,608 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,614 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,616 DEBUG AnswerService: Answer can't be created in repository, answer - com.javarush.nikolenko.entity.Answer@3d37203b
+2024-04-30 04:19:03,619 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,636 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,640 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,648 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,654 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,662 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,668 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,668 DEBUG AnswerService: Answer can't be updated in repository, answer - null
+2024-04-30 04:19:03,672 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,679 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,685 INFO AnswerService: AnswerService created
+2024-04-30 04:19:03,685 DEBUG AnswerService: Answer can't be updated in repository, answer - com.javarush.nikolenko.entity.Answer@78c1372d
+2024-04-30 04:19:56,194 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,238 DEBUG AnswerService: Answer can't be created in repository, answer - null
+2024-04-30 04:19:56,295 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,302 DEBUG AnswerService: Answer can't be updated in repository, answer - com.javarush.nikolenko.entity.Answer@28e19366
+2024-04-30 04:19:56,312 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,385 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,387 DEBUG AnswerService: Answer can't be created in repository, answer - com.javarush.nikolenko.entity.Answer@2aa6311a
+2024-04-30 04:19:56,394 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,396 DEBUG AnswerService: Answer can't be updated in repository, answer - com.javarush.nikolenko.entity.Answer@249e0271
+2024-04-30 04:19:56,401 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,411 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,412 DEBUG AnswerService: Answer can't be created in repository, answer - com.javarush.nikolenko.entity.Answer@78525ef9
+2024-04-30 04:19:56,416 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,424 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,429 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,433 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,439 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,445 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,446 DEBUG AnswerService: Answer can't be created in repository, answer - com.javarush.nikolenko.entity.Answer@1b4ae4e0
+2024-04-30 04:19:56,450 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,467 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,473 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,479 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,485 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,498 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,506 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,507 DEBUG AnswerService: Answer can't be updated in repository, answer - null
+2024-04-30 04:19:56,511 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,517 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,522 INFO AnswerService: AnswerService created
+2024-04-30 04:19:56,523 DEBUG AnswerService: Answer can't be updated in repository, answer - com.javarush.nikolenko.entity.Answer@3f92a84e
+2024-04-30 04:20:29,234 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,260 DEBUG AnswerService: Answer can't be created in repository, answer - null
+2024-04-30 04:20:29,307 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,313 DEBUG AnswerService: Answer can't be updated in repository, answer - com.javarush.nikolenko.entity.Answer@28e19366
+2024-04-30 04:20:29,318 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,390 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,392 DEBUG AnswerService: Answer can't be created in repository, answer - com.javarush.nikolenko.entity.Answer@2aa6311a
+2024-04-30 04:20:29,398 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,399 DEBUG AnswerService: Answer can't be updated in repository, answer - com.javarush.nikolenko.entity.Answer@249e0271
+2024-04-30 04:20:29,406 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,412 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,413 DEBUG AnswerService: Answer can't be created in repository, answer - com.javarush.nikolenko.entity.Answer@78525ef9
+2024-04-30 04:20:29,417 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,425 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,432 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,439 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,443 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,448 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,450 DEBUG AnswerService: Answer can't be created in repository, answer - com.javarush.nikolenko.entity.Answer@1b4ae4e0
+2024-04-30 04:20:29,455 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,467 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,473 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,478 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,484 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,496 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,506 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,507 DEBUG AnswerService: Answer can't be updated in repository, answer - null
+2024-04-30 04:20:29,511 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,515 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,521 INFO AnswerService: AnswerService created
+2024-04-30 04:20:29,521 DEBUG AnswerService: Answer can't be updated in repository, answer - com.javarush.nikolenko.entity.Answer@3f92a84e

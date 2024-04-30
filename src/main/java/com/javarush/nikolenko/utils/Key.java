@@ -60,7 +60,6 @@ public class Key {
     public static final String FILE =  "file";
     public static final String IMAGE =  "image";
 
-    public static final String RANDOM_ERROR =  "Random error";
     public static final String WRONG_USER_DATA =  "Wrong login or password.";
     public static final String USER_EXIST =  "A user with this login exists.";
     public static final String CANT_UPDATE =  "Can't update user.";
@@ -70,5 +69,6 @@ public class Key {
     public static final String BROKEN_SESSION =  "Session is broken, try one more time";
     public static final String CANT_EXT_REQUEST =  "Can't execute the request";
     public static final String PARSE_EXCEPTION =  "Quest has syntax mistakes, check your text and try again.";
-
+    public static final String WRONG_SYNTAX_QUESTION =  "Question line wrong syntax";
+    public static final String WRONG_SYNTAX_ANSWER =  "Answer line wrong syntax";
 }

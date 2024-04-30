@@ -14,8 +14,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 
+@Slf4j
 @WebFilter(urlPatterns = {UrlHelper.INDEX, UrlHelper.PLAY, UrlHelper.QUESTS,
         UrlHelper.QUESTION, UrlHelper.ANSWER, UrlHelper.LOGIN,
         UrlHelper.REGISTRATION})
@@ -36,6 +39,7 @@ public class UserDefinedFilter extends HttpFilter {
             session.setAttribute(Key.USER, anonymous);
             session.setAttribute(Key.USER_ID, anonymous.getId());
             session.setAttribute(Key.IS_AUTHORIZED, false);
+            log.info("Default {[]} user is set", anonymous.getName());
         }
 
         chain.doFilter(req, res);

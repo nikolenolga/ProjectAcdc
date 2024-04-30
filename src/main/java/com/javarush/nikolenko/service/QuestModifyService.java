@@ -3,9 +3,12 @@ package com.javarush.nikolenko.service;
 import com.javarush.nikolenko.config.ServiceLocator;
 import com.javarush.nikolenko.entity.*;
 import com.javarush.nikolenko.exception.QuestException;
+import com.javarush.nikolenko.utils.Key;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +18,7 @@ import java.util.Optional;
 import java.util.TreeMap;
 
 public class QuestModifyService {
+    private static final Logger log = LoggerFactory.getLogger(QuestModifyService.class);
     private final QuestService questService;
     private final QuestionService questionService;
     private final AnswerService answerService;
@@ -26,6 +30,7 @@ public class QuestModifyService {
         this.questionService = ServiceLocator.getService(QuestionService.class);
         this.answerService = ServiceLocator.getService(AnswerService.class);
         this.imageService = ServiceLocator.getService(ImageService.class);
+        log.info("QuestModifyService created");
     }
 
     public void addQuestion(long questId, long questionId) {
@@ -35,6 +40,7 @@ public class QuestModifyService {
             Quest quest = optionalQuest.get();
             quest.addQuestion(optionalQuestion.get());
             questService.update(quest);
+            log.info("Question {} added to quest {}, name - {}", questionId, quest.getId(), quest.getName());
         }
     }
 
@@ -49,6 +55,7 @@ public class QuestModifyService {
             question.addPossibleAnswer(answer);
             questionService.update(question);
             questService.update(quest);
+            log.info("Answer {} added to question {}", answerId, question.getId());
         }
     }
 
@@ -70,6 +77,7 @@ public class QuestModifyService {
             quest.deleteQuestion(question);
             deleteQuestion(question);
             questService.update(quest);
+            log.info("Question {} deleted from quest {}, name - {}", questionId, quest.getId(), quest.getName());
         }
     }
 
@@ -91,6 +99,7 @@ public class QuestModifyService {
             question.removePossibleAnswer(answer);
             questionService.update(question);
             questService.update(quest);
+            log.info("Answer {} deleted from question {}", answerId, question.getId());
         }
     }
 
@@ -197,7 +206,8 @@ public class QuestModifyService {
             for (Map.Entry<Long, Question> entry : questions.entrySet()) {
                 Question question = entry.getValue();
                 if (questionService.create(question).isEmpty()) {
-                    throw new QuestException("Question line wrong syntax");
+                    log.debug("{}: {}", Key.WRONG_SYNTAX_QUESTION, line);
+                    throw new QuestException(Key.WRONG_SYNTAX_QUESTION);
                 }
                 if (entry.getKey() == 1L) {
                     quest.setFirstQuestionId(question.getId());
@@ -215,6 +225,7 @@ public class QuestModifyService {
                         answer.setNextQuestionId(savedQuestionId);
                     }
                     if (answerService.create(answer).isEmpty()) {
+                        log.debug("{}: {}", Key.WRONG_SYNTAX_ANSWER, line);
                         throw new QuestException("Answer line wrong syntax");
                     }
                 }
@@ -222,10 +233,8 @@ public class QuestModifyService {
             }
 
             return questService.create(quest);
-        } catch (QuestException e) {
-
         } catch (Exception e) {
-
+            log.debug("Quest {} loading failed: {}", name.toString(), e.getMessage());
         }
 
         return Optional.empty();

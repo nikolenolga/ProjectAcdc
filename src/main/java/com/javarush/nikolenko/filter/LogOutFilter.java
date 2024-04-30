@@ -9,9 +9,11 @@ import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
+@Slf4j
 @WebFilter(urlPatterns = {UrlHelper.EDIT_USER})
 public class LogOutFilter extends HttpFilter {
     @Override
@@ -22,6 +24,7 @@ public class LogOutFilter extends HttpFilter {
             session.removeAttribute(Key.USER_ID);
             session.setAttribute(Key.IS_AUTHORIZED, false);
             res.sendRedirect(UrlHelper.LOGIN);
+            log.info("User logged out");
         } else {
             chain.doFilter(req, res);
         }
