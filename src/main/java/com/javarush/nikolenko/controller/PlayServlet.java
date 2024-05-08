@@ -1,6 +1,6 @@
 package com.javarush.nikolenko.controller;
 
-import com.javarush.nikolenko.config.ServiceLocator;
+import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.entity.Game;
 import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.service.GameService;
@@ -28,8 +28,8 @@ public class PlayServlet extends HttpServlet {
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
-        questService = ServiceLocator.getService(QuestService.class);
-        gameService = ServiceLocator.getService(GameService.class);
+        questService = NanoSpring.find(QuestService.class);
+        gameService = NanoSpring.find(GameService.class);
     }
 
     @Override

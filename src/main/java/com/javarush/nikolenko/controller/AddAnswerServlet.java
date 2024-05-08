@@ -1,6 +1,6 @@
 package com.javarush.nikolenko.controller;
 
-import com.javarush.nikolenko.config.ServiceLocator;
+import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.entity.GameState;
 import com.javarush.nikolenko.service.AnswerService;
@@ -28,8 +28,8 @@ public class AddAnswerServlet extends HttpServlet {
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
-        answerService = ServiceLocator.getService(AnswerService.class);
-        questModifyService = ServiceLocator.getService(QuestModifyService.class);
+        answerService = NanoSpring.find(AnswerService.class);
+        questModifyService = NanoSpring.find(QuestModifyService.class);
 
     }
 

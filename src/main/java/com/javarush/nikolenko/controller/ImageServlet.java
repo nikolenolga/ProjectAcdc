@@ -1,6 +1,6 @@
 package com.javarush.nikolenko.controller;
 
-import com.javarush.nikolenko.config.ServiceLocator;
+import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.service.ImageService;
 import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.ServletConfig;
@@ -24,7 +24,7 @@ public class ImageServlet extends HttpServlet {
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
-        imageService = ServiceLocator.getService(ImageService.class);
+        imageService = NanoSpring.find(ImageService.class);
     }
 
     @Override

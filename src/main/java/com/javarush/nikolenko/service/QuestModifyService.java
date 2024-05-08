@@ -1,6 +1,6 @@
 package com.javarush.nikolenko.service;
 
-import com.javarush.nikolenko.config.ServiceLocator;
+import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.entity.GameState;
 import com.javarush.nikolenko.entity.Quest;
@@ -29,10 +29,10 @@ public class QuestModifyService {
 
     @SneakyThrows
     public QuestModifyService() {
-        this.questService = ServiceLocator.getService(QuestService.class);
-        this.questionService = ServiceLocator.getService(QuestionService.class);
-        this.answerService = ServiceLocator.getService(AnswerService.class);
-        this.imageService = ServiceLocator.getService(ImageService.class);
+        this.questService = NanoSpring.find(QuestService.class);
+        this.questionService = NanoSpring.find(QuestionService.class);
+        this.answerService = NanoSpring.find(AnswerService.class);
+        this.imageService = NanoSpring.find(ImageService.class);
         log.info("QuestModifyService created");
     }
 

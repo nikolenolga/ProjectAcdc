@@ -1,6 +1,6 @@
 package com.javarush.nikolenko.service;
 
-import com.javarush.nikolenko.config.ServiceLocator;
+import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.entity.Game;
 import com.javarush.nikolenko.entity.GameState;
@@ -24,7 +24,7 @@ public class GameService {
     @SneakyThrows
     public GameService(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
-        answerService = ServiceLocator.getService(AnswerService.class);
+        answerService = NanoSpring.find(AnswerService.class);
         log.info("GameService created");
     }
 

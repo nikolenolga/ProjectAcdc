@@ -1,6 +1,6 @@
 package com.javarush.nikolenko.controller;
 
-import com.javarush.nikolenko.config.ServiceLocator;
+import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.service.QuestService;
 import com.javarush.nikolenko.utils.Key;
@@ -26,7 +26,7 @@ public class UserQuestsServlet extends HttpServlet {
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
-        questService = ServiceLocator.getService(QuestService.class);
+        questService = NanoSpring.find(QuestService.class);
     }
 
     @Override

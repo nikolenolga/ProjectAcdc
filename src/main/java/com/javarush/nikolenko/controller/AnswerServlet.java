@@ -1,6 +1,6 @@
 package com.javarush.nikolenko.controller;
 
-import com.javarush.nikolenko.config.ServiceLocator;
+import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.service.AnswerService;
 import com.javarush.nikolenko.service.GameService;
 import com.javarush.nikolenko.utils.Key;
@@ -26,8 +26,8 @@ public class AnswerServlet extends HttpServlet {
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
-        gameService = ServiceLocator.getService(GameService.class);
-        answerService = ServiceLocator.getService(AnswerService.class);
+        gameService = NanoSpring.find(GameService.class);
+        answerService = NanoSpring.find(AnswerService.class);
     }
 
     @Override

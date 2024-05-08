@@ -23,8 +23,8 @@ public class Configuration {
 
     @SneakyThrows
     public Configuration() {
-        questModifyService = ServiceLocator.getService(QuestModifyService.class);
-        userService = ServiceLocator.getService(UserService.class);
+        questModifyService = NanoSpring.find(QuestModifyService.class);
+        userService = NanoSpring.find(UserService.class);
         admin = new User("Admin", "admin", "admin-admin");
         userService.create(admin);
         configDefaultQuests();

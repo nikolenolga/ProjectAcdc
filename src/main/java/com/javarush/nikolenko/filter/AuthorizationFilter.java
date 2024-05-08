@@ -1,7 +1,7 @@
 package com.javarush.nikolenko.filter;
 
 import com.javarush.nikolenko.config.Configuration;
-import com.javarush.nikolenko.config.ServiceLocator;
+import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.FilterChain;
@@ -23,7 +23,7 @@ public class AuthorizationFilter extends HttpFilter {
     @SneakyThrows
     @Override
     public void init(FilterConfig config) throws ServletException {
-        ServiceLocator.getService(Configuration.class);
+        NanoSpring.find(Configuration.class);
     }
 
     @Override

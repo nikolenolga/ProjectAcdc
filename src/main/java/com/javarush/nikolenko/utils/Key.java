@@ -71,4 +71,5 @@ public class Key {
     public static final String PARSE_EXCEPTION = "Quest has syntax mistakes, check your text and try again.";
     public static final String WRONG_SYNTAX_QUESTION = "Question line wrong syntax";
     public static final String WRONG_SYNTAX_ANSWER = "Answer line wrong syntax";
+    public static final String WRONG_IMPL = "Not found impl for %s (type=%s)";
 }

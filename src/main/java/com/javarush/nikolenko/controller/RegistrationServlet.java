@@ -1,6 +1,6 @@
 package com.javarush.nikolenko.controller;
 
-import com.javarush.nikolenko.config.ServiceLocator;
+import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.service.UserService;
 import com.javarush.nikolenko.utils.Key;
@@ -25,7 +25,7 @@ public class RegistrationServlet extends HttpServlet {
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
-        userService = ServiceLocator.getService(UserService.class);
+        userService = NanoSpring.find(UserService.class);
     }
 
     @Override

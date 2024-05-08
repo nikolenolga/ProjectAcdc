@@ -1,6 +1,6 @@
 package com.javarush.nikolenko.filter;
 
-import com.javarush.nikolenko.config.ServiceLocator;
+import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.service.QuestModifyService;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.RequestHelper;
@@ -23,7 +23,7 @@ public class AddQuestComponentsFilter extends HttpFilter {
     @SneakyThrows
     @Override
     public void init(FilterConfig config) throws ServletException {
-        questModifyService = ServiceLocator.getService(QuestModifyService.class);
+        questModifyService = NanoSpring.find(QuestModifyService.class);
     }
 
     @Override

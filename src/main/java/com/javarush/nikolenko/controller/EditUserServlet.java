@@ -1,6 +1,6 @@
 package com.javarush.nikolenko.controller;
 
-import com.javarush.nikolenko.config.ServiceLocator;
+import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.service.ImageService;
 import com.javarush.nikolenko.service.UserService;
@@ -30,8 +30,8 @@ public class EditUserServlet extends HttpServlet {
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
-        userService = ServiceLocator.getService(UserService.class);
-        imageService = ServiceLocator.getService(ImageService.class);
+        userService = NanoSpring.find(UserService.class);
+        imageService = NanoSpring.find(ImageService.class);
     }
 
     @Override
