@@ -16,10 +16,17 @@ import java.util.List;
 public class Question extends AbstractComponent {
     private final List<Answer> possibleAnswers = new ArrayList<>();
     private String questionMessage;
+    private Long questId;
 
     public Question(String questionMessage) {
         super(0L);
         this.questionMessage = questionMessage;
+    }
+
+    public Question(String questionMessage, Long questId) {
+        super(0L);
+        this.questionMessage = questionMessage;
+        this.questId = questId;
     }
 
     public List<Answer> getPossibleAnswers() {

@@ -14,6 +14,7 @@ public class Answer extends AbstractComponent {
     protected GameState gameState;
     private Long nextQuestionId;
     private String finalMessage;
+    private Long questionId;
 
     public Answer(String answerMessage, GameState gameState, long nextQuestionId, String finalMessage) {
         super(0L);
@@ -29,6 +30,24 @@ public class Answer extends AbstractComponent {
         this.gameState = gameState;
         this.nextQuestionId = nextQuestionId;
         this.finalMessage = "";
+    }
+
+    public Answer(String answerMessage, GameState gameState, long nextQuestionId, String finalMessage, Long questionId) {
+        super(0L);
+        this.answerMessage = answerMessage;
+        this.gameState = gameState;
+        this.nextQuestionId = nextQuestionId;
+        this.finalMessage = finalMessage;
+        this.questionId = questionId;
+    }
+
+    public Answer(String answerMessage, GameState gameState, long nextQuestionId, Long questionId) {
+        super(0L);
+        this.answerMessage = answerMessage;
+        this.gameState = gameState;
+        this.nextQuestionId = nextQuestionId;
+        this.finalMessage = "";
+        this.questionId = questionId;
     }
 
     public boolean isFinal() {
