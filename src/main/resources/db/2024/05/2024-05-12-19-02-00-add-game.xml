@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="2024-05-12-19-02-00-add-game" author="nikolenko">
+        <createTable tableName="game">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_game"/>
+            </column>
+            <column name="quest_id" type="BIGINT"/>
+            <column name="current_question_id" type="BIGINT"/>
+            <column name="user_player_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_state" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2024-05-12-19-02-00-add-game-fk" author="nikolenko">
+        <addForeignKeyConstraint baseColumnNames="user_player_id"
+                                 baseTableName="game"
+                                 constraintName="fk_game_users"
+                                 onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+
+        <addForeignKeyConstraint baseColumnNames="game_state"
+                                 baseTableName="game"
+                                 constraintName="fk_game_game_state"
+                                 onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="value"
+                                 referencedTableName="game_state"/>
+    </changeSet>
+</databaseChangeLog>

@@ -6,5 +6,11 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
         <include file="db/2024/04/2024-04-23-20-53-50-add-role.xml" relativeToChangelogFile="false"/>
+        <include file="db/2024/05/2024-05-11-22-19-00-add-users.xml" relativeToChangelogFile="false"/>
+        <include file="db/2024/05/2024-05-11-22-19-00-add-quest.xml" relativeToChangelogFile="false"/>
+        <include file="db/2024/04/2024-04-23-20-53-50-add-game-state.xml" relativeToChangelogFile="false"/>
+        <include file="db/2024/05/2024-05-12-18-32-00-add-question.xml" relativeToChangelogFile="false"/>
+        <include file="db/2024/05/2024-05-12-18-48-00-add-answer.xml" relativeToChangelogFile="false"/>
+        <include file="db/2024/05/2024-05-12-19-02-00-add-game.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>
