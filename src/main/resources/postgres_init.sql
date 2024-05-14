@@ -145,3 +145,5 @@ CREATE TABLE IF NOT EXISTS game
             ON DELETE NO ACTION
             ON UPDATE NO ACTION
 );
+
+DELETE FROM users WHERE id > 4;

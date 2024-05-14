@@ -19,12 +19,10 @@ public class Question extends AbstractComponent {
     private Long questId;
 
     public Question(String questionMessage) {
-        super(0L);
         this.questionMessage = questionMessage;
     }
 
     public Question(String questionMessage, Long questId) {
-        super(0L);
         this.questionMessage = questionMessage;
         this.questId = questId;
     }

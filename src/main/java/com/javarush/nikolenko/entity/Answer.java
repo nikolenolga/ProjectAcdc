@@ -25,7 +25,6 @@ public class Answer extends AbstractComponent {
     }
 
     public Answer(String answerMessage, GameState gameState, long nextQuestionId) {
-        super(0L);
         this.answerMessage = answerMessage;
         this.gameState = gameState;
         this.nextQuestionId = nextQuestionId;
@@ -33,7 +32,6 @@ public class Answer extends AbstractComponent {
     }
 
     public Answer(String answerMessage, GameState gameState, long nextQuestionId, String finalMessage, Long questionId) {
-        super(0L);
         this.answerMessage = answerMessage;
         this.gameState = gameState;
         this.nextQuestionId = nextQuestionId;
@@ -42,7 +40,6 @@ public class Answer extends AbstractComponent {
     }
 
     public Answer(String answerMessage, GameState gameState, long nextQuestionId, Long questionId) {
-        super(0L);
         this.answerMessage = answerMessage;
         this.gameState = gameState;
         this.nextQuestionId = nextQuestionId;

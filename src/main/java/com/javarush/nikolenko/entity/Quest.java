@@ -23,7 +23,6 @@ public class Quest extends AbstractComponent {
     private String description;
 
     public Quest(String name, long userAuthorId, long firstQuestionId, String description) {
-        super(0L);
         this.name = name;
         this.userAuthorId = userAuthorId;
         this.firstQuestionId = firstQuestionId;

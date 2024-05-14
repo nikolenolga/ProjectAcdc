@@ -17,7 +17,6 @@ public class Game extends AbstractComponent {
     private GameState gameState;
 
     public Game(long userPlayerId, long questId, long currentQuestionId) {
-        super(0L);
         this.userPlayerId = userPlayerId;
         this.questId = questId;
         this.currentQuestionId = currentQuestionId;
