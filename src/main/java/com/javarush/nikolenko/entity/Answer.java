@@ -1,15 +1,14 @@
 package com.javarush.nikolenko.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Builder
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Answer extends AbstractComponent {
+    private Long id;
     protected String answerMessage;
     protected GameState gameState;
     private Long nextQuestionId;
@@ -17,7 +16,6 @@ public class Answer extends AbstractComponent {
     private Long questionId;
 
     public Answer(String answerMessage, GameState gameState, long nextQuestionId, String finalMessage) {
-        super(0L);
         this.answerMessage = answerMessage;
         this.gameState = gameState;
         this.nextQuestionId = nextQuestionId;
@@ -69,6 +67,11 @@ public class Answer extends AbstractComponent {
 
     public boolean hasOnlyNextQuestionLogic() {
         return !hasFinalMessage() && !isFinal() && hasNextQuestion();
+    }
+
+    @Override
+    public String getImage() {
+        return super.getImage()  + id;
     }
 
 }

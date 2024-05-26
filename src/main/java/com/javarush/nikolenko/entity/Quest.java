@@ -1,9 +1,6 @@
 package com.javarush.nikolenko.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -15,8 +12,10 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Quest extends AbstractComponent {
     private final List<Question> questions = new ArrayList<>();
+    private Long id;
     private String name;
     private Long userAuthorId;
     private Long firstQuestionId;
@@ -40,5 +39,10 @@ public class Quest extends AbstractComponent {
 
     public List<Question> getQuestions() {
         return Collections.unmodifiableList(questions);
+    }
+
+    @Override
+    public String getImage() {
+        return super.getImage()  + id;
     }
 }

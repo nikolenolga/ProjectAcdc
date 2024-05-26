@@ -1,9 +1,6 @@
 package com.javarush.nikolenko.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,8 +10,10 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Question extends AbstractComponent {
     private final List<Answer> possibleAnswers = new ArrayList<>();
+    private Long id;
     private String questionMessage;
     private Long questId;
 
@@ -37,5 +36,10 @@ public class Question extends AbstractComponent {
 
     public void removePossibleAnswer(Answer answer) {
         possibleAnswers.remove(answer);
+    }
+
+    @Override
+    public String getImage() {
+        return super.getImage()  + id;
     }
 }

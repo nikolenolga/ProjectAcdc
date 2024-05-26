@@ -8,11 +8,12 @@ public class Cnn implements CnnConnector {
     private static final String DATABASE_URL_KEY = "database.url";
     private static final String DATABASE_USER_KEY = "database.user";
     private static final String DATABASE_PASSWORD_KEY = "database.password";
+    private static final String DATABASE_DRIVER_KEY = "database.driver";
 
 
     static {
         try {
-            Class.forName("org.postgresql.Driver");
+            Class.forName(DATABASE_DRIVER_KEY);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

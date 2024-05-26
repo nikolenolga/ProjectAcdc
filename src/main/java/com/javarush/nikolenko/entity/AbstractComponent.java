@@ -8,13 +8,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public abstract class AbstractComponent {
-    protected Long id;
-
-    protected AbstractComponent(long id) {
-        this.id = id;
-    }
 
     public String getImage() {
-        return getClass().getSimpleName().toLowerCase() + "-" + id;
+        return getClass().getSimpleName().toLowerCase() + "-";
     }
 }

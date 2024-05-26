@@ -1,5 +1,6 @@
 package com.javarush.nikolenko.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Game extends AbstractComponent {
+    private Long id;
     private Long userPlayerId;
     private Long questId;
     private Long currentQuestionId;
@@ -33,5 +36,10 @@ public class Game extends AbstractComponent {
 
     public boolean isFinished() {
         return this.gameState != GameState.GAME;
+    }
+
+    @Override
+    public String getImage() {
+        return super.getImage()  + id;
     }
 }
