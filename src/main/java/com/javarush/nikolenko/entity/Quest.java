@@ -1,11 +1,13 @@
 package com.javarush.nikolenko.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Slf4j
 @Builder
@@ -13,21 +15,27 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "quest")
+@ToString(exclude = {"questions"})
+@NamedQueries({
+        @NamedQuery(name = "QUERY_MORE_ID", query = "SELECT q FROM Quest q where id>:id")
+})
 public class Quest extends AbstractComponent {
+    @Transient
     private final List<Question> questions = new ArrayList<>();
-    private Long id;
-    private String name;
-    private Long userAuthorId;
-    private Long firstQuestionId;
-    private String description;
 
-    public Quest(String name, long userAuthorId, long firstQuestionId, String description) {
-        this.name = name;
-        this.userAuthorId = userAuthorId;
-        this.firstQuestionId = firstQuestionId;
-        this.description = description;
-        log.debug("New Quest entity created, id - {}, name - {}, authorId - {}", id, name, userAuthorId);
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+    @Column(name = "user_author_id")
+    private Long userAuthorId;
+    @Column(name = "first_question_id")
+    private Long firstQuestionId;
+
+    private String description;
 
     public void addQuestion(Question question) {
         questions.add(question);
@@ -45,4 +53,5 @@ public class Quest extends AbstractComponent {
     public String getImage() {
         return super.getImage()  + id;
     }
+
 }

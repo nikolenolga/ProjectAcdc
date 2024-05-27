@@ -1,5 +1,6 @@
 package com.javarush.nikolenko.config;
 
+import com.javarush.nikolenko.entity.Role;
 import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.service.QuestModifyService;
 import com.javarush.nikolenko.service.UserService;
@@ -25,7 +26,7 @@ public class Configuration {
     public Configuration() {
         questModifyService = NanoSpring.find(QuestModifyService.class);
         userService = NanoSpring.find(UserService.class);
-        admin = new User("Admin", "admin", "admin-admin");
+        admin = new User(0L, "Admin", "admin", "admin-admin", Role.ADMIN);
         userService.create(admin);
         configDefaultQuests();
         log.debug("Application configuration loaded");

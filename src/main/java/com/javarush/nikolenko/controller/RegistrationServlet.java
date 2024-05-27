@@ -1,6 +1,8 @@
 package com.javarush.nikolenko.controller;
 
 import com.javarush.nikolenko.config.NanoSpring;
+import com.javarush.nikolenko.entity.GameState;
+import com.javarush.nikolenko.entity.Role;
 import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.service.UserService;
 import com.javarush.nikolenko.utils.Key;
@@ -41,9 +43,10 @@ public class RegistrationServlet extends HttpServlet {
         String login = req.getParameter(Key.LOGIN);
 
         if (!userService.userExist(login)) {
-            User user = new User(req.getParameter(Key.NAME),
+            User user = new User(0L, req.getParameter(Key.NAME),
                     login,
-                    req.getParameter(Key.PASSWORD));
+                    req.getParameter(Key.PASSWORD),
+                    Role.THE_USER);
             Optional<User> optionalUser = userService.create(user);
 
             session.setAttribute(Key.USER, user);

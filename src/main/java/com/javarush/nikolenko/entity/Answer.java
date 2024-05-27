@@ -1,5 +1,6 @@
 package com.javarush.nikolenko.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 
 @Builder
@@ -7,43 +8,22 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "answer")
+@ToString
 public class Answer extends AbstractComponent {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     protected String answerMessage;
-    protected GameState gameState;
-    private Long nextQuestionId;
     private String finalMessage;
+
+    @Enumerated(EnumType.STRING)
+    protected GameState gameState;
+
+    private Long nextQuestionId;
     private Long questionId;
-
-    public Answer(String answerMessage, GameState gameState, long nextQuestionId, String finalMessage) {
-        this.answerMessage = answerMessage;
-        this.gameState = gameState;
-        this.nextQuestionId = nextQuestionId;
-        this.finalMessage = finalMessage;
-    }
-
-    public Answer(String answerMessage, GameState gameState, long nextQuestionId) {
-        this.answerMessage = answerMessage;
-        this.gameState = gameState;
-        this.nextQuestionId = nextQuestionId;
-        this.finalMessage = "";
-    }
-
-    public Answer(String answerMessage, GameState gameState, long nextQuestionId, String finalMessage, Long questionId) {
-        this.answerMessage = answerMessage;
-        this.gameState = gameState;
-        this.nextQuestionId = nextQuestionId;
-        this.finalMessage = finalMessage;
-        this.questionId = questionId;
-    }
-
-    public Answer(String answerMessage, GameState gameState, long nextQuestionId, Long questionId) {
-        this.answerMessage = answerMessage;
-        this.gameState = gameState;
-        this.nextQuestionId = nextQuestionId;
-        this.finalMessage = "";
-        this.questionId = questionId;
-    }
 
     public boolean isFinal() {
         return gameState != GameState.GAME;

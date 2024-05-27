@@ -13,7 +13,7 @@ public class Cnn implements CnnConnector {
 
     static {
         try {
-            Class.forName(DATABASE_DRIVER_KEY);
+            Class.forName(ConfigUtil.getValue(DATABASE_DRIVER_KEY));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

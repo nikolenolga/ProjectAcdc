@@ -2,6 +2,7 @@ package com.javarush.nikolenko.filter;
 
 import com.javarush.nikolenko.config.Configuration;
 import com.javarush.nikolenko.config.NanoSpring;
+import com.javarush.nikolenko.entity.Role;
 import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.UrlHelper;
@@ -29,7 +30,7 @@ public class UserDefinedFilter extends HttpFilter {
     @Override
     public void init(FilterConfig config) throws ServletException {
         NanoSpring.find(Configuration.class);
-        anonymous = new User("Anonymous", "anonymous", "anonymous-anonymous");
+        anonymous = new User(0L, "Anonymous", "anonymous", "anonymous-anonymous", Role.GUEST);
     }
 
     @Override

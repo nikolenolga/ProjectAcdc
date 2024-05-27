@@ -72,4 +72,8 @@ public class Key {
     public static final String WRONG_SYNTAX_QUESTION = "Question line wrong syntax";
     public static final String WRONG_SYNTAX_ANSWER = "Answer line wrong syntax";
     public static final String WRONG_IMPL = "Not found impl for %s (type=%s)";
+
+    public static boolean nullOrEquals(Object first, Object second) {
+        return (first == null && second == null) || (first != null && first.equals(second));
+    }
 }

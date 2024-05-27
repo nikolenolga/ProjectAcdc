@@ -1,6 +1,8 @@
-package com.javarush.nikolenko.lesson9Hibernate;
+package com.javarush.nikolenko.lesson10HQL;
 
+import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.entity.User;
+import com.javarush.nikolenko.lesson9Hibernate.SessionCreater;
 import com.javarush.nikolenko.repository.Repository;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -10,20 +12,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
-public class UserDbDao implements Repository<User> {
+public class QuestDbDao implements Repository<Quest> {
     private SessionCreater sessionCreater;
 
-    public UserDbDao(SessionCreater sessionCreater) {
+    public QuestDbDao(SessionCreater sessionCreater) {
         this.sessionCreater = sessionCreater;
     }
 
     @Override
-    public void create(User user) {
+    public void create(Quest quest) {
         try(Session session = sessionCreater.getSession()) {
             Transaction transaction = session.beginTransaction();
             try{
-                session.persist(user);
+                session.persist(quest);
                 transaction.commit();
             } catch (Exception e) {
                 transaction.rollback();
@@ -32,11 +35,11 @@ public class UserDbDao implements Repository<User> {
     }
 
     @Override
-    public void update(User user) {
+    public void update(Quest quest) {
         try(Session session = sessionCreater.getSession()) {
             Transaction transaction = session.beginTransaction();
             try{
-                session.merge(user);
+                session.merge(quest);
                 transaction.commit();
             } catch (Exception e) {
                 transaction.rollback();
@@ -45,11 +48,11 @@ public class UserDbDao implements Repository<User> {
     }
 
     @Override
-    public void delete(User user) {
+    public void delete(Quest quest) {
         try(Session session = sessionCreater.getSession()) {
             Transaction transaction = session.beginTransaction();
             try{
-                session.remove(user);
+                session.remove(quest);
                 transaction.commit();
             } catch (Exception e) {
                 transaction.rollback();
@@ -58,14 +61,14 @@ public class UserDbDao implements Repository<User> {
     }
 
     @Override
-    public Collection<User> getAll() {
+    public Collection<Quest> getAll() {
         try(Session session = sessionCreater.getSession()) {
             Transaction transaction = session.beginTransaction();
             try {
-                Query<User> query = session.createQuery("SELECT u FROM User u", User.class);
-                Collection<User> users = query.getResultList();
+                Query<Quest> query = session.createQuery("SELECT q FROM Quest q", Quest.class);
+                Collection<Quest> quests = query.getResultList();
                 transaction.commit();
-                return users;
+                return quests;
             } catch (Exception e) {
                 transaction.rollback();
                 return new ArrayList<>();
@@ -74,17 +77,22 @@ public class UserDbDao implements Repository<User> {
     }
 
     @Override
-    public Optional<User> get(Long id) {
+    public Optional<Quest> get(Long id) {
         try(Session session = sessionCreater.getSession()) {
             Transaction transaction = session.beginTransaction();
             try{
-                User user = session.find(User.class, id);
+                Quest quest = session.find(Quest.class, id);
                 transaction.commit();
-                return Optional.of(user);
+                return Optional.of(quest);
             } catch (Exception e) {
                 transaction.rollback();
                 return Optional.empty();
             }
         }
+    }
+
+    public Stream<Quest> find(Quest pattern) {
+
+        return null;
     }
 }

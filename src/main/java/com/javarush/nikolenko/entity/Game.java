@@ -1,9 +1,7 @@
 package com.javarush.nikolenko.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -11,22 +9,21 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "game")
+@ToString
 public class Game extends AbstractComponent {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private GameState gameState;
+    private Long firstQuestionId;
+    private Long currentQuestionId;
+
     private Long userPlayerId;
     private Long questId;
-    private Long currentQuestionId;
-    private Long firstQuestionId;
-    private GameState gameState;
-
-    public Game(long userPlayerId, long questId, long currentQuestionId) {
-        this.userPlayerId = userPlayerId;
-        this.questId = questId;
-        this.currentQuestionId = currentQuestionId;
-        this.firstQuestionId = currentQuestionId;
-        this.gameState = GameState.GAME;
-        log.debug("New Game entity created, gameId - {}, questId - {}, userId - {}", id, questId, userPlayerId);
-    }
 
     public void restart() {
         this.gameState = GameState.GAME;

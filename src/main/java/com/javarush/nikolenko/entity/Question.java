@@ -1,5 +1,6 @@
 package com.javarush.nikolenko.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -11,20 +12,19 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "question")
+@ToString(exclude = {"possibleAnswers"})
 public class Question extends AbstractComponent {
+    @Transient
     private final List<Answer> possibleAnswers = new ArrayList<>();
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String questionMessage;
+
     private Long questId;
-
-    public Question(String questionMessage) {
-        this.questionMessage = questionMessage;
-    }
-
-    public Question(String questionMessage, Long questId) {
-        this.questionMessage = questionMessage;
-        this.questId = questId;
-    }
 
     public List<Answer> getPossibleAnswers() {
         return Collections.unmodifiableList(possibleAnswers);

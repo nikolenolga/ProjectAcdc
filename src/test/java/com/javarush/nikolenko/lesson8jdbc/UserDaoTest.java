@@ -2,6 +2,7 @@ package com.javarush.nikolenko.lesson8jdbc;
 
 import com.javarush.nikolenko.entity.Role;
 import com.javarush.nikolenko.entity.User;
+import com.javarush.nikolenko.lesson9Hibernate.UserDbDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -49,6 +51,13 @@ class UserDaoTest {
                 .name("newName")
                 .build();
         userDao.create(tempUser);
+    }
+
+    @Test
+    @DisplayName("When find all users result contains admin")
+    void getAll() {
+        List<User> users = userDao.getAll();
+        assertTrue(users.stream().anyMatch(user -> user.getRole() == Role.ADMIN));
     }
 
     @Test

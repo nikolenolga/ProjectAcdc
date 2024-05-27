@@ -59,7 +59,7 @@ public class GameService {
     }
 
     public Game initGame(long userPlayerId, long questId, long currentQuestion) {
-        Game game = new Game(userPlayerId, questId, currentQuestion);
+        Game game = new Game(0L, GameState.GAME, currentQuestion, currentQuestion, userPlayerId, questId);
         gameRepository.create(game);
         return game;
     }

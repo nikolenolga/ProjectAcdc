@@ -1,6 +1,6 @@
 package com.javarush.nikolenko.lesson9Hibernate;
 
-import com.javarush.nikolenko.entity.User;
+import com.javarush.nikolenko.entity.*;
 import lombok.SneakyThrows;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,6 +21,12 @@ public class SessionCreater implements Closeable {
         Configuration configuration = new Configuration();
 
         sessionFactory = configuration.configure()
+                        .addAnnotatedClass(Answer.class)
+                        .addAnnotatedClass(Game.class)
+                        .addAnnotatedClass(GameState.class)
+                        .addAnnotatedClass(Quest.class)
+                        .addAnnotatedClass(Question.class)
+                        .addAnnotatedClass(Role.class)
                         .addAnnotatedClass(User.class)
                         .buildSessionFactory();
     }
