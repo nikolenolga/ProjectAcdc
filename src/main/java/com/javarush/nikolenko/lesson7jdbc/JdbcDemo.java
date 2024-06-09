@@ -1,5 +1,8 @@
 package com.javarush.nikolenko.lesson7jdbc;
 
+import com.javarush.nikolenko.config.Cnn;
+import com.javarush.nikolenko.config.CnnConnector;
+
 import java.sql.*;
 
 public class JdbcDemo {

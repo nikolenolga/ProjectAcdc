@@ -3,6 +3,8 @@ package com.javarush.nikolenko.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
+
 @Builder
 @Setter
 @Getter
@@ -16,14 +18,21 @@ public class Answer extends AbstractComponent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "answer_message")
     protected String answerMessage;
+    @Column(name = "final_message")
     private String finalMessage;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "game_state")
     protected GameState gameState;
-
+    @Column(name = "next_question_id")
     private Long nextQuestionId;
-    private Long questionId;
+
+    @ManyToOne
+    @Column(name = "question_id")
+    @ToString.Exclude
+    private Question question;
 
     public boolean isFinal() {
         return gameState != GameState.GAME;
@@ -54,4 +63,16 @@ public class Answer extends AbstractComponent {
         return super.getImage()  + id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Answer answer = (Answer) o;
+        return Objects.equals(id, answer.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 38;
+    }
 }

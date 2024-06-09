@@ -2,14 +2,12 @@ package com.javarush.nikolenko.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Objects;
 
-@Slf4j
 @Builder
 @Getter
 @Setter
@@ -17,25 +15,33 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 @Entity
 @Table(name = "quest")
-@ToString(exclude = {"questions"})
+@ToString
 @NamedQueries({
         @NamedQuery(name = "QUERY_MORE_ID", query = "SELECT q FROM Quest q where id>:id")
 })
 public class Quest extends AbstractComponent {
-    @Transient
-    private final List<Question> questions = new ArrayList<>();
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name")
     private String name;
-    @Column(name = "user_author_id")
-    private Long userAuthorId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_author_id")
+    @ToString.Exclude
+    private User author;
+
     @Column(name = "first_question_id")
     private Long firstQuestionId;
 
+    @Column(name = "description")
     private String description;
+
+    @OneToMany(mappedBy = "quest")
+    @ToString.Exclude
+    private final List<Question> questions = new ArrayList<>();
+
 
     public void addQuestion(Question question) {
         questions.add(question);
@@ -54,4 +60,16 @@ public class Quest extends AbstractComponent {
         return super.getImage()  + id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Quest quest = (Quest) o;
+        return Objects.equals(id, quest.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 7;
+    }
 }

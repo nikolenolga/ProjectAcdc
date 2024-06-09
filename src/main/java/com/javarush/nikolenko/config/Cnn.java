@@ -1,4 +1,4 @@
-package com.javarush.nikolenko.lesson7jdbc;
+package com.javarush.nikolenko.config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

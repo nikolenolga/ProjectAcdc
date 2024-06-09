@@ -1,4 +1,4 @@
-package com.javarush.nikolenko.lesson7jdbc;
+package com.javarush.nikolenko.config;
 
 import java.io.IOException;
 import java.util.Properties;

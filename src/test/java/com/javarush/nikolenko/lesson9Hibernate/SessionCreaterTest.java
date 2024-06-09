@@ -1,10 +1,9 @@
 package com.javarush.nikolenko.lesson9Hibernate;
 
+import com.javarush.nikolenko.config.SessionCreater;
 import org.hibernate.Session;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class SessionCreaterTest {
 

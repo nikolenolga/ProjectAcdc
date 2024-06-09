@@ -1,16 +1,15 @@
-package com.javarush.nikolenko.lesson9Hibernate;
+package com.javarush.nikolenko.config;
 
 import com.javarush.nikolenko.entity.*;
+import com.javarush.nikolenko.lesson9Hibernate.UserDbDao;
 import lombok.SneakyThrows;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.Properties;
 
 //SessionCreater всегда один
 public class SessionCreater implements Closeable {
@@ -38,13 +37,5 @@ public class SessionCreater implements Closeable {
     @Override
     public void close() throws IOException {
         sessionFactory.close();
-    }
-
-    public static void main(String[] args) throws IOException {
-        SessionCreater sessionCreater = new SessionCreater();
-        UserDbDao dbDao = new UserDbDao(sessionCreater);
-
-        Optional<User> optionalUser = dbDao.get(1L);
-        optionalUser.ifPresent(System.out::println);
     }
 }

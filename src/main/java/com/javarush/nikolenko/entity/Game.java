@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
+
 @Slf4j
 @Getter
 @Setter
@@ -18,17 +20,27 @@ public class Game extends AbstractComponent {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "game_state")
     private GameState gameState;
+    @Column(name = "first_question_id")
     private Long firstQuestionId;
+    @Column(name = "current_question_id")
     private Long currentQuestionId;
 
-    private Long userPlayerId;
-    private Long questId;
+    @ManyToOne
+    @Column(name = "user_player_id")
+    @ToString.Exclude
+    private User player;
+
+    @ManyToOne
+    @Column(name = "quest_id")
+    @ToString.Exclude
+    private Quest quest;
 
     public void restart() {
         this.gameState = GameState.GAME;
         this.currentQuestionId = this.firstQuestionId;
-        log.debug("Game restarted, gameId - {}, questId - {}, userId - {}", id, questId, userPlayerId);
+        log.debug("Game restarted, gameId - {}, questId - {}, userId - {}", id, quest.getId(), player.getId());
     }
 
     public boolean isFinished() {
@@ -38,5 +50,18 @@ public class Game extends AbstractComponent {
     @Override
     public String getImage() {
         return super.getImage()  + id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return Objects.equals(id, game.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 18;
     }
 }

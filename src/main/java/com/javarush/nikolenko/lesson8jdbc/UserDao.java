@@ -1,7 +1,9 @@
 package com.javarush.nikolenko.lesson8jdbc;
 
+import com.javarush.nikolenko.config.CnnPool;
 import com.javarush.nikolenko.entity.Role;
 import com.javarush.nikolenko.entity.User;
+import com.javarush.nikolenko.exception.DaoException;
 import com.javarush.nikolenko.repository.Repository;
 
 import java.sql.*;

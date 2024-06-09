@@ -1,4 +1,4 @@
-package com.javarush.nikolenko.lesson8jdbc;
+package com.javarush.nikolenko.exception;
 
 import lombok.extern.slf4j.Slf4j;
 

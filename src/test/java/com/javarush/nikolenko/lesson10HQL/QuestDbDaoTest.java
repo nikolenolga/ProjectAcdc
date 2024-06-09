@@ -1,18 +1,17 @@
 package com.javarush.nikolenko.lesson10HQL;
 
 import com.javarush.nikolenko.entity.Quest;
-import com.javarush.nikolenko.lesson9Hibernate.SessionCreater;
+import com.javarush.nikolenko.config.SessionCreater;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.stream.Stream;
 
 class QuestDbDaoTest {
     private Session session;
@@ -54,6 +53,24 @@ class QuestDbDaoTest {
         query.getResultList().forEach(System.out::println);
         transaction.commit();
     }
+
+    @Test
+    @DisplayName("When find by id then get user id=1, role=ADMIN")
+    void find() {
+        //given
+        Transaction transaction = session.beginTransaction();
+        Quest pattern = Quest.builder().name("TestQuest").build();
+        questDbDao.create(pattern);
+        Long testQuestId = pattern.getId();
+        //when
+        Stream<Quest> questStream = questDbDao.find(pattern);
+        questStream.forEach(System.out::println);
+        questDbDao.delete(pattern);
+        Stream<Quest> questStream2 = questDbDao.find(pattern);
+        questStream2.forEach(System.out::println);
+        transaction.commit();
+    }
+
 
     @AfterEach
     void tearDown() throws IOException {

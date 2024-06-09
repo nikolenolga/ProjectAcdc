@@ -1,18 +1,29 @@
 package com.javarush.nikolenko.lesson9Hibernate;
 
+import com.javarush.nikolenko.config.SessionCreater;
 import com.javarush.nikolenko.entity.Role;
 import com.javarush.nikolenko.entity.User;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserDbDaoTest {
-    private SessionCreater sessionCreater = new SessionCreater();
-    private UserDbDao userDbDao = new UserDbDao(sessionCreater);
+    private Session session;
+    private SessionCreater sessionCreater;
+    private UserDbDao userDbDao;
 
+    @BeforeEach
+    void setUp() {
+        sessionCreater = new SessionCreater();
+        session = sessionCreater.getSession();
+        userDbDao = new UserDbDao(sessionCreater);
+    }
 
     @Test
     @DisplayName("When create tempUser then no exeption")
@@ -119,6 +130,16 @@ class UserDbDaoTest {
         assertEquals(expectedId, tempUser.getId());
         assertEquals(expectedRole, tempUser.getRole());
 
+    }
+
+    @Test
+    @DisplayName("When find by id then get user id=1, role=ADMIN")
+    void find() {
+        Transaction transaction = session.beginTransaction();
+        User pattern = User.builder().role(Role.ADMIN).build();
+        Stream<User> userStream = userDbDao.find(pattern);
+        userStream.forEach(System.out::println);
+        transaction.commit();
     }
 
     @AfterEach

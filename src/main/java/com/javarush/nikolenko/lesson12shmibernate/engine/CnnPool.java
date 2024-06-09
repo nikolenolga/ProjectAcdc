@@ -1,5 +1,5 @@
-package com.javarush.nikolenko.lesson8jdbc;
-import com.javarush.nikolenko.lesson7jdbc.Cnn;
+package com.javarush.nikolenko.lesson12shmibernate.engine;
+import com.javarush.nikolenko.config.Cnn;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.Proxy;
@@ -14,7 +14,7 @@ public class CnnPool {
     public static final int SIZE = 10;
     private static final BlockingQueue<Connection> proxies = new ArrayBlockingQueue<>(SIZE);
     private static final List<Connection> realConnections = new ArrayList<>(SIZE);
-    private static final Cnn cnn = new Cnn();
+    private static final com.javarush.nikolenko.config.Cnn cnn = new Cnn();
 
     private static void init() {
         for (int i = 0; i < SIZE; i++) {

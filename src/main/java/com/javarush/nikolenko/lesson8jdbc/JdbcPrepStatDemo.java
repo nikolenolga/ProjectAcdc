@@ -1,5 +1,7 @@
 package com.javarush.nikolenko.lesson8jdbc;
 
+import com.javarush.nikolenko.config.CnnPool;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -6,6 +6,7 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Builder
 @Getter
@@ -14,17 +15,23 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "question")
-@ToString(exclude = {"possibleAnswers"})
+@ToString
 public class Question extends AbstractComponent {
-    @Transient
-    private final List<Answer> possibleAnswers = new ArrayList<>();
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "question_message")
     private String questionMessage;
 
-    private Long questId;
+    @ManyToOne
+    @Column(name = "quest_id")
+    @ToString.Exclude
+    private Quest quest;
+
+    @OneToMany(mappedBy = "question")
+    @ToString.Exclude
+    private final List<Answer> possibleAnswers = new ArrayList<>();
 
     public List<Answer> getPossibleAnswers() {
         return Collections.unmodifiableList(possibleAnswers);
@@ -41,5 +48,18 @@ public class Question extends AbstractComponent {
     @Override
     public String getImage() {
         return super.getImage()  + id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Question question = (Question) o;
+        return Objects.equals(id, question.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 15;
     }
 }

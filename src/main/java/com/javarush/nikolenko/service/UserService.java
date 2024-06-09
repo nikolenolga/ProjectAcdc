@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class UserService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
@@ -56,4 +57,7 @@ public class UserService {
         return userRepository.getUser(currentLogin, currentPassword);
     }
 
+    public Stream<User> find(User user) {
+        return userRepository.find(user);
+    }
 }
