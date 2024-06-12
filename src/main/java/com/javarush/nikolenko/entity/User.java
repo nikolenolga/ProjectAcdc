@@ -2,7 +2,10 @@ package com.javarush.nikolenko.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +20,11 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 @ToString
-public class User extends AbstractComponent implements Serializable {
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+public class User implements AbstractComponent, Serializable {
+    @Serial
+    private static final long serialVersionUID = -1798070786993154676L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,18 +40,16 @@ public class User extends AbstractComponent implements Serializable {
     @Column(name = "role")
     private Role role;
 
-    @OneToMany(mappedBy = "author")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserInfo userInfo;
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
     @ToString.Exclude
     private final Collection<Quest> quests = new ArrayList<>();
 
     @OneToMany(mappedBy = "player")
     @ToString.Exclude
     private final Collection<Game> games = new ArrayList<>();
-
-    @Override
-    public String getImage() {
-        return super.getImage()  + id;
-    }
 
     @Override
     public boolean equals(Object o) {

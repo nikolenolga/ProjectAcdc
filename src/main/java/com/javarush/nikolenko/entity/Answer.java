@@ -2,7 +2,12 @@ package com.javarush.nikolenko.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
 
+
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Builder
@@ -13,7 +18,11 @@ import java.util.Objects;
 @Entity
 @Table(name = "answer")
 @ToString
-public class Answer extends AbstractComponent {
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+public class Answer implements AbstractComponent, Serializable {
+    @Serial
+    private static final long serialVersionUID = -1798070786934154676L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -56,11 +65,6 @@ public class Answer extends AbstractComponent {
 
     public boolean hasOnlyNextQuestionLogic() {
         return !hasFinalMessage() && !isFinal() && hasNextQuestion();
-    }
-
-    @Override
-    public String getImage() {
-        return super.getImage()  + id;
     }
 
     @Override

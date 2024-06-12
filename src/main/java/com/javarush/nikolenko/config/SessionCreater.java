@@ -18,16 +18,15 @@ public class SessionCreater implements Closeable {
     @SneakyThrows
     public SessionCreater() {
         Configuration configuration = new Configuration();
+        configuration.addAnnotatedClass(Answer.class)
+                .addAnnotatedClass(Game.class)
+                .addAnnotatedClass(Quest.class)
+                .addAnnotatedClass(Question.class)
+                .addAnnotatedClass(User.class)
+                .addAnnotatedClass(UserInfo.class)
+                .buildSessionFactory();
 
-        sessionFactory = configuration.configure()
-                        .addAnnotatedClass(Answer.class)
-                        .addAnnotatedClass(Game.class)
-                        .addAnnotatedClass(GameState.class)
-                        .addAnnotatedClass(Quest.class)
-                        .addAnnotatedClass(Question.class)
-                        .addAnnotatedClass(Role.class)
-                        .addAnnotatedClass(User.class)
-                        .buildSessionFactory();
+        sessionFactory = configuration.buildSessionFactory();
     }
 
     public Session getSession() {

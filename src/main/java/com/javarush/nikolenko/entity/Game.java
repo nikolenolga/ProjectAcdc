@@ -1,9 +1,13 @@
 package com.javarush.nikolenko.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cache;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Slf4j
@@ -14,7 +18,11 @@ import java.util.Objects;
 @Entity
 @Table(name = "game")
 @ToString
-public class Game extends AbstractComponent {
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+public class Game implements AbstractComponent, Serializable {
+    @Serial
+    private static final long serialVersionUID = -1798030786993154676L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,11 +53,6 @@ public class Game extends AbstractComponent {
 
     public boolean isFinished() {
         return this.gameState != GameState.GAME;
-    }
-
-    @Override
-    public String getImage() {
-        return super.getImage()  + id;
     }
 
     @Override

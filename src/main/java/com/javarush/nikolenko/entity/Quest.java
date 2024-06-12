@@ -1,8 +1,16 @@
 package com.javarush.nikolenko.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 import lombok.*;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
 
+
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +27,46 @@ import java.util.Objects;
 @NamedQueries({
         @NamedQuery(name = "QUERY_MORE_ID", query = "SELECT q FROM Quest q where id>:id")
 })
-public class Quest extends AbstractComponent {
+@FetchProfile(
+        name = Quest.FETCH_LAZY_QUESTIONS_AND_JOIN_AUTHOR_AND_JOIN_USERINFO,
+        fetchOverrides = {
+                @FetchProfile.FetchOverride(
+                        entity = Quest.class,
+                        association = "questions",
+                        mode = FetchMode.JOIN
+                ),
+                @FetchProfile.FetchOverride(
+                        entity = Quest.class,
+                        association = "author",
+                        mode = FetchMode.JOIN
+                ),
+                @FetchProfile.FetchOverride(
+                        entity = User.class,
+                        association = "userInfo",
+                        mode = FetchMode.JOIN
+                )
+        }
+)
+@NamedEntityGraph(
+        name = Quest.GRAPH_LAZY_QUESTIONS_AND_JOIN_AUTHOR_AND_JOIN_USERINFO,
+        attributeNodes = {
+                @NamedAttributeNode(value = "questions", subgraph = "questions"),
+                @NamedAttributeNode(value = "author", subgraph = "authorInfo")
+        },
+        subgraphs = {
+                @NamedSubgraph(name = "questions", attributeNodes = {}),
+                @NamedSubgraph(name = "authorInfo",
+                               attributeNodes = @NamedAttributeNode(value = "userInfo"))
+        }
+)
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+public class Quest implements AbstractComponent, Serializable {
+    @Serial
+    private static final long serialVersionUID = -179807072993154676L;
+
+    public static final String GRAPH_LAZY_QUESTIONS_AND_JOIN_AUTHOR_AND_JOIN_USERINFO = "graphLazyQuestionsAndJoinAuthorAndJoinUserinfo";
+    public static final String FETCH_LAZY_QUESTIONS_AND_JOIN_AUTHOR_AND_JOIN_USERINFO = "fetchLazyQuestionsAndJoinAuthorAndJoinUserinfo";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +74,7 @@ public class Quest extends AbstractComponent {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_author_id")
     @ToString.Exclude
     private User author;
@@ -53,11 +100,6 @@ public class Quest extends AbstractComponent {
 
     public List<Question> getQuestions() {
         return Collections.unmodifiableList(questions);
-    }
-
-    @Override
-    public String getImage() {
-        return super.getImage()  + id;
     }
 
     @Override

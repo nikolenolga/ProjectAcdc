@@ -1,8 +1,12 @@
 package com.javarush.nikolenko.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cache;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +20,11 @@ import java.util.Objects;
 @Entity
 @Table(name = "question")
 @ToString
-public class Question extends AbstractComponent {
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+public class Question implements AbstractComponent, Serializable  {
+    @Serial
+    private static final long serialVersionUID = -1798070784493154676L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,11 +51,6 @@ public class Question extends AbstractComponent {
 
     public void removePossibleAnswer(Answer answer) {
         possibleAnswers.remove(answer);
-    }
-
-    @Override
-    public String getImage() {
-        return super.getImage()  + id;
     }
 
     @Override
