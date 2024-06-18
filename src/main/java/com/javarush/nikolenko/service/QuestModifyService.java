@@ -1,14 +1,13 @@
 package com.javarush.nikolenko.service;
 
 import com.javarush.nikolenko.config.NanoSpring;
-import com.javarush.nikolenko.entity.Answer;
-import com.javarush.nikolenko.entity.GameState;
-import com.javarush.nikolenko.entity.Quest;
-import com.javarush.nikolenko.entity.Question;
+import com.javarush.nikolenko.entity.*;
 import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.utils.Key;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,21 +19,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
+@AllArgsConstructor
+@Transactional
 public class QuestModifyService {
     private static final Logger log = LoggerFactory.getLogger(QuestModifyService.class);
     private final QuestService questService;
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final ImageService imageService;
-
-    @SneakyThrows
-    public QuestModifyService() {
-        this.questService = NanoSpring.find(QuestService.class);
-        this.questionService = NanoSpring.find(QuestionService.class);
-        this.answerService = NanoSpring.find(AnswerService.class);
-        this.imageService = NanoSpring.find(ImageService.class);
-        log.info("QuestModifyService created");
-    }
 
     public void addQuestion(long questId, long questionId) {
         Optional<Quest> optionalQuest = questService.get(questId);
@@ -151,7 +143,7 @@ public class QuestModifyService {
         }
     }
 
-    public Optional<Quest> parseQuest(long userId, String text) {
+    public Optional<Quest> parseQuest(User author, String text) {
         //parse app entities from text
         StringBuilder name = new StringBuilder();
         StringBuilder description = new StringBuilder();
@@ -200,7 +192,7 @@ public class QuestModifyService {
 
             Quest quest = Quest.builder()
                     .name(name.toString())
-                    .userAuthorId(userId)
+                    .author(author)
                     .firstQuestionId(1L)
                     .description(description.toString())
                     .build();
@@ -243,9 +235,9 @@ public class QuestModifyService {
         return Optional.empty();
     }
 
-    public void loadQuest(long userId, String path) {
+    public void loadQuest(User author, String path) {
         String text = questService.loadTextFromFile(path);
-        parseQuest(userId, text);
+        parseQuest(author, text);
     }
 
     public void uploadQuestImage(HttpServletRequest req, long questId) throws ServletException, IOException {

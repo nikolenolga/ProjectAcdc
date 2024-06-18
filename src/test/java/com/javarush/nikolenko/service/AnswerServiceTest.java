@@ -2,6 +2,7 @@ package com.javarush.nikolenko.service;
 
 import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.entity.GameState;
+import com.javarush.nikolenko.entity.Question;
 import com.javarush.nikolenko.repository.AnswerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,14 @@ class AnswerServiceTest {
     void givenNullAnswerMessage_whenCreate_thenReturnEmptyOptional() {
         //given
         String answerMessage = null;
-        Answer answer = new Answer(0L, answerMessage, "finalMessage", GameState.GAME, 1L, 1L);
+        Answer answer = Answer.builder()
+                .id(0L)
+                .answerMessage(answerMessage)
+                .finalMessage("finalMessage")
+                .gameState(GameState.GAME)
+                .nextQuestionId(1L)
+                .question(new Question())
+                .build();
 
         //when
         Optional<Answer> actual = answerService.create(answer);
@@ -60,7 +68,14 @@ class AnswerServiceTest {
     void givenNullGameState_whenCreate_thenReturnEmptyOptional() {
         //given
         GameState gameState = null;
-        Answer answer = new Answer(0L, "answerMessage", "finalMessage", gameState, 1L, 1L);
+        Answer answer = Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage("finalMessage")
+                .gameState(gameState)
+                .nextQuestionId(1L)
+                .question(new Question())
+                .build();
 
         //when
         Optional<Answer> actual = answerService.create(answer);
@@ -74,7 +89,14 @@ class AnswerServiceTest {
     void givenNullFinalMessage_whenCreate_thenReturnEmptyOptional() {
         //given
         String finalMessage = null;
-        Answer answer = new Answer(0L, "answerMessage", finalMessage, GameState.GAME, 1L, 1L);
+        Answer answer = Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage(finalMessage)
+                .gameState(GameState.GAME)
+                .nextQuestionId(1L)
+                .question(new Question())
+                .build();
 
         //when
         Optional<Answer> actual = answerService.create(answer);
@@ -87,7 +109,14 @@ class AnswerServiceTest {
     @Test
     void givenValidAnswer_whenCreate_thenReturnOptional() {
         //given
-        Answer answer = new Answer(0L, "answerMessage", "finalMessage", GameState.GAME, 3L, 1L);
+        Answer answer = Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage("finalMessage")
+                .gameState(GameState.GAME)
+                .nextQuestionId(3L)
+                .question(new Question())
+                .build();
 
         //when
         Optional<Answer> actual = answerService.create(answer);
@@ -115,7 +144,14 @@ class AnswerServiceTest {
     void givenNullAnswerMessage_whenUpdate_thenReturnEmptyOptional() {
         //given
         String answerMessage = null;
-        Answer answer = new Answer(0L, answerMessage, "finalMessage", GameState.GAME, 3L, 1L);
+        Answer answer = Answer.builder()
+                .id(0L)
+                .answerMessage(answerMessage)
+                .finalMessage("finalMessage")
+                .gameState(GameState.GAME)
+                .nextQuestionId(3L)
+                .question(new Question())
+                .build();
 
         //when
         Optional<Answer> actual = answerService.update(answer);
@@ -129,7 +165,14 @@ class AnswerServiceTest {
     void givenNullGameState_whenUpdate_thenReturnEmptyOptional() {
         //given
         GameState gameState = null;
-        Answer answer = new Answer(0L, "answerMessage", "finalMessage", gameState, 3L, 1L);
+        Answer answer = Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage("finalMessage")
+                .gameState(gameState)
+                .nextQuestionId(3L)
+                .question(new Question())
+                .build();
 
         //when
         Optional<Answer> actual = answerService.update(answer);
@@ -143,7 +186,14 @@ class AnswerServiceTest {
     void givenNullFinalMessage_whenUpdate_thenReturnEmptyOptional() {
         //given
         String finalMessage = null;
-        Answer answer = new Answer(0L, "answerMessage", finalMessage, GameState.GAME, 3L, 1L);
+        Answer answer = Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage(finalMessage)
+                .gameState(GameState.GAME)
+                .nextQuestionId(3L)
+                .question(new Question())
+                .build();
 
         //when
         Optional<Answer> actual = answerService.update(answer);
@@ -156,8 +206,14 @@ class AnswerServiceTest {
     @Test
     void givenValidAnswer_whenUpdate_thenReturn() {
         //given
-        Answer expected = new Answer(0L, "answerMessage", "finalMessage", GameState.GAME, 3L, 1L);
-
+        Answer expected = Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage("finalMessage")
+                .gameState(GameState.GAME)
+                .nextQuestionId(3L)
+                .question(new Question())
+                .build();
         //when
         Optional<Answer> actual = answerService.update(expected);
 
@@ -169,7 +225,14 @@ class AnswerServiceTest {
     @Test
     void givenAnswer_whenAnswerServiceDelete_thenAnswerRepositoryDelete() {
         //given
-        Answer answer = new Answer(0L, "answerMessage", "finalMessage", GameState.GAME, 3L, 1L);
+        Answer answer = Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage("finalMessage")
+                .gameState(GameState.GAME)
+                .nextQuestionId(3L)
+                .question(new Question())
+                .build();
         //when
         answerService.delete(answer);
         //then
@@ -180,8 +243,14 @@ class AnswerServiceTest {
     void givenAnswersInRepository_whenGetAll_thenEqualCollections() {
         //given
         Collection<Answer> expectedAnswers = Stream.generate(() ->
-                        new Answer(0L, "answerMessage", "finalMessage",
-                                GameState.GAME, (long) (Math.random() * 35), 1L))
+                Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage("finalMessage")
+                .gameState(GameState.GAME)
+                .nextQuestionId((long) (Math.random() * 35))
+                .question(new Question())
+                .build())
                         .limit(30)
                         .collect(Collectors.toList());
         when(answerRepository.getAll()).thenReturn(expectedAnswers);
@@ -195,7 +264,14 @@ class AnswerServiceTest {
     @Test
     void givenValidAnswerIdInRepository_whenGet_thenPresentValue() {
         //given
-        Answer expectedAnswer = new Answer(0L, "answerMessage", "finalMessage", GameState.GAME, 3L, 1L);
+        Answer expectedAnswer = Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage("finalMessage")
+                .gameState(GameState.GAME)
+                .nextQuestionId(3L)
+                .question(new Question())
+                .build();
         when(answerRepository.get(5L)).thenReturn(Optional.of(expectedAnswer));
 
         //when
@@ -220,7 +296,14 @@ class AnswerServiceTest {
     void givenValidAnswerWithFinalMessage_whenHasFinalMessage_thenCorrect() {
         //given
         String finalMessage = "finalMessage";
-        Answer answer = new Answer(0L, "answerMessage", finalMessage, GameState.GAME, 3L, 1L);
+        Answer answer = Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage(finalMessage)
+                .gameState(GameState.GAME)
+                .nextQuestionId(3L)
+                .question(new Question())
+                .build();
         //when
         when(answerRepository.get(2L)).thenReturn(Optional.of(answer));
         //then
@@ -239,7 +322,14 @@ class AnswerServiceTest {
     void givenValidAnswerWithEmptyFinalMessage_whenHasFinalMessage_thenFalse() {
         //given
         String finalMessage = "";
-        Answer answer = new Answer(0L, "answerMessage", finalMessage, GameState.GAME, 3L, 1L);
+        Answer answer = Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage(finalMessage)
+                .gameState(GameState.GAME)
+                .nextQuestionId(3L)
+                .question(new Question())
+                .build();
         //when
         when(answerRepository.get(2L)).thenReturn(Optional.of(answer));
         //then
@@ -249,7 +339,14 @@ class AnswerServiceTest {
     @Test
     void givenWinAnswer_whenIsFinal_thenTrue() {
         //given
-        Answer answer = new Answer(0L, "answerMessage", "finalMessage", GameState.GAME, 3L, 1L);
+        Answer answer = Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage("finalMessage")
+                .gameState(GameState.GAME)
+                .nextQuestionId(3L)
+                .question(new Question())
+                .build();
         //when
         when(answerRepository.get(1L)).thenReturn(Optional.of(answer));
         //then
@@ -259,7 +356,14 @@ class AnswerServiceTest {
     @Test
     void givenLoseAnswer_whenIsFinal_thenTrue() {
         //given
-        Answer answer = new Answer(0L, "answerMessage", "finalMessage", GameState.GAME, 3L, 1L);
+        Answer answer = Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage("finalMessage")
+                .gameState(GameState.GAME)
+                .nextQuestionId(3L)
+                .question(new Question())
+                .build();
         //when
         when(answerRepository.get(1L)).thenReturn(Optional.of(answer));
         //then
@@ -269,7 +373,14 @@ class AnswerServiceTest {
     @Test
     void givenGameAnswer_whenIsFinal_thenFalse() {
         //given
-        Answer answer = new Answer(0L, "answerMessage", "finalMessage", GameState.GAME, 3L, 1L);
+        Answer answer = Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage("finalMessage")
+                .gameState(GameState.GAME)
+                .nextQuestionId(3L)
+                .question(new Question())
+                .build();
         //when
         when(answerRepository.get(1L)).thenReturn(Optional.of(answer));
         //then
@@ -288,7 +399,14 @@ class AnswerServiceTest {
     void givenValidAnswerWithNextQuestion_whenGetNextQuestionId_thenGetValidId() {
         //given
         long expected  = 3L;
-        Answer answer = new Answer(0L, "answerMessage", "finalMessage", GameState.GAME, expected, 1L);
+        Answer answer = Answer.builder()
+                .id(0L)
+                .answerMessage("answerMessage")
+                .finalMessage("finalMessage")
+                .gameState(GameState.GAME)
+                .nextQuestionId(expected)
+                .question(new Question())
+                .build();
         when(answerRepository.get(2L)).thenReturn(Optional.of(answer));
         //when
         long actual= answerService.getNextQuestionId(2L);

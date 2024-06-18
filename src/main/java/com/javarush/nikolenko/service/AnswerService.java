@@ -2,6 +2,8 @@ package com.javarush.nikolenko.service;
 
 import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.repository.AnswerRepository;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -9,13 +11,10 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Slf4j
+@AllArgsConstructor
+@Transactional
 public class AnswerService {
     private final AnswerRepository answerRepository;
-
-    public AnswerService(AnswerRepository answerRepository) {
-        this.answerRepository = answerRepository;
-        log.info("AnswerService created");
-    }
 
     public Optional<Answer> create(Answer answer) {
         if (answer != null && ObjectUtils.allNotNull(answer.getAnswerMessage(), answer.getGameState(), answer.getFinalMessage())) {

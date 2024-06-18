@@ -33,7 +33,7 @@ public class Question implements AbstractComponent, Serializable  {
     private String questionMessage;
 
     @ManyToOne
-    @Column(name = "quest_id")
+    @JoinColumn(name = "quest_id")
     @ToString.Exclude
     private Quest quest;
 

@@ -13,6 +13,7 @@ import java.util.Objects;
 @Slf4j
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -36,12 +37,12 @@ public class Game implements AbstractComponent, Serializable {
     private Long currentQuestionId;
 
     @ManyToOne
-    @Column(name = "user_player_id")
+    @JoinColumn(name = "user_player_id")
     @ToString.Exclude
     private User player;
 
     @ManyToOne
-    @Column(name = "quest_id")
+    @JoinColumn(name = "quest_id")
     @ToString.Exclude
     private Quest quest;
 

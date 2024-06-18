@@ -2,6 +2,7 @@ package com.javarush.nikolenko.controller;
 
 import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.entity.Quest;
+import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.service.QuestService;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.RequestHelper;
@@ -38,11 +39,12 @@ public class CreateQuestServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String name = req.getParameter(Key.NAME);
         long userAuthorId = RequestHelper.getLongValue(req.getSession(), Key.USER_ID);
+        User author = (User) req.getSession().getAttribute(Key.USER);
         String description = req.getParameter(Key.DESCRIPTION);
 
         Quest quest = Quest.builder()
                 .name(name)
-                .userAuthorId(userAuthorId)
+                .author(author)
                 .description(description)
                 .firstQuestionId(0L)
                 .build();

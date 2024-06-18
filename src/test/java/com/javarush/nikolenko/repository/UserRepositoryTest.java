@@ -1,5 +1,6 @@
 package com.javarush.nikolenko.repository;
 
+import com.javarush.nikolenko.config.ApplicationProperties;
 import com.javarush.nikolenko.entity.Role;
 import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.config.SessionCreater;
@@ -12,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 class UserRepositoryTest {
-    private final UserRepository userRepository = new UserRepository(new SessionCreater());
+    private final UserRepository userRepository = new UserRepository(new SessionCreater(new ApplicationProperties()));
     private User testUser;
 
     @BeforeEach

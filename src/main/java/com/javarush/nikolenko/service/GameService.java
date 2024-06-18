@@ -1,35 +1,33 @@
 package com.javarush.nikolenko.service;
 
 import com.javarush.nikolenko.config.NanoSpring;
-import com.javarush.nikolenko.entity.Answer;
-import com.javarush.nikolenko.entity.Game;
-import com.javarush.nikolenko.entity.GameState;
+import com.javarush.nikolenko.entity.*;
+import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.repository.GameRepository;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.RequestHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @Slf4j
+@AllArgsConstructor
+@Transactional
 public class GameService {
     private final GameRepository gameRepository;
     private final AnswerService answerService;
-
-    @SneakyThrows
-    public GameService(GameRepository gameRepository) {
-        this.gameRepository = gameRepository;
-        answerService = NanoSpring.find(AnswerService.class);
-        log.info("GameService created");
-    }
+    private final QuestService questService;
 
     public Optional<Game> create(Game game) {
-        if (game != null && ObjectUtils.allNotNull(game.getUserPlayerId(), game.getQuestId(), game.getCurrentQuestionId(), game.getFirstQuestionId())) {
+        if (game != null && ObjectUtils.allNotNull(game.getPlayer().getId(), game.getQuest().getId(), game.getCurrentQuestionId(), game.getFirstQuestionId())) {
             gameRepository.create(game);
             return Optional.of(game);
         }
@@ -38,7 +36,7 @@ public class GameService {
     }
 
     public Optional<Game> update(Game game) {
-        if (game != null && ObjectUtils.allNotNull(game.getUserPlayerId(), game.getQuestId(), game.getCurrentQuestionId(), game.getFirstQuestionId())) {
+        if (game != null && ObjectUtils.allNotNull(game.getPlayer().getId(), game.getQuest().getId(), game.getCurrentQuestionId(), game.getFirstQuestionId())) {
             gameRepository.update(game);
             return Optional.of(game);
         }
@@ -58,8 +56,19 @@ public class GameService {
         return gameRepository.get(id);
     }
 
-    public Game initGame(long userPlayerId, long questId, long currentQuestion) {
-        Game game = new Game(0L, GameState.GAME, currentQuestion, currentQuestion, userPlayerId, questId);
+    public Game initGame(User player, long questId) {
+        Optional<Quest> optionalQuest = questService.get(questId);
+        if (optionalQuest.isEmpty()) {
+            throw new QuestException("Quest with %d not found".formatted(questId));
+        }
+        Quest quest = optionalQuest.get();
+        Game game = Game.builder()
+                .quest(quest)
+                .player(player)
+                .gameState(GameState.GAME)
+                .currentQuestionId(quest.getFirstQuestionId())
+                .firstQuestionId(quest.getFirstQuestionId())
+                .build();
         gameRepository.create(game);
         return game;
     }

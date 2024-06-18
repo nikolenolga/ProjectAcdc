@@ -2,12 +2,13 @@ package com.javarush.nikolenko.repository;
 
 import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.config.SessionCreater;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -26,81 +27,41 @@ public abstract class BaseRepository<T> implements Repository<T> {
 
     @Override
     public Collection<T> getAll() {
-        try(Session session = sessionCreater.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            try {
-                Query<T> query = session.createQuery("SELECT entity FROM %s entity".formatted(entityClass.getName()), entityClass);
-                Collection<T> entities = query.getResultList();
-                transaction.commit();
-                return entities;
-            } catch (Exception e) {
-                transaction.rollback();
-                return new ArrayList<>();
-            }
-        }
+        Session session = sessionCreater.getSession();
+        Query<T> query = session.createQuery("SELECT entity FROM %s entity".formatted(entityClass.getName()), entityClass);
+        return query.getResultList();
     }
 
     @Override
     public void create(T entity) {
-        try(Session session = sessionCreater.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            try{
-                session.persist(entity);
-                transaction.commit();
-            } catch (Exception e) {
-                transaction.rollback();
-            }
-        }
+        Session session = sessionCreater.getSession();
+        session.saveOrUpdate(entity);
     }
 
     @Override
     public void update(T entity) {
-        try(Session session = sessionCreater.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            try{
-                session.merge(entity);
-                transaction.commit();
-            } catch (Exception e) {
-                transaction.rollback();
-            }
-        }
+        Session session = sessionCreater.getSession();
+        session.merge(entity);
     }
 
     @Override
     public void delete(T entity) {
-        try(Session session = sessionCreater.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            try{
-                session.remove(entity);
-                transaction.commit();
-            } catch (Exception e) {
-                transaction.rollback();
-            }
-        }
+        Session session = sessionCreater.getSession();
+        session.remove(entity);
     }
 
     @Override
     public Optional<T> get(Long id) {
-        try(Session session = sessionCreater.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            try{
-                T entity = session.find(entityClass, id);
-                Optional<T> optionalEntity = Optional.of(entity);
-                transaction.commit();
-                return optionalEntity;
-            } catch (Exception e) {
-                transaction.rollback();
-                return Optional.empty();
-            }
-        }
+        Session session = sessionCreater.getSession();
+        T entity = session.find(entityClass, id);
+        return  Optional.of(entity);
     }
 
+    @Override
+    @SneakyThrows
     public Stream<T> find(T pattern) {
         Session session = sessionCreater.getSession();
         //Class<? extends T> patternClass = pattern.getClass();
-        try (session) {
-            Transaction tx = session.beginTransaction();
-            try {
                 //получаем необходимые компоненты для построения запроса на criteria api
                 CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
                 CriteriaQuery<T> query = criteriaBuilder.createQuery(entityClass);
@@ -113,7 +74,7 @@ public abstract class BaseRepository<T> implements Repository<T> {
                     field.trySetAccessible();
                     String name = field.getName();
                     Object object = field.get(pattern);
-                    if ((object != null) && !field.isAnnotationPresent(Transient.class)) {
+                    if (isPredicate(field, object)) {
                         Predicate predicate = criteriaBuilder.equal(entityRoot.get(name), object);
                         predicates.add(predicate);
                     }
@@ -124,13 +85,15 @@ public abstract class BaseRepository<T> implements Repository<T> {
                 //строим обычный Query на основе CriteriaQuery и дальше работаем как обьчно
                 Query<T> entityQuery = session.createQuery(query);
                 Collection<T> entities = entityQuery.getResultList();
-                tx.commit();
-
                 return entities.stream();
-            } catch (Exception e) {
-                tx.rollback();
-                throw new QuestException(e);
-            }
-        }
+    }
+
+    private static boolean isPredicate(Field field, Object value) {
+        return (value != null)
+                && !field.isAnnotationPresent(Transient.class)
+                && !field.isAnnotationPresent(OneToMany.class)
+                && !field.isAnnotationPresent(ManyToOne.class)
+                && !field.isAnnotationPresent(OneToOne.class)
+                && !field.isAnnotationPresent(ManyToMany.class);
     }
 }

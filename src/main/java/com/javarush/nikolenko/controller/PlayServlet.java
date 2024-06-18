@@ -3,6 +3,7 @@ package com.javarush.nikolenko.controller;
 import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.entity.Game;
 import com.javarush.nikolenko.entity.Quest;
+import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.service.GameService;
 import com.javarush.nikolenko.service.QuestService;
 import com.javarush.nikolenko.utils.Key;
@@ -48,10 +49,10 @@ public class PlayServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
         long userId = RequestHelper.getLongValue(session, Key.USER_ID);
+        User player = (User) session.getAttribute(Key.USER);
         long questId = RequestHelper.getLongValue(req, Key.QUEST_ID);
-        long firstQuestionId = questService.getFirstQuestionId(questId);
 
-        Game game = gameService.initGame(userId, questId, firstQuestionId);
+        Game game = gameService.initGame(player, questId);
         session.setAttribute(Key.GAME, game);
         session.setAttribute(Key.GAME_ID, game.getId());
 

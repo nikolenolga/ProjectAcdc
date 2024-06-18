@@ -12,23 +12,28 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 import com.javarush.nikolenko.exception.QuestException;
-import com.javarush.nikolenko.utils.Key;
+import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.implementation.bind.annotation.*;
+import net.bytebuddy.matcher.ElementMatchers;
+
+import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
 
 @Slf4j
 public class NanoSpring {
     private static final Map<Class<?>, Object> components = new ConcurrentHashMap<>();
     // add support abstraction<?>
     private static final List<Class<?>> beanDefinitions = new ArrayList<>();
-
-    @SneakyThrows
-    private static void init() {
-        URL resource = NanoSpring.class.getResource("NanoSpring.class");
-        URI uri = Objects.requireNonNull(resource).toURI();
-        Path appRoot = Path.of(uri).getParent().getParent();
-        scanPackages(appRoot);
-    }
+    private static final String CLASSES = File.separator + "classes" + File.separator;
+    private static final String EXT = ".class";
+    private static final String DOT = ".";
+    private static final String COMMA = ",";
+    private static final String GENERIC_START = "<";
+    private static final String GENERIC_END = ">";
+    private static final String EMPTY = "";
 
     @SneakyThrows
     public static <T> T find(Class<T> clazz) {
@@ -45,41 +50,33 @@ public class NanoSpring {
                 Class<?> impl = findImpl(parameterTypes[i], genericParameterTypes[i]);
                 parameters[i] = find(impl);
             }
-            Object newInstance = constructor.newInstance(parameters);
+            Object newInstance = checkTransactional(clazz)
+                    ? constructProxyInstance(clazz, parameterTypes, parameters)
+                    : constructor.newInstance(parameters);
             components.put(clazz, newInstance);
-            log.info("ServiceLocator created new instance of {}", clazz);
+            log.info("NanoSpring created new instance of {}", clazz);
         }
 
         return (T) components.get(clazz);
     }
 
-    private static Class<?> findImpl(Class<?> aClass, Type type) {
-        for(Class<?> beanDefinition : beanDefinitions) {
-            boolean assidnable = aClass.isAssignableFrom(beanDefinition);
-            boolean nonGeneric = beanDefinition.getTypeParameters().length == 0;
-            boolean nonInterface = !beanDefinition.isInterface();
-            boolean nonAbstract = !Modifier.isAbstract(beanDefinition.getModifiers());
-            boolean checkGenerics = checkGenerics(type, beanDefinition);
-            if(assidnable & nonGeneric & nonInterface & nonAbstract && checkGenerics) {
-                return beanDefinition;
-            }
-        }
-        throw new QuestException(Key.WRONG_IMPL.formatted(aClass, type));
-
+    @SneakyThrows
+    private static void init() {
+        URL resource = NanoSpring.class.getResource("NanoSpring.class");
+        URI uri = Objects.requireNonNull(resource).toURI();
+        Path appRoot = Path.of(uri).getParent().getParent();
+        scanPackages(appRoot);
     }
 
     public static void scanPackages(Path appPackage, String... excludes) {
-        String prefix = "/classes/";
-        int offset = prefix.length();
-        String end = ".class";
         try(Stream<Path> walk = Files.walk(appPackage)) {                               // в папке
             List<String> names = walk.map(Path::toString)                               // рекурсия по
-                    .filter(o -> o.endsWith(end))                                       // всем классам
+                    .filter(o -> o.endsWith(EXT))                                       // всем классам
                     .filter(o -> Arrays.stream(excludes).noneMatch(o::contains))        // кроме запрещенных
-                    .map(s -> s.substring(s.indexOf(prefix) + offset))        // del ".../classes/"
-                    .map(s -> s.replace(end, ""))                           // и ".class"
-                    .map(s -> s.replace(File.separator, "."))               // через точки
-                        .toList();                                                     // собранные как строки
+                    .map(s -> s.substring(s.indexOf(CLASSES) + CLASSES.length()))        // del ".../classes/"
+                    .map(s -> s.replace(EXT, EMPTY))                           // и ".class"
+                    .map(s -> s.replace(File.separator, DOT))               // через точки
+                    .toList();                                                     // собранные как строки
             for (String name : names) {                                                 // которые переведем
                 beanDefinitions.add(Class.forName(name));                               // в классы
             }                                                                           // готово
@@ -88,48 +85,91 @@ public class NanoSpring {
         }
     }
 
-    private static boolean checkGenerics (Type baseType, Class<?> impl) {
-        Class<?>[] baseGeneric = getInfoGeneric(baseType);
-        if(baseGeneric.length == 0) {
-            return true;
-        }
-        List<Type> types = new ArrayList<>();
-        while (impl != null) {
-            types.add(impl.getGenericSuperclass());
-            types.addAll(List.of(impl.getGenericInterfaces()));
-            impl = impl.getSuperclass();
-        }
-        for(Type implType : types) {
-            if(implType != null) {
-                Class<?>[] implGeneric = getInfoGeneric(implType);
-                if(implGeneric.length == baseGeneric.length) {
-                    boolean ok = true;
-                    for (int i = 0; i < baseGeneric.length; i++) {
-                        ok = ok && baseGeneric[i].equals(implGeneric[i]);
-                    }
-                    if (ok) return true;
-                }
+    private static Class<?> findImpl(Class<?> aClass, Type type) {
+        for (Class<?> beanDefinition : beanDefinitions) {
+            boolean assignable = aClass.isAssignableFrom(beanDefinition);
+            boolean nonGeneric = beanDefinition.getTypeParameters().length == 0;
+            boolean nonInterface = !beanDefinition.isInterface();
+            boolean nonAbstract = !Modifier.isAbstract(beanDefinition.getModifiers());
+            boolean checkGenerics = checkGenerics(type, beanDefinition);
+            if (assignable & nonGeneric & nonInterface & nonAbstract && checkGenerics) {
+                return beanDefinition;
             }
         }
-        return false;
+        throw new RuntimeException("Not found impl for %s (type=%s)".formatted(aClass, type));
     }
 
-    private static Class<?>[] getInfoGeneric(Type type) {
-        int start = type.getTypeName().lastIndexOf("<") + 1;
-        if (start < 1) {
-            return new Class[0];
+    private static boolean checkGenerics(Type type, Class<?> impl) {
+        var typeContractGeneric = NanoSpring.getContractGeneric(type);
+        return Objects.nonNull(impl) &&
+                Stream.iterate(impl, Objects::nonNull, (Class<?> c) -> c.getSuperclass())
+                        .flatMap(c -> Stream.concat(
+                                Stream.of(c.getGenericSuperclass()),
+                                Stream.of(c.getGenericInterfaces())))
+                        .filter(Objects::nonNull)
+                        .map(NanoSpring::getContractGeneric)
+                        .anyMatch(typeContractGeneric::equals);
+    }
+
+    private static List<? extends Class<?>> getContractGeneric(Type type) {
+        var typeName = type.getTypeName();
+        return !typeName.contains("<")
+                ? List.of()
+                : Arrays.stream(typeName
+                        .replaceFirst(".+<", EMPTY)
+                        .replace(">", EMPTY)
+                        .split(COMMA))
+                .map(NanoSpring::getaClassOrNull)
+                .toList();
+    }
+
+    private static Class<?> getaClassOrNull(String className) {
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            return null;
         }
-        int stop = type.getTypeName().indexOf(">");
-        String[] types = type.getTypeName().substring(start, stop).split(",");
-        Class<?>[] classes = new Class[types.length];
-        for (int i = 0, typesLength = types.length; i < typesLength; i++) {
+    }
+
+    //add proxy
+    private static <T> boolean checkTransactional(Class<T> type) {
+        //в данном примере сделано просто и тупо:
+        // если класс или любой метод Transactional
+        // - заворачиваем все без проверки что отмечено, а что нет
+        //нужно в динамике проверять каждый метод если класса не отмечен
+        //и запускать прокси только в нужных местах
+        return type.isAnnotationPresent(Transactional.class)
+                || Arrays.stream(type.getMethods())
+                .anyMatch(method -> method.isAnnotationPresent(Transactional.class));
+    }
+
+    @SneakyThrows
+    private static Object constructProxyInstance(Class<?> type, Class<?>[] parameterTypes, Object[] parameters) {
+        Class<?> proxy = new ByteBuddy()
+                .subclass(type)
+                .method(isDeclaredBy(ElementMatchers.isAnnotatedWith(Transactional.class))
+                        .or(ElementMatchers.isAnnotatedWith(Transactional.class)))
+                .intercept(MethodDelegation.to(Interceptor.class))
+                .make()
+                .load(type.getClassLoader())
+                .getLoaded();
+        Constructor<?> constructor = proxy.getConstructor(parameterTypes);
+        return constructor.newInstance(parameters);
+    }
+
+    public class Interceptor {
+        @RuntimeType
+        public static Object intercept(@This Object self,
+                                       @Origin Method method,
+                                       @AllArguments Object[] args,
+                                       @SuperMethod Method superMethod) throws Throwable {
+            SessionCreater sessionCreater = find(SessionCreater.class);
+            sessionCreater.beginTransactional();
             try {
-                classes[i] = Class.forName(types[i]); // конкретный тип
-            } catch (ClassNotFoundException e) {
-                classes[i] = null; //T, K, E, V, ? extends, ? super
+                return  superMethod.invoke(self, args);
+            } finally {
+                sessionCreater.endTransactional();
             }
         }
-        return classes;
     }
-
 }

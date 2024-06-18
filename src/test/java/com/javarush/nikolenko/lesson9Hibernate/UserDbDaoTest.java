@@ -1,8 +1,10 @@
 package com.javarush.nikolenko.lesson9Hibernate;
 
+import com.javarush.nikolenko.config.ApplicationProperties;
 import com.javarush.nikolenko.config.SessionCreater;
 import com.javarush.nikolenko.entity.Role;
 import com.javarush.nikolenko.entity.User;
+import com.javarush.lessonsForDelete.lesson9Hibernate.UserDbDao;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.jupiter.api.*;
@@ -20,7 +22,7 @@ class UserDbDaoTest {
 
     @BeforeEach
     void setUp() {
-        sessionCreater = new SessionCreater();
+        sessionCreater = new SessionCreater(new ApplicationProperties());
         session = sessionCreater.getSession();
         userDbDao = new UserDbDao(sessionCreater);
     }
@@ -42,7 +44,13 @@ class UserDbDaoTest {
     void givenUserWith0id_whenCreate_thenIdnot0() {
         //given
         Long expected = 0L;
-        User tempUser = new User(expected, "newName", "newLogin", "newPassword", Role.THE_USER);
+        User tempUser = User.builder()
+                .id(expected)
+                .name("newName")
+                .login("newLogin")
+                .password("newPassword")
+                .role(Role.THE_USER)
+                .build();
         //when
         userDbDao.create(tempUser);
         Long actual = tempUser.getId();
@@ -53,7 +61,13 @@ class UserDbDaoTest {
     @Test
     void givenNewName_whenUpdate_thenGetNewName() {
         //given
-        User tempUser = new User(0L, "Olga", "olga", "123", Role.THE_USER);
+        User tempUser = User.builder()
+                .id(0L)
+                .name("Olga")
+                .login("olga")
+                .password("123")
+                .role(Role.THE_USER)
+                .build();
         userDbDao.create(tempUser);
 
         //when
@@ -69,7 +83,13 @@ class UserDbDaoTest {
     @DisplayName("When update tempUser then no exeption")
     void givenUser_whenUpdate_thenNoException() {
         //given
-        User tempUser = new User(0L, "Olga", "olga", "123", Role.THE_USER);
+        User tempUser = User.builder()
+                .id(0L)
+                .name("Olga")
+                .login("olga")
+                .password("123")
+                .role(Role.THE_USER)
+                .build();
         userDbDao.create(tempUser);
 
         //when then
@@ -80,7 +100,13 @@ class UserDbDaoTest {
     @Test
     void givenCreatedUser_whenDelete_thenGetEmptyOptionalUser() {
         //given
-        User tempUser = new User(0L, "Olga", "olga", "123", Role.THE_USER);
+        User tempUser = User.builder()
+                .id(0L)
+                .name("Olga")
+                .login("olga")
+                .password("123")
+                .role(Role.THE_USER)
+                .build();
         userDbDao.create(tempUser);
         long expectedId = tempUser.getId();
 
@@ -95,7 +121,13 @@ class UserDbDaoTest {
     @DisplayName("When delete tempUser then no exeption")
     void givenUser_whenDelete_thenNoException() {
         //given
-        User tempUser = new User(0L, "Olga", "olga", "123", Role.THE_USER);
+        User tempUser = User.builder()
+                .id(0L)
+                .name("Olga")
+                .login("olga")
+                .password("123")
+                .role(Role.THE_USER)
+                .build();
         userDbDao.create(tempUser);
         long expectedId = tempUser.getId();
 

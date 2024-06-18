@@ -14,7 +14,7 @@ public class QuestRepository extends BaseRepository<Quest> {
     public Collection<Quest> getUserQuests(long id) {
         return getAll()
                 .stream()
-                .filter(quest -> quest.getUserAuthorId() == id)
+                .filter(quest -> quest.getAuthor().getId() == id)
                 .toList();
     }
 }

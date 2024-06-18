@@ -43,10 +43,13 @@ public class RegistrationServlet extends HttpServlet {
         String login = req.getParameter(Key.LOGIN);
 
         if (!userService.userExist(login)) {
-            User user = new User(0L, req.getParameter(Key.NAME),
-                    login,
-                    req.getParameter(Key.PASSWORD),
-                    Role.THE_USER);
+            User user = User.builder()
+                    .name(req.getParameter(Key.NAME))
+                    .login(login)
+                    .password(req.getParameter(Key.PASSWORD))
+                    .role(Role.THE_USER)
+                    .build();
+
             Optional<User> optionalUser = userService.create(user);
 
             session.setAttribute(Key.USER, user);

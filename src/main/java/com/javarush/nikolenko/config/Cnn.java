@@ -1,19 +1,18 @@
 package com.javarush.nikolenko.config;
 
+import com.javarush.nikolenko.config.forDelete.ConfigUtil;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Cnn implements CnnConnector {
-    private static final String DATABASE_URL_KEY = "database.url";
-    private static final String DATABASE_USER_KEY = "database.user";
-    private static final String DATABASE_PASSWORD_KEY = "database.password";
-    private static final String DATABASE_DRIVER_KEY = "database.driver";
+    private static final ApplicationProperties applicationProperties = NanoSpring.find(ApplicationProperties.class);
 
 
     static {
         try {
-            Class.forName(ConfigUtil.getValue(DATABASE_DRIVER_KEY));
+            Class.forName(applicationProperties.getProperty(ApplicationProperties.HIBERNATE_CONNECTION_DRIVER_CLASS));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -23,9 +22,9 @@ public class Cnn implements CnnConnector {
     public Connection get() {
         try {
             return DriverManager.getConnection(
-                    ConfigUtil.getValue(DATABASE_URL_KEY),
-                    ConfigUtil.getValue(DATABASE_USER_KEY),
-                    ConfigUtil.getValue(DATABASE_PASSWORD_KEY)
+                    applicationProperties.getProperty(ApplicationProperties.HIBERNATE_CONNECTION_URL),
+                    applicationProperties.getProperty(ApplicationProperties.HIBERNATE_CONNECTION_USERNAME),
+                    applicationProperties.getProperty(ApplicationProperties.HIBERNATE_CONNECTION_PASSWORD)
                     );
         } catch (SQLException e) {
             throw new RuntimeException("Failed connection", e);

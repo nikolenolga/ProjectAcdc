@@ -1,6 +1,6 @@
 package com.javarush.nikolenko.filter;
 
-import com.javarush.nikolenko.config.Configuration;
+import com.javarush.nikolenko.config.Configurator;
 import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.entity.Role;
 import com.javarush.nikolenko.entity.User;
@@ -29,8 +29,13 @@ public class UserDefinedFilter extends HttpFilter {
     @SneakyThrows
     @Override
     public void init(FilterConfig config) throws ServletException {
-        NanoSpring.find(Configuration.class);
-        anonymous = new User(0L, "Anonymous", "anonymous", "anonymous-anonymous", Role.GUEST);
+        NanoSpring.find(Configurator.class);
+        anonymous = User.builder()
+                .name("Anonymous")
+                .login("anonymous")
+                .password("anonymous-anonymous")
+                .role(Role.GUEST)
+                .build();
     }
 
     @Override

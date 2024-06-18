@@ -2,6 +2,8 @@ package com.javarush.nikolenko.service;
 
 import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.repository.UserRepository;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,17 +12,14 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@AllArgsConstructor
+@Transactional
 public class UserService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-        log.info("UserService created");
-    }
-
     public Optional<User> create(User user) {
-        if (user != null && ObjectUtils.allNotNull(user.getName(), user.getLogin(), user.getPassword())) {
+        if (validateUser(user)) {
             userRepository.create(user);
             return Optional.of(user);
         }
@@ -29,12 +28,16 @@ public class UserService {
     }
 
     public Optional<User> update(User user) {
-        if (user != null && ObjectUtils.allNotNull(user.getName(), user.getLogin(), user.getPassword())) {
+        if (validateUser(user)) {
             userRepository.update(user);
             return Optional.of(user);
         }
         log.debug("User updating failed, user - {}", user);
         return Optional.empty();
+    }
+
+    public boolean validateUser(User user) {
+        return user != null && ObjectUtils.allNotNull(user.getName(), user.getLogin(), user.getPassword());
     }
 
     public void delete(User user) {

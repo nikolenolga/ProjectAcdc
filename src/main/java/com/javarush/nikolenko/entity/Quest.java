@@ -28,7 +28,7 @@ import java.util.Objects;
         @NamedQuery(name = "QUERY_MORE_ID", query = "SELECT q FROM Quest q where id>:id")
 })
 @FetchProfile(
-        name = Quest.FETCH_LAZY_QUESTIONS_AND_JOIN_AUTHOR_AND_JOIN_USERINFO,
+        name = Quest.FETCH_LAZY_QUESTIONS_AND_JOIN_AUTHOR,
         fetchOverrides = {
                 @FetchProfile.FetchOverride(
                         entity = Quest.class,
@@ -39,24 +39,16 @@ import java.util.Objects;
                         entity = Quest.class,
                         association = "author",
                         mode = FetchMode.JOIN
-                ),
-                @FetchProfile.FetchOverride(
-                        entity = User.class,
-                        association = "userInfo",
-                        mode = FetchMode.JOIN
                 )
         }
 )
 @NamedEntityGraph(
-        name = Quest.GRAPH_LAZY_QUESTIONS_AND_JOIN_AUTHOR_AND_JOIN_USERINFO,
+        name = Quest.GRAPH_LAZY_QUESTIONS_AND_JOIN_AUTHOR,
         attributeNodes = {
-                @NamedAttributeNode(value = "questions", subgraph = "questions"),
-                @NamedAttributeNode(value = "author", subgraph = "authorInfo")
+                @NamedAttributeNode(value = "questions", subgraph = "questions")
         },
         subgraphs = {
-                @NamedSubgraph(name = "questions", attributeNodes = {}),
-                @NamedSubgraph(name = "authorInfo",
-                               attributeNodes = @NamedAttributeNode(value = "userInfo"))
+                @NamedSubgraph(name = "questions", attributeNodes = {})
         }
 )
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
@@ -64,8 +56,8 @@ public class Quest implements AbstractComponent, Serializable {
     @Serial
     private static final long serialVersionUID = -179807072993154676L;
 
-    public static final String GRAPH_LAZY_QUESTIONS_AND_JOIN_AUTHOR_AND_JOIN_USERINFO = "graphLazyQuestionsAndJoinAuthorAndJoinUserinfo";
-    public static final String FETCH_LAZY_QUESTIONS_AND_JOIN_AUTHOR_AND_JOIN_USERINFO = "fetchLazyQuestionsAndJoinAuthorAndJoinUserinfo";
+    public static final String GRAPH_LAZY_QUESTIONS_AND_JOIN_AUTHOR = "graphLazyQuestionsAndJoinAuthor";
+    public static final String FETCH_LAZY_QUESTIONS_AND_JOIN_AUTHOR = "fetchLazyQuestionsAndJoinAuthor";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

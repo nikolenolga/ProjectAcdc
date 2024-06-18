@@ -2,7 +2,7 @@ package com.javarush.nikolenko.lesson8jdbc;
 
 import com.javarush.nikolenko.entity.Role;
 import com.javarush.nikolenko.entity.User;
-import com.javarush.nikolenko.lesson9Hibernate.UserDbDao;
+import com.javarush.lessonsForDelete.lesson8jdbc.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,7 +65,13 @@ class UserDaoTest {
     void givenUserWith0id_whenCreate_thenIdnot0() {
         //given
         Long expected = 0L;
-        User tempUser = new User(expected, "newName", "newLogin", "newPassword", Role.THE_USER);
+        User tempUser = User.builder()
+                .id(expected)
+                .name("newName")
+                .login("newLogin")
+                .password("newPassword")
+                .role(Role.THE_USER)
+                .build();
         //when
         userDao.create(tempUser);
         Long actual = tempUser.getId();
@@ -76,7 +82,13 @@ class UserDaoTest {
     @Test
     void givenNewName_whenUpdate_thenGetNewName() {
         //given
-        User tempUser = new User(0L, "Olga", "olga", "123", Role.THE_USER);
+        User tempUser = User.builder()
+                .id(0L)
+                .name("Olga")
+                .login("olga")
+                .password("123")
+                .role(Role.THE_USER)
+                .build();
         userDao.create(tempUser);
 
         //when
@@ -92,7 +104,13 @@ class UserDaoTest {
     @DisplayName("When update tempUser then no exeption")
     void givenUser_whenUpdate_thenNoException() {
         //given
-        User tempUser = new User(0L, "Olga", "olga", "123", Role.THE_USER);
+        User tempUser = User.builder()
+                .id(0L)
+                .name("Olga")
+                .login("olga")
+                .password("123")
+                .role(Role.THE_USER)
+                .build();
         userDao.create(tempUser);
 
         //when then
@@ -103,7 +121,13 @@ class UserDaoTest {
     @Test
     void givenCreatedUser_whenDelete_thenGetEmptyOptionalUser() {
         //given
-        User tempUser = new User(0L, "Olga", "olga", "123", Role.THE_USER);
+        User tempUser = User.builder()
+                .id(0L)
+                .name("Olga")
+                .login("olga")
+                .password("123")
+                .role(Role.THE_USER)
+                .build();
         userDao.create(tempUser);
         long expectedId = tempUser.getId();
 
@@ -118,7 +142,13 @@ class UserDaoTest {
     @DisplayName("When delete tempUser then no exeption")
     void givenUser_whenDelete_thenNoException() {
         //given
-        User tempUser = new User(0L, "Olga", "olga", "123", Role.THE_USER);
+        User tempUser = User.builder()
+                .id(0L)
+                .name("Olga")
+                .login("olga")
+                .password("123")
+                .role(Role.THE_USER)
+                .build();
         userDao.create(tempUser);
         long expectedId = tempUser.getId();
 

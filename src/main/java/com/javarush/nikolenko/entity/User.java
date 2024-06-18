@@ -9,7 +9,6 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -22,8 +21,8 @@ import java.util.Objects;
 @ToString
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class User implements AbstractComponent, Serializable {
-    @Serial
-    private static final long serialVersionUID = -1798070786993154676L;
+//    @Serial
+//    private static final long serialVersionUID = -1798070786993154676L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,9 +38,6 @@ public class User implements AbstractComponent, Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private UserInfo userInfo;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
     @ToString.Exclude

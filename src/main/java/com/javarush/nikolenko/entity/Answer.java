@@ -39,7 +39,7 @@ public class Answer implements AbstractComponent, Serializable {
     private Long nextQuestionId;
 
     @ManyToOne
-    @Column(name = "question_id")
+    @JoinColumn(name = "question_id")
     @ToString.Exclude
     private Question question;
 

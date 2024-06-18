@@ -4,6 +4,8 @@ import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.repository.QuestRepository;
 import com.javarush.nikolenko.utils.Key;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,17 +17,14 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
+@AllArgsConstructor
+@Transactional
 public class QuestService {
     private static final Logger log = LoggerFactory.getLogger(QuestService.class);
     private final QuestRepository questRepository;
 
-    public QuestService(QuestRepository questRepository) {
-        this.questRepository = questRepository;
-        log.info("QuestService created");
-    }
-
     public Optional<Quest> create(Quest quest) {
-        if (quest != null && ObjectUtils.allNotNull(quest.getName(), quest.getUserAuthorId(), quest.getFirstQuestionId(), quest.getDescription())) {
+        if (quest != null && ObjectUtils.allNotNull(quest.getName(), quest.getAuthor(), quest.getFirstQuestionId(), quest.getDescription())) {
             questRepository.create(quest);
             return Optional.of(quest);
         }
@@ -34,7 +33,7 @@ public class QuestService {
     }
 
     public Optional<Quest> update(Quest quest) {
-        if (quest != null && ObjectUtils.allNotNull(quest.getName(), quest.getUserAuthorId(), quest.getFirstQuestionId(), quest.getDescription())) {
+        if (quest != null && ObjectUtils.allNotNull(quest.getName(), quest.getAuthor(), quest.getFirstQuestionId(), quest.getDescription())) {
             questRepository.update(quest);
             return Optional.of(quest);
         }
