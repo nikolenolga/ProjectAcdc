@@ -51,7 +51,8 @@ import java.util.Objects;
                 @NamedSubgraph(name = "questions", attributeNodes = {})
         }
 )
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class Quest implements AbstractComponent, Serializable {
     @Serial
     private static final long serialVersionUID = -179807072993154676L;
@@ -77,10 +78,12 @@ public class Quest implements AbstractComponent, Serializable {
     @Column(name = "description")
     private String description;
 
+    @Version
+    Long version;
+
     @OneToMany(mappedBy = "quest")
     @ToString.Exclude
     private final List<Question> questions = new ArrayList<>();
-
 
     public void addQuestion(Question question) {
         questions.add(question);

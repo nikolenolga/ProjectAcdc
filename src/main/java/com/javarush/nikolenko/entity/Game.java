@@ -5,6 +5,8 @@ import org.hibernate.annotations.Cache;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -19,7 +21,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "game")
 @ToString
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class Game implements AbstractComponent, Serializable {
     @Serial
     private static final long serialVersionUID = -1798030786993154676L;
@@ -45,6 +48,9 @@ public class Game implements AbstractComponent, Serializable {
     @JoinColumn(name = "quest_id")
     @ToString.Exclude
     private Quest quest;
+
+    @Version
+    Long version;
 
     public void restart() {
         this.gameState = GameState.GAME;

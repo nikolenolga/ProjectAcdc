@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -19,7 +21,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 @ToString
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class User implements AbstractComponent, Serializable {
 //    @Serial
 //    private static final long serialVersionUID = -1798070786993154676L;
@@ -39,13 +42,16 @@ public class User implements AbstractComponent, Serializable {
     @Column(name = "role")
     private Role role;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "author")
     @ToString.Exclude
     private final Collection<Quest> quests = new ArrayList<>();
 
     @OneToMany(mappedBy = "player")
     @ToString.Exclude
     private final Collection<Game> games = new ArrayList<>();
+
+    @Version
+    Long version;
 
     @Override
     public boolean equals(Object o) {

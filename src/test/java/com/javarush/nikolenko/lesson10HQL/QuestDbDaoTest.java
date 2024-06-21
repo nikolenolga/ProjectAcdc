@@ -3,7 +3,7 @@ package com.javarush.nikolenko.lesson10HQL;
 import com.javarush.nikolenko.config.ApplicationProperties;
 import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.config.SessionCreater;
-import com.javarush.lessonsForDelete.lesson10HQL.QuestDbDao;
+import lessonsForDelete.lesson10HQL.QuestDbDao;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;

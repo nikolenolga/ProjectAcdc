@@ -24,12 +24,12 @@ public class ApplicationProperties extends Properties {
 
     public final static Path CLASSES_ROOT = Paths.get(URI.create(
                     Objects.requireNonNull(
-                            ApplicationProperties.class.getResource(File.separator)
+                            ApplicationProperties.class.getResource("/")
                     ).toString()));
 
     public final static Path CLASSES_ROOT_2 = Paths.get(URI.create(
                     Objects.requireNonNull(
-                            ImageService.class.getResource("/")
+                            ApplicationProperties.class.getResource("/")
                     ).toString()))
             .getParent();
 
@@ -39,9 +39,11 @@ public class ApplicationProperties extends Properties {
         try {
             String test_path = CLASSES_ROOT_2 + File.separator + "classes" + File.separator +"application.properties";
             System.out.println(test_path);
-            String app_prop_path = CLASSES_ROOT.toString().substring(0, CLASSES_ROOT.toString().lastIndexOf("com")) + "application.properties";
-            System.out.println(app_prop_path);
-            this.load(new FileReader(test_path));
+
+//            String app_prop_path = CLASSES_ROOT.toString().substring(0, CLASSES_ROOT.toString().lastIndexOf("com")) + "application.properties";
+//            System.out.println(app_prop_path);
+
+            this.load(new FileReader(CLASSES_ROOT_2 + File.separator + "classes" + File.separator +"application.properties"));
             String driver = this.getProperty(HIBERNATE_CONNECTION_DRIVER_CLASS);
             Class.forName(driver);
         } catch (ClassNotFoundException e) {

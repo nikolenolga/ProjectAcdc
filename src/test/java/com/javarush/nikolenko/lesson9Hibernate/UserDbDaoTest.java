@@ -4,7 +4,7 @@ import com.javarush.nikolenko.config.ApplicationProperties;
 import com.javarush.nikolenko.config.SessionCreater;
 import com.javarush.nikolenko.entity.Role;
 import com.javarush.nikolenko.entity.User;
-import com.javarush.lessonsForDelete.lesson9Hibernate.UserDbDao;
+import lessonsForDelete.lesson9Hibernate.UserDbDao;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.jupiter.api.*;

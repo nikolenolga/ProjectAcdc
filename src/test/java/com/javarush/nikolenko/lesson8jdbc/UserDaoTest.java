@@ -2,7 +2,7 @@ package com.javarush.nikolenko.lesson8jdbc;
 
 import com.javarush.nikolenko.entity.Role;
 import com.javarush.nikolenko.entity.User;
-import com.javarush.lessonsForDelete.lesson8jdbc.UserDao;
+import lessonsForDelete.lesson8jdbc.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

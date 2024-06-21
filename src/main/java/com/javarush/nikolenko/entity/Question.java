@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -20,7 +22,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "question")
 @ToString
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class Question implements AbstractComponent, Serializable  {
     @Serial
     private static final long serialVersionUID = -1798070784493154676L;
@@ -40,6 +43,9 @@ public class Question implements AbstractComponent, Serializable  {
     @OneToMany(mappedBy = "question")
     @ToString.Exclude
     private final List<Answer> possibleAnswers = new ArrayList<>();
+
+    @Version
+    Long version;
 
     public List<Answer> getPossibleAnswers() {
         return Collections.unmodifiableList(possibleAnswers);

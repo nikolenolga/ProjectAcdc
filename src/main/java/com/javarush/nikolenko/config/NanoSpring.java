@@ -65,7 +65,7 @@ public class NanoSpring {
         URL resource = NanoSpring.class.getResource("NanoSpring.class");
         URI uri = Objects.requireNonNull(resource).toURI();
         Path appRoot = Path.of(uri).getParent().getParent();
-        scanPackages(appRoot);
+        scanPackages(appRoot,"Controller", "Servlet", "Filter");
     }
 
     public static void scanPackages(Path appPackage, String... excludes) {
