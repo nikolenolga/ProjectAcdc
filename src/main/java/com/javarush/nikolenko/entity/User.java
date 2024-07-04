@@ -1,31 +1,20 @@
 package com.javarush.nikolenko.entity;
 
+import com.javarush.nikolenko.dto.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.OptimisticLockType;
-import org.hibernate.annotations.OptimisticLocking;
+import java.util.*;
 
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
-
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @Entity
 @Table(name = "users")
 @ToString
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@OptimisticLocking(type = OptimisticLockType.VERSION)
-public class User implements AbstractComponent, Serializable {
-//    @Serial
-//    private static final long serialVersionUID = -1798070786993154676L;
+@Cacheable
+public class User implements AbstractComponent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,14 +33,19 @@ public class User implements AbstractComponent, Serializable {
 
     @OneToMany(mappedBy = "author")
     @ToString.Exclude
-    private final Collection<Quest> quests = new ArrayList<>();
+    private final List<Quest> quests = new ArrayList<>();
 
     @OneToMany(mappedBy = "player")
     @ToString.Exclude
-    private final Collection<Game> games = new ArrayList<>();
+    private final List<Game> games = new ArrayList<>();
 
-    @Version
-    Long version;
+    public Collection<Quest> getQuests() {
+        return Collections.unmodifiableList(quests);
+    }
+
+    public Collection<Game> getGames() {
+        return Collections.unmodifiableList(games);
+    }
 
     @Override
     public boolean equals(Object o) {

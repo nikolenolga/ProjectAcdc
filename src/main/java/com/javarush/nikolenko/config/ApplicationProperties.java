@@ -1,7 +1,8 @@
 package com.javarush.nikolenko.config;
 
 import com.javarush.nikolenko.exception.DaoException;
-import com.javarush.nikolenko.service.ImageService;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,45 +14,83 @@ import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Properties;
 
+import static org.hibernate.cfg.JdbcSettings.JAKARTA_JDBC_DRIVER;
 
+@Slf4j
 public class ApplicationProperties extends Properties {
-    public static final String HIBERNATE_CONNECTION_URL = "hibernate.connection.url";
-    public static final String HIBERNATE_CONNECTION_USERNAME = "hibernate.connection.username";
-    public static final String HIBERNATE_CONNECTION_PASSWORD = "hibernate.connection.password";
-    public static final String HIBERNATE_CONNECTION_DRIVER_CLASS = "hibernate.connection.driver_class";
-    private final File resourcesDirectory = new File("src/main/resources");
-    private final String absolutePath = resourcesDirectory.getAbsolutePath();
+    private static final String APPLICATION_PROPERTIES_FILE = "application.properties";
 
-    public final static Path CLASSES_ROOT = Paths.get(URI.create(
-                    Objects.requireNonNull(
-                            ApplicationProperties.class.getResource("/")
-                    ).toString()));
-
-    public final static Path CLASSES_ROOT_2 = Paths.get(URI.create(
-                    Objects.requireNonNull(
-                            ApplicationProperties.class.getResource("/")
-                    ).toString()))
-            .getParent();
-
-    public final static Path APP_PROP = CLASSES_ROOT.getParent();
-
+    @SneakyThrows
     public ApplicationProperties() {
+        String pathFor = CLASSES_ROOT + File.separator + "application.properties";
+        System.out.println(pathFor);
+        log.info(pathFor);
+        String driver = "NOT SETTED";
+
         try {
-            String test_path = CLASSES_ROOT_2 + File.separator + "classes" + File.separator +"application.properties";
-            System.out.println(test_path);
-
-//            String app_prop_path = CLASSES_ROOT.toString().substring(0, CLASSES_ROOT.toString().lastIndexOf("com")) + "application.properties";
-//            System.out.println(app_prop_path);
-
-            this.load(new FileReader(CLASSES_ROOT_2 + File.separator + "classes" + File.separator +"application.properties"));
-            String driver = this.getProperty(HIBERNATE_CONNECTION_DRIVER_CLASS);
+            this.load(new FileReader(CLASSES_ROOT + File.separator + "application.properties"));
+            driver = this.getProperty(JAKARTA_JDBC_DRIVER);
             Class.forName(driver);
         } catch (ClassNotFoundException e) {
-            throw new DaoException(HIBERNATE_CONNECTION_DRIVER_CLASS + " not found");
+            log.error("{} not found, {}", driver, e);
+            throw new DaoException("%s not found, %s".formatted(driver, e));
         } catch (FileNotFoundException e) {
-            throw new DaoException("Cant't find application.properties file at " + CLASSES_ROOT);
+            log.error("Cant't find {} file at {}", APPLICATION_PROPERTIES_FILE, CLASSES_ROOT);
+            throw new DaoException("Cant't find %s file at %s".formatted(APPLICATION_PROPERTIES_FILE, CLASSES_ROOT));
         } catch (IOException e) {
-            throw new DaoException("Cant't read application.properties file at " + CLASSES_ROOT);
+            log.error("Cant't read {} file at {}", APPLICATION_PROPERTIES_FILE, CLASSES_ROOT);
+            throw new DaoException("Cant't read %s file at %s".formatted(APPLICATION_PROPERTIES_FILE, CLASSES_ROOT));
         }
     }
+
+    //any runtime
+    public final static Path CLASSES_ROOT = Paths.get(URI.create(
+            Objects.requireNonNull(
+                    ApplicationProperties.class.getResource("/")
+            ).toString()));
+
+    //only in Tomcat (not use in tests)
+    public final static Path WEB_INF = CLASSES_ROOT.getParent();
 }
+
+
+
+
+//@Slf4j
+//public class ApplicationProperties extends Properties {
+//    private static final String CLASSES = File.separator + "classes" + File.separator;
+//    private static final String APPLICATION_PROPERTIES_FILE = "application.properties";
+//
+//
+//    public final static Path CLASSES_ROOT = Paths.get(URI.create(
+//                    Objects.requireNonNull(
+//                            ApplicationProperties.class.getResource("/")
+//                    ).toString()));
+//
+//    public final static Path APP_PROP = CLASSES_ROOT.getParent();
+//
+//    @SneakyThrows
+//    public ApplicationProperties() {
+//       String applicationPropertiesPath = CLASSES_ROOT + File.separator + APPLICATION_PROPERTIES_FILE;
+//       System.out.println(applicationPropertiesPath);
+//
+//        String driver = null;
+//        try {
+//            this.load(new FileReader(applicationPropertiesPath));
+////            String test_path = CLASSES_ROOT + CLASSES + APPLICATION_PROPERTIES_FILE;
+////            System.out.println(test_path);
+//            driver = this.getProperty(JAKARTA_JDBC_DRIVER);
+//            Class.forName(driver);
+//        } catch (ClassNotFoundException e) {
+//            log.error("{} not found, {}", driver, e);
+//            throw new DaoException("%s not found, %s".formatted(driver, e));
+//        } catch (FileNotFoundException e) {
+//            log.error("Cant't find {} file at {}", APPLICATION_PROPERTIES_FILE, CLASSES_ROOT);
+//            throw new DaoException("Cant't find %s file at %s".formatted(APPLICATION_PROPERTIES_FILE, CLASSES_ROOT));
+//        } catch (IOException e) {
+//            log.error("Cant't read {} file at {}", APPLICATION_PROPERTIES_FILE, CLASSES_ROOT);
+//            throw new DaoException("Cant't read %s file at %s".formatted(APPLICATION_PROPERTIES_FILE, CLASSES_ROOT));
+//        }
+//        log.info("Properties loaded from path: {}", applicationPropertiesPath);
+//    }
+//}

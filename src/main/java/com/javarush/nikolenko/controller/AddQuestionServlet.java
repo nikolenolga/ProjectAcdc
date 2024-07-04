@@ -1,9 +1,8 @@
 package com.javarush.nikolenko.controller;
 
 import com.javarush.nikolenko.config.NanoSpring;
-import com.javarush.nikolenko.entity.Question;
-import com.javarush.nikolenko.service.QuestModifyService;
-import com.javarush.nikolenko.service.QuestionService;
+import com.javarush.nikolenko.dto.QuestionTo;
+import com.javarush.nikolenko.service.QuestService;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.RequestHelper;
 import com.javarush.nikolenko.utils.UrlHelper;
@@ -20,14 +19,12 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = {UrlHelper.ADD_QUESTION})
 public class AddQuestionServlet extends HttpServlet {
-    QuestModifyService questModifyService;
-    private QuestionService questionService;
+    private QuestService questService;
 
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
-        questionService = NanoSpring.find(QuestionService.class);
-        questModifyService = NanoSpring.find(QuestModifyService.class);
+        questService = NanoSpring.find(QuestService.class);
     }
 
     @Override
@@ -48,12 +45,7 @@ public class AddQuestionServlet extends HttpServlet {
 
         if (req.getParameter(Key.BUTTON_ADD_QUESTION) != null) {
             String questionMessage = req.getParameter(Key.QUESTION_MESSAGE);
-            Question question = Question.builder()
-                    .questionMessage(questionMessage)
-                    .build();
-
-            questionService.create(question);
-            questModifyService.addQuestion(questId, question.getId());
+            questService.addNewQuestionToCreatedQuest(questId, questionMessage);
         }
 
         resp.sendRedirect(redirectPath);

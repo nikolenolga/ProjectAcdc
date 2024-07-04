@@ -2,8 +2,9 @@ package com.javarush.nikolenko.filter;
 
 import com.javarush.nikolenko.config.Configurator;
 import com.javarush.nikolenko.config.NanoSpring;
-import com.javarush.nikolenko.entity.Role;
-import com.javarush.nikolenko.entity.User;
+import com.javarush.nikolenko.dto.Role;
+import com.javarush.nikolenko.dto.UserTo;
+import com.javarush.nikolenko.service.UserService;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.FilterChain;
@@ -24,24 +25,19 @@ import java.io.IOException;
         UrlHelper.QUESTION, UrlHelper.ANSWER, UrlHelper.LOGIN,
         UrlHelper.REGISTRATION})
 public class UserDefinedFilter extends HttpFilter {
-    private User anonymous;
+    private UserService userService;
 
     @SneakyThrows
     @Override
     public void init(FilterConfig config) throws ServletException {
-        NanoSpring.find(Configurator.class);
-        anonymous = User.builder()
-                .name("Anonymous")
-                .login("anonymous")
-                .password("anonymous-anonymous")
-                .role(Role.GUEST)
-                .build();
+        userService = NanoSpring.find(UserService.class);
     }
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpSession session = req.getSession();
         if (session.getAttribute(Key.USER) == null) {
+            UserTo anonymous = userService.createAnonymousUser();
             session.setAttribute(Key.USER, anonymous);
             session.setAttribute(Key.USER_ID, anonymous.getId());
             session.setAttribute(Key.IS_AUTHORIZED, false);

@@ -1,13 +1,8 @@
 package com.javarush.nikolenko.entity;
 
+import com.javarush.nikolenko.dto.GameState;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cache;
-
-
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.Objects;
 
 @Builder
@@ -18,11 +13,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "answer")
 @ToString
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class Answer implements AbstractComponent, Serializable {
-    @Serial
-    private static final long serialVersionUID = -1798070786934154676L;
-
+@Cacheable
+public class Answer implements AbstractComponent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,8 +27,11 @@ public class Answer implements AbstractComponent, Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "game_state")
     protected GameState gameState;
-    @Column(name = "next_question_id")
-    private Long nextQuestionId;
+
+    @ManyToOne
+    @JoinColumn(name = "next_question_id")
+    @ToString.Exclude
+    private Question nextQuestion;
 
     @ManyToOne
     @JoinColumn(name = "question_id")
@@ -48,7 +43,7 @@ public class Answer implements AbstractComponent, Serializable {
     }
 
     public boolean hasNextQuestion() {
-        return nextQuestionId != null && nextQuestionId != 0L;
+        return nextQuestion != null && nextQuestion.getId() != 0L;
     }
 
     public boolean hasFinalMessage() {

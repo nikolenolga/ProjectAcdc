@@ -42,19 +42,37 @@ public class NanoSpring {
         }
         Object component = components.get(clazz);
         if (component == null) {
-            Constructor<?> constructor = clazz.getConstructors()[0];
+            Constructor<?> constructor = null;
+            try {
+                constructor = clazz.getConstructors()[0];
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println(constructor);
+                System.out.println("In block " + clazz.getSimpleName());
+                throw new RuntimeException(e + " in block " + clazz.getSimpleName());
+            }
             Class<?>[] parameterTypes = constructor.getParameterTypes();
             Type[] genericParameterTypes = constructor.getGenericParameterTypes();
             Object[] parameters = new Object[parameterTypes.length];
-            for (int i = 0; i < parameters.length; i++) {
-                Class<?> impl = findImpl(parameterTypes[i], genericParameterTypes[i]);
-                parameters[i] = find(impl);
+            try {
+                for (int i = 0; i < parameters.length; i++) {
+                    Class<?> impl = findImpl(parameterTypes[i], genericParameterTypes[i]);
+                    parameters[i] = find(impl);
+                }
+            } catch (IndexOutOfBoundsException e) {
+                String message = "IndexOutOfBoundsException in: %s".formatted(clazz.getSimpleName());
+                log.error(message);
+                System.out.println(message);
+                System.out.println("constructor " + constructor);
+                System.out.println("parameterTypes " + parameterTypes);
+                System.out.println("genericParameterTypes " + genericParameterTypes);
+                System.out.println("parameters " + parameters);
+                throw new RuntimeException(e + message);
             }
             Object newInstance = checkTransactional(clazz)
                     ? constructProxyInstance(clazz, parameterTypes, parameters)
                     : constructor.newInstance(parameters);
             components.put(clazz, newInstance);
-            log.info("NanoSpring created new instance of {}", clazz);
+            log.debug("NanoSpring created new instance of {}", clazz);
         }
 
         return (T) components.get(clazz);
@@ -65,7 +83,7 @@ public class NanoSpring {
         URL resource = NanoSpring.class.getResource("NanoSpring.class");
         URI uri = Objects.requireNonNull(resource).toURI();
         Path appRoot = Path.of(uri).getParent().getParent();
-        scanPackages(appRoot,"Controller", "Servlet", "Filter");
+        scanPackages(appRoot,"Controller", "Servlet", "Filter", "controller", "servlet", "filter");
     }
 
     public static void scanPackages(Path appPackage, String... excludes) {
@@ -81,6 +99,7 @@ public class NanoSpring {
                 beanDefinitions.add(Class.forName(name));                               // в классы
             }                                                                           // готово
         } catch (IOException | ClassNotFoundException e) {
+            log.error("NanoSpring scanPackages caused exeption {}, bean is not in excludes list: {}", e.getMessage(), excludes);
             throw new QuestException(e);
         }
     }
@@ -96,6 +115,7 @@ public class NanoSpring {
                 return beanDefinition;
             }
         }
+        log.info("Not found impl for {} (type={})", aClass, type);
         throw new RuntimeException("Not found impl for %s (type=%s)".formatted(aClass, type));
     }
 
@@ -127,6 +147,7 @@ public class NanoSpring {
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
+            log.error("{} not found}", className);
             return null;
         }
     }
@@ -166,7 +187,7 @@ public class NanoSpring {
             SessionCreater sessionCreater = find(SessionCreater.class);
             sessionCreater.beginTransactional();
             try {
-                return  superMethod.invoke(self, args);
+                return superMethod.invoke(self, args);
             } finally {
                 sessionCreater.endTransactional();
             }

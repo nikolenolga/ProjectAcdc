@@ -6,7 +6,10 @@ import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.Part;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,12 +23,13 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
+@Transactional
 public class ImageService {
     private static final String DEFAULT_IMAGE_PNG = "default.png";
     private static final List<String> EXTENSIONS = List.of(
             ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".webp"
     );
-    private static final Logger log = LoggerFactory.getLogger(ImageService.class);
 
     public final Path WEB_INF = Paths.get(URI.create(
                     Objects.requireNonNull(

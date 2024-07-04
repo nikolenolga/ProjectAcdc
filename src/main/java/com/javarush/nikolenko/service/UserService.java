@@ -1,66 +1,120 @@
 package com.javarush.nikolenko.service;
 
+import com.javarush.nikolenko.dto.QuestTo;
+import com.javarush.nikolenko.dto.Role;
+import com.javarush.nikolenko.dto.UserTo;
+import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.entity.User;
+import com.javarush.nikolenko.exception.QuestException;
+import com.javarush.nikolenko.mapping.Dto;
 import com.javarush.nikolenko.repository.UserRepository;
+import com.javarush.nikolenko.utils.Key;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@Slf4j
 @AllArgsConstructor
 @Transactional
 public class UserService {
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
 
-    public Optional<User> create(User user) {
-        if (validateUser(user)) {
-            userRepository.create(user);
-            return Optional.of(user);
+//    public Optional<UserTo> create(UserTo userTo) {
+//        if (validateUser(userTo)) {
+//            return userRepository.create(Dto.MAPPER.from(userTo)).map(Dto.MAPPER::from);
+//        }
+//        log.debug("User creation failed, user - {}", userTo);
+//        return Optional.empty();
+//    }
+
+    public void update(UserTo userTo, String name, String password) {
+        if (!userTo.getName().equals(name) && !userTo.getPassword().equals(password)) {
+            userTo.setName(name);
+            userTo.setPassword(password);
+            userRepository.update(Dto.MAPPER.from(userTo)).map(Dto.MAPPER::from);
         }
-        log.debug("User creation failed, user - {}", user);
-        return Optional.empty();
     }
 
-    public Optional<User> update(User user) {
-        if (validateUser(user)) {
-            userRepository.update(user);
-            return Optional.of(user);
+//    private boolean validateUser(UserTo userTo) {
+//        return userTo != null && ObjectUtils.allNotNull(userTo.getLogin());
+//    }
+
+//    public void delete(UserTo userTo) {
+//        userRepository.delete(Dto.MAPPER.from(userTo));
+//    }
+
+//    public Collection<UserTo> getAll() {
+//        return userRepository.getAll()
+//                .stream()
+//                .map(Dto.MAPPER::from)
+//                .toList();
+//    }
+
+//    public Optional<UserTo> get(long id) {
+//        return userRepository.get(id).map(Dto.MAPPER::from);
+//    }
+
+    public Optional<UserTo> signIn(String currentLogin, String currentPassword, String currentName) {
+
+        if(ObjectUtils.anyNull(currentPassword, currentLogin) || userRepository.userExist(currentLogin)) return Optional.empty();
+
+        User user = User.builder()
+                .name(currentName)
+                .login(currentLogin)
+                .password(currentPassword)
+                .role(Role.THE_USER)
+                .build();
+
+        return userRepository.create(user).map(Dto.MAPPER::from);
+    }
+
+    public Optional<UserTo> getUser(String currentLogin, String currentPassword) {
+        return userRepository.getUser(currentLogin, currentPassword)
+                .map(Dto.MAPPER::from);
+    }
+
+    public Optional<UserTo> findOrCreateUser(UserTo userTo) {
+        Optional<User> optionalUser = userRepository.find(Dto.MAPPER.from(userTo)).findFirst();
+        if (optionalUser.isPresent()) {
+            return optionalUser.map(Dto.MAPPER::from);
+        } else {
+            return userRepository.create(Dto.MAPPER.from(userTo)).map(Dto.MAPPER::from);
         }
-        log.debug("User updating failed, user - {}", user);
-        return Optional.empty();
     }
 
-    public boolean validateUser(User user) {
-        return user != null && ObjectUtils.allNotNull(user.getName(), user.getLogin(), user.getPassword());
+    public Collection<QuestTo> getUserQuests(long userId) {
+        Collection<Quest> quests = userRepository.get(userId)
+                .map(User::getQuests)
+                .orElse(new ArrayList<>());
+
+        return quests.stream()
+                .map(Dto.MAPPER::from)
+                .toList();
     }
 
-    public void delete(User user) {
-        userRepository.delete(user);
-    }
+    public UserTo createAnonymousUser() {
+        long count = userRepository.countAllUsers();
+        long index = count + (int) (Math.random() * 100);
+//        while (userRepository.userExist("anonymous" + index)) {
+//            index = count + (int) (Math.random() * 100);
+//        }
+        User user = User.builder()
+                .login("anonymous" + index)
+                .role(Role.GUEST)
+                .build();
+        Optional<User> optionalUser = userRepository.create(user);
+        if (optionalUser.isEmpty()) {
+            throw new QuestException("Cannot create anonymous user");
+        }
 
-    public Collection<User> getAll() {
-        return userRepository.getAll();
-    }
-
-    public Optional<User> get(long id) {
-        return userRepository.get(id);
-    }
-
-    public boolean userExist(String currentLogin) {
-        return userRepository.userExist(currentLogin);
-    }
-
-    public Optional<User> getUser(String currentLogin, String currentPassword) {
-        return userRepository.getUser(currentLogin, currentPassword);
-    }
-
-    public Stream<User> find(User user) {
-        return userRepository.find(user);
+        return optionalUser.map(Dto.MAPPER::from).get();
     }
 }

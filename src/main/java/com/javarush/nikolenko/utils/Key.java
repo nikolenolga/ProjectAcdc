@@ -1,5 +1,9 @@
 package com.javarush.nikolenko.utils;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Key {
     public static final String USER = "user";
     public static final String GAME = "game";
@@ -61,7 +65,7 @@ public class Key {
     public static final String IMAGE = "image";
 
     public static final String WRONG_USER_DATA = "Wrong login or password.";
-    public static final String USER_EXIST = "A user with this login exists.";
+    public static final String USER_EXIST = "A user with this login exists or not suitable login/password.";
     public static final String CANT_UPDATE = "Can't update user.";
     public static final String NEED_TO_LOGIN = "Login to access the resource.";
     public static final String FILE_NOT_FOUND = "File not found.";
@@ -72,6 +76,10 @@ public class Key {
     public static final String WRONG_SYNTAX_QUESTION = "Question line wrong syntax";
     public static final String WRONG_SYNTAX_ANSWER = "Answer line wrong syntax";
     public static final String WRONG_IMPL = "Not found impl for %s (type=%s)";
+
+    public static final List<String> QUEST_EDIT_BUTTONS = List.of(new String[]{BUTTON_LOAD_QUEST_IMAGE, BUTTON_EDIT_QUEST,
+            BUTTON_DELETE_QUESTION, BUTTON_EDIT_QUESTION, BUTTON_LOAD_QUESTION_IMAGE,
+            BUTTON_DELETE_ANSWER, BUTTON_EDIT_ANSWER, BUTTON_LOAD_ANSWER_IMAGE});
 
     public static boolean nullOrEquals(Object first, Object second) {
         return (first == null && second == null) || (first != null && first.equals(second));

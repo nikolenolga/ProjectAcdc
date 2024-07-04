@@ -1,5 +1,6 @@
 package com.javarush.nikolenko.entity;
 
+import com.javarush.nikolenko.dto.GameState;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import lombok.*;
@@ -21,11 +22,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "game")
 @ToString
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@OptimisticLocking(type = OptimisticLockType.VERSION)
-public class Game implements AbstractComponent, Serializable {
-    @Serial
-    private static final long serialVersionUID = -1798030786993154676L;
+public class Game implements AbstractComponent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +31,11 @@ public class Game implements AbstractComponent, Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "game_state")
     private GameState gameState;
-    @Column(name = "first_question_id")
-    private Long firstQuestionId;
-    @Column(name = "current_question_id")
-    private Long currentQuestionId;
+
+    @ManyToOne
+    @JoinColumn(name = "current_question_id")
+    @ToString.Exclude
+    private Question currentQuestion;
 
     @ManyToOne
     @JoinColumn(name = "user_player_id")
@@ -49,12 +47,9 @@ public class Game implements AbstractComponent, Serializable {
     @ToString.Exclude
     private Quest quest;
 
-    @Version
-    Long version;
-
     public void restart() {
         this.gameState = GameState.GAME;
-        this.currentQuestionId = this.firstQuestionId;
+        this.currentQuestion = this.quest.getFirstQuestion();
         log.debug("Game restarted, gameId - {}, questId - {}, userId - {}", id, quest.getId(), player.getId());
     }
 

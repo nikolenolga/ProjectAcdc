@@ -1,10 +1,9 @@
 package com.javarush.nikolenko.controller;
 
 import com.javarush.nikolenko.config.NanoSpring;
-import com.javarush.nikolenko.entity.Answer;
-import com.javarush.nikolenko.entity.GameState;
-import com.javarush.nikolenko.service.AnswerService;
-import com.javarush.nikolenko.service.QuestModifyService;
+import com.javarush.nikolenko.dto.AnswerTo;
+import com.javarush.nikolenko.dto.GameState;
+import com.javarush.nikolenko.service.QuestionService;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.RequestHelper;
 import com.javarush.nikolenko.utils.UrlHelper;
@@ -21,15 +20,13 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = {UrlHelper.ADD_ANSWER})
 public class AddAnswerServlet extends HttpServlet {
-    private AnswerService answerService;
-    private QuestModifyService questModifyService;
+    private QuestionService questionService;
 
 
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
-        answerService = NanoSpring.find(AnswerService.class);
-        questModifyService = NanoSpring.find(QuestModifyService.class);
+        questionService = NanoSpring.find(QuestionService.class);
 
     }
 
@@ -55,15 +52,13 @@ public class AddAnswerServlet extends HttpServlet {
             long nextQuestionId = RequestHelper.getLongValue(req, Key.NEXT_QUESTION_ID);
             String finalMessage = req.getParameter(Key.FINAL_MESSAGE);
 
-            Answer answer = Answer.builder()
+            AnswerTo answer = AnswerTo.builder()
                     .answerMessage(answerMessage)
                     .gameState(gameState)
-                    .nextQuestionId(nextQuestionId)
                     .finalMessage(finalMessage)
                     .build();
 
-            answerService.create(answer);
-            questModifyService.addAnswer(questId, questionId, answer.getId());
+            questionService.addNewAnswerToCreatedQuestion(questionId, answer, nextQuestionId);
         }
 
         resp.sendRedirect(redirectPath);

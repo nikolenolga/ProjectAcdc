@@ -1,63 +1,69 @@
 package com.javarush.nikolenko.service;
 
-import com.javarush.nikolenko.config.NanoSpring;
+import com.javarush.nikolenko.dto.*;
 import com.javarush.nikolenko.entity.*;
 import com.javarush.nikolenko.exception.QuestException;
+import com.javarush.nikolenko.mapping.Dto;
+import com.javarush.nikolenko.repository.AnswerRepository;
 import com.javarush.nikolenko.repository.GameRepository;
+import com.javarush.nikolenko.repository.QuestRepository;
+import com.javarush.nikolenko.repository.UserRepository;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.RequestHelper;
+import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 @Slf4j
 @AllArgsConstructor
 @Transactional
 public class GameService {
     private final GameRepository gameRepository;
+    private final QuestRepository questRepository;
+    private final UserRepository userRepository;
     private final AnswerService answerService;
+    private final AnswerRepository answerRepository;
     private final QuestService questService;
 
-    public Optional<Game> create(Game game) {
-        if (game != null && ObjectUtils.allNotNull(game.getPlayer().getId(), game.getQuest().getId(), game.getCurrentQuestionId(), game.getFirstQuestionId())) {
-            gameRepository.create(game);
-            return Optional.of(game);
-        }
-        log.debug("Game creation failed, game - {}", game);
-        return Optional.empty();
-    }
+//    public Optional<GameTo> create(GameTo gameTo) {
+//        if (validateGame(gameTo)) {
+//            return gameRepository.create(Dto.MAPPER.from(gameTo)).map(Dto.MAPPER::from);
+//        }
+//        log.debug("Game creation failed, game - {}", gameTo);
+//        return Optional.empty();
+//    }
+//
+//    public Optional<GameTo> update(GameTo gameTo) {
+//        if (validateGame(gameTo)) {
+//            return gameRepository.update(Dto.MAPPER.from(gameTo)).map(Dto.MAPPER::from);
+//        }
+//        log.debug("Game updating failed, game - {}", gameTo);
+//        return Optional.empty();
+//    }
+//
+//    public void delete(GameTo gameTo) {
+//        gameRepository.delete(Dto.MAPPER.from(gameTo));
+//    }
+//
+//    public Collection<GameTo> getAll() {
+//        return gameRepository.getAll().stream().map(Dto.MAPPER::from).toList();
+//    }
+//
+//    public Optional<GameTo> get(long id) {
+//        return gameRepository.get(id).map(Dto.MAPPER::from);
+//    }
 
-    public Optional<Game> update(Game game) {
-        if (game != null && ObjectUtils.allNotNull(game.getPlayer().getId(), game.getQuest().getId(), game.getCurrentQuestionId(), game.getFirstQuestionId())) {
-            gameRepository.update(game);
-            return Optional.of(game);
-        }
-        log.debug("Game updating failed, game - {}", game);
-        return Optional.empty();
-    }
 
-    public void delete(Game game) {
-        gameRepository.delete(game);
-    }
-
-    public Collection<Game> getAll() {
-        return gameRepository.getAll();
-    }
-
-    public Optional<Game> get(long id) {
-        return gameRepository.get(id);
-    }
-
-    public Game initGame(User player, long questId) {
-        Optional<Quest> optionalQuest = questService.get(questId);
+    public GameTo initGame(long playerId, long questId) {
+        Optional<Quest> optionalQuest = questRepository.get(questId);
+        User player = userRepository.get(playerId).orElse(null);
         if (optionalQuest.isEmpty()) {
             throw new QuestException("Quest with %d not found".formatted(questId));
         }
@@ -66,37 +72,51 @@ public class GameService {
                 .quest(quest)
                 .player(player)
                 .gameState(GameState.GAME)
-                .currentQuestionId(quest.getFirstQuestionId())
-                .firstQuestionId(quest.getFirstQuestionId())
+                .currentQuestion(quest.getFirstQuestion())
                 .build();
-        gameRepository.create(game);
-        return game;
+        return gameRepository.create(game)
+                .map(Dto.MAPPER::from)
+                .orElse(null);
     }
 
-    public Long getCurrentQuestionId(long id) {
-        return get(id).map(Game::getCurrentQuestionId).orElse(0L);
+    public QuestionTo getCurrentQuestionWithAnswers(long id) {
+        Question question = gameRepository.get(id).map(Game::getCurrentQuestion).get();
+        question.getPossibleAnswers();
+        return Dto.MAPPER.from(question);
     }
 
-    public void setNextQuestion(long gameId, long nextQuestionId) {
-        Optional<Game> optionalGame = gameRepository.get(gameId);
-        optionalGame.ifPresent(game -> game.setCurrentQuestionId(nextQuestionId));
+    public boolean processAnswer(long answerId, long gameId) {
+        Answer answer = answerRepository.get(answerId).get();
+        Question nextQuestion = answer.getQuestion();
+        gameRepository.get(gameId).ifPresent(game -> game.setCurrentQuestion(nextQuestion));
+
+        return answer.hasFinalMessage() || answer.isFinal();
     }
+
+//
+//    public void setNextQuestion(long gameId, long nextQuestionId) {
+//        Optional<Game> optionalGame = gameRepository.get(gameId);
+//        optionalGame.ifPresent(game -> game.setCurrentQuestion(nextQuestion));
+//    }
 
     public void restartGame(long gameId) {
-        Optional<Game> optionalGame = gameRepository.get(gameId);
-        optionalGame.ifPresent(Game::restart);
+        gameRepository.get(gameId).ifPresent(Game::restart);
+        log.debug("Game {} restarted.", gameId);
     }
 
-    public void checkAnswer(long answerId, HttpServletRequest req) {
-        Optional<Answer> optionalAnswer = answerService.get(answerId);
-        if (optionalAnswer.isPresent() && optionalAnswer.get().isFinal()) {
-            Answer answer = optionalAnswer.get();
-            HttpSession session = req.getSession();
-            long gameId = RequestHelper.getLongValue(session, Key.GAME_ID);
-            Game game = get(gameId).get();
+    public AnswerTo checkAnswer(long answerId, long gameId) {
+        Answer answer = answerRepository.get(answerId).get();
+
+        if (answer.isFinal()) {
+            Game game = gameRepository.get(gameId).get();
             game.setGameState(answer.isWin() ? GameState.WIN : GameState.LOSE);
-            update(game);
-            log.info("Game {} finished {} and saved to repository.", game.getId(), game.getGameState());
+            log.debug("Game {} finished {}.", game.getId(), game.getGameState());
         }
+
+        return Dto.MAPPER.from(answer);
+    }
+
+    private boolean validateGame(GameTo gameTo) {
+        return gameTo != null && ObjectUtils.allNotNull(gameTo.getQuestId());
     }
 }

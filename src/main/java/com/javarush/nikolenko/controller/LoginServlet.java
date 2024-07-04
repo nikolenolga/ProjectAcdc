@@ -1,7 +1,7 @@
 package com.javarush.nikolenko.controller;
 
 import com.javarush.nikolenko.config.NanoSpring;
-import com.javarush.nikolenko.entity.User;
+import com.javarush.nikolenko.dto.UserTo;
 import com.javarush.nikolenko.service.UserService;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.UrlHelper;
@@ -40,10 +40,11 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = req.getSession();
         String login = req.getParameter(Key.LOGIN);
         String password = req.getParameter(Key.PASSWORD);
-        Optional<User> optionalUser = userService.getUser(login, password);
+
+        Optional<UserTo> optionalUser = userService.getUser(login, password);
 
         if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
+            UserTo user = optionalUser.get();
             session.setAttribute(Key.USER, user);
             session.setAttribute(Key.USER_ID, user.getId());
             session.setAttribute(Key.IS_AUTHORIZED, true);

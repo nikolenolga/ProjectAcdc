@@ -1,11 +1,17 @@
 package com.javarush.nikolenko.service;
 
+import com.javarush.nikolenko.dto.QuestTo;
+import com.javarush.nikolenko.dto.QuestionTo;
 import com.javarush.nikolenko.entity.Quest;
+import com.javarush.nikolenko.entity.Question;
 import com.javarush.nikolenko.exception.QuestException;
+import com.javarush.nikolenko.mapping.Dto;
 import com.javarush.nikolenko.repository.QuestRepository;
+import com.javarush.nikolenko.repository.QuestionRepository;
 import com.javarush.nikolenko.utils.Key;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,66 +23,88 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
+@Slf4j
 @AllArgsConstructor
 @Transactional
 public class QuestService {
-    private static final Logger log = LoggerFactory.getLogger(QuestService.class);
     private final QuestRepository questRepository;
+    private final QuestionRepository questionRepository;
 
-    public Optional<Quest> create(Quest quest) {
-        if (quest != null && ObjectUtils.allNotNull(quest.getName(), quest.getAuthor(), quest.getFirstQuestionId(), quest.getDescription())) {
-            questRepository.create(quest);
-            return Optional.of(quest);
+    public boolean create(QuestTo questTo) {
+        if (validateQuest(questTo)) {
+            questRepository.create(Dto.MAPPER.from(questTo));
         }
-        log.debug("Quest creation failed, quest - {}", quest);
-        return Optional.empty();
+        return questTo.getAuthorId() != 0L;
     }
 
-    public Optional<Quest> update(Quest quest) {
-        if (quest != null && ObjectUtils.allNotNull(quest.getName(), quest.getAuthor(), quest.getFirstQuestionId(), quest.getDescription())) {
+//    public Optional<QuestTo> update(QuestTo questTo) {
+//        if (validateQuest(questTo)) {
+//            return questRepository.update(Dto.MAPPER.from(questTo)).map(Dto.MAPPER::from);
+//        }
+//        log.debug("Quest updating failed, quest - {}", questTo);
+//        return Optional.empty();
+//    }
+
+    public void delete(QuestTo questTo) {
+        questRepository.delete(Dto.MAPPER.from(questTo));
+    }
+
+    public void delete(long questId) {
+        questRepository.get(questId).ifPresent(questRepository::delete);
+    }
+
+    public Collection<QuestTo> getAll() {
+        return questRepository.getAll()
+                .map(Dto.MAPPER::from)
+                .toList();
+    }
+
+    public QuestTo getQuestWithQuestions(long questId) {
+        QuestTo questTo = questRepository.get(questId).map(Dto.MAPPER::from).orElseThrow();
+        questTo.getQuestions();
+        return questTo;
+    }
+
+    public Optional<QuestTo> get(long id) {
+        return questRepository.get(id).map(Dto.MAPPER::from);
+    }
+
+    public void updateQuest(long questId, String name, String description, long firstQuestionId) {
+        Optional<Quest> optionalQuest = questRepository.get(questId);
+        Optional<Question> optionalQuestion = questionRepository.get(firstQuestionId);
+        if (optionalQuest.isPresent() && optionalQuestion.isPresent()) {
+            Quest quest = optionalQuest.get();
+            quest.setName(name);
+            quest.setDescription(description);
+            quest.setFirstQuestion(optionalQuestion.get());
             questRepository.update(quest);
-            return Optional.of(quest);
         }
-        log.debug("Quest updating failed, quest - {}", quest);
-        return Optional.empty();
     }
 
-    public void delete(Quest quest) {
-        questRepository.delete(quest);
+//    public void addQuestion(long questId, long questionId) {
+//        Optional<Quest> optionalQuest = questRepository.get(questId);
+//        Optional<Question> optionalQuestion = questionRepository.get(questionId);
+//        if (optionalQuest.isPresent() && optionalQuestion.isPresent()) {
+//            Quest quest = optionalQuest.get();
+//            quest.addQuestion(optionalQuestion.get());
+//            log.info("Question {} added to quest {}, name - {}", questionId, quest.getId(), quest.getName());
+//        }
+//    }
+
+    public void addNewQuestionToCreatedQuest(long questId, String questionMessage) {
+        Question question = Question.builder()
+                .questionMessage(questionMessage)
+                .build();
+        questionRepository.create(question);
+        questRepository.get(questId).ifPresent(quest -> quest.addQuestion(question));
     }
 
-    public Collection<Quest> getAll() {
-        return questRepository.getAll();
+//    public Long getFirstQuestionId(long id) {
+//        return get(id).map(QuestTo::getFirstQuestionId).orElse(0L);
+//    }
+//
+    private boolean validateQuest(QuestTo questTo) {
+        return questTo != null && ObjectUtils.allNotNull(questTo.getName(), questTo.getAuthorId(), questTo.getFirstQuestionId());
     }
-
-    public Optional<Quest> get(long id) {
-        return questRepository.get(id);
-    }
-
-    public Long getFirstQuestionId(long id) {
-        return get(id).map(Quest::getFirstQuestionId).orElse(0L);
-    }
-
-    public Collection<Quest> getUserQuests(long id) {
-        return questRepository.getUserQuests(id);
-    }
-
-    public String loadTextFromFile(String sPath) {
-        StringBuilder fileText = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(sPath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                fileText.append(line).append("\r\n");
-            }
-        } catch (FileNotFoundException e) {
-            log.error("Loading text failed, can't find file {}", sPath);
-            throw new QuestException(Key.FILE_NOT_FOUND);
-        } catch (IOException e) {
-            log.error("Can't load file {}", sPath);
-            throw new QuestException(Key.FILE_LOAD_ERROR);
-        }
-        return fileText.toString();
-    }
-
 
 }

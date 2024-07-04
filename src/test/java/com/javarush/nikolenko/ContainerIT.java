@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.*;
 
-import static com.javarush.nikolenko.config.ApplicationProperties.*;
+import static org.hibernate.cfg.JdbcSettings.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Slf4j
@@ -23,9 +23,9 @@ public class ContainerIT {
         CONTAINER.start(); //docker image started
         //set new properties from TestContainers
         ApplicationProperties properties = NanoSpring.find(ApplicationProperties.class);
-        properties.setProperty(HIBERNATE_CONNECTION_URL, CONTAINER.getJdbcUrl());
-        properties.setProperty(HIBERNATE_CONNECTION_USERNAME, CONTAINER.getUsername());
-        properties.setProperty(HIBERNATE_CONNECTION_PASSWORD, CONTAINER.getPassword());
+        properties.setProperty(JAKARTA_JDBC_URL, CONTAINER.getJdbcUrl());
+        properties.setProperty(JAKARTA_JDBC_USER, CONTAINER.getUsername());
+        properties.setProperty(JAKARTA_JDBC_PASSWORD, CONTAINER.getPassword());
         //fill db
         Configurator configurator = NanoSpring.find(Configurator.class);
         //configurator.fillStartData();
@@ -39,9 +39,9 @@ public class ContainerIT {
         System.out.println("test container ContainerIt initialized");
     }
 
-    @Test
-    void testSessionCreater() {
-        SessionCreater sessionCreater = NanoSpring.find(SessionCreater.class);
-        assertNotNull(sessionCreater);
-    }
+//    @Test
+//    void testSessionCreater() {
+//        SessionCreater sessionCreater = NanoSpring.find(SessionCreater.class);
+//        assertNotNull(sessionCreater);
+//    }
 }

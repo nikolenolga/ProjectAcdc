@@ -12,4 +12,5 @@ public class QuestionTo {
     String questionMessage;
     Long questId;
     List<AnswerTo> possibleAnswers;
+    String image;
 }

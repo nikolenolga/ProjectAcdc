@@ -1,7 +1,7 @@
 package com.javarush.nikolenko.controller;
 
 import com.javarush.nikolenko.config.NanoSpring;
-import com.javarush.nikolenko.entity.User;
+import com.javarush.nikolenko.dto.UserTo;
 import com.javarush.nikolenko.service.ImageService;
 import com.javarush.nikolenko.service.UserService;
 import com.javarush.nikolenko.utils.Key;
@@ -45,18 +45,15 @@ public class EditUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         long userId = RequestHelper.getLongValue(session, Key.USER_ID);
+        UserTo user = (UserTo) session.getAttribute(Key.USER);
         String name = req.getParameter(Key.NAME);
         String password = req.getParameter(Key.PASSWORD);
-        User user = userService.get(userId).get();
         String redirectPath = UrlHelper.EDIT_USER;
 
         if (req.getParameter(Key.BUTTON_USER_IMG_LOAD) != null) {
             imageService.uploadImage(req, user.getImage());
-        } else if (req.getParameter(Key.BUTTON_SUBMIT) != null && !StringUtils.isAnyBlank(name, password)) {
-            user.setName(name);
-            user.setPassword(password);
-            userService.update(user);
-
+        } else if (req.getParameter(Key.BUTTON_SUBMIT) != null && !StringUtils.isAnyBlank(password)) {
+            userService.update(user, name, password);
             session.setAttribute(Key.USER, user);
         } else {
             redirectPath = UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.EDIT_USER,

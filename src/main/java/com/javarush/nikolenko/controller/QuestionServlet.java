@@ -1,8 +1,8 @@
 package com.javarush.nikolenko.controller;
 
 import com.javarush.nikolenko.config.NanoSpring;
-import com.javarush.nikolenko.entity.Answer;
-import com.javarush.nikolenko.entity.Question;
+import com.javarush.nikolenko.dto.AnswerTo;
+import com.javarush.nikolenko.dto.QuestionTo;
 import com.javarush.nikolenko.service.AnswerService;
 import com.javarush.nikolenko.service.GameService;
 import com.javarush.nikolenko.service.QuestionService;
@@ -25,26 +25,22 @@ import java.util.Collection;
 @WebServlet(urlPatterns = {UrlHelper.QUESTION})
 public class QuestionServlet extends HttpServlet {
     private GameService gameService;
-    private QuestionService questionService;
-    private AnswerService answerService;
 
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
         gameService = NanoSpring.find(GameService.class);
-        questionService = NanoSpring.find(QuestionService.class);
-        answerService = NanoSpring.find(AnswerService.class);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
         long gameId = RequestHelper.getLongValue(session, Key.GAME_ID);
-        long currentQuestionId = gameService.getCurrentQuestionId(gameId);
-        Question question = questionService.get(currentQuestionId).get();
-        Collection<Answer> answers = questionService.getAnswersByQuestionId(currentQuestionId);
 
-        req.setAttribute(Key.QUESTION, question);
+        QuestionTo questionTo = gameService.getCurrentQuestionWithAnswers(gameId);
+        Collection<AnswerTo> answers = questionTo.getPossibleAnswers();
+
+        req.setAttribute(Key.QUESTION, questionTo);
         req.setAttribute(Key.ANSWERS, answers);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher(UrlHelper.getJspPath(UrlHelper.QUESTION));
         requestDispatcher.forward(req, resp);
@@ -52,13 +48,11 @@ public class QuestionServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long answerId = RequestHelper.getLongValue(req, Key.ANSWER_ID);
         HttpSession session = req.getSession(false);
+        long answerId = RequestHelper.getLongValue(req, Key.ANSWER_ID);
         long gameId = RequestHelper.getLongValue(session, Key.GAME_ID);
-        long nextQuestionId = answerService.getNextQuestionId(answerId);
-        gameService.setNextQuestion(gameId, nextQuestionId);
 
-        String redirectPath = answerService.hasFinalMessage(answerId) || answerService.isFinal(answerId)
+        String redirectPath = gameService.processAnswer(answerId, gameId)
                 ? UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.ANSWER, Key.ANSWER_ID, answerId)
                 : UrlHelper.QUESTION;
         resp.sendRedirect(redirectPath);

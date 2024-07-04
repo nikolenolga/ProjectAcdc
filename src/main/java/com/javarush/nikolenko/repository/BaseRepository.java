@@ -22,32 +22,39 @@ import java.util.stream.Stream;
 
 @AllArgsConstructor
 public abstract class BaseRepository<T> implements Repository<T> {
-    private SessionCreater sessionCreater;
+    protected SessionCreater sessionCreater;
     private final Class<T> entityClass;
 
     @Override
-    public Collection<T> getAll() {
+    public Stream<T> getAll() {
         Session session = sessionCreater.getSession();
         Query<T> query = session.createQuery("SELECT entity FROM %s entity".formatted(entityClass.getName()), entityClass);
-        return query.getResultList();
+        return query.getResultList().stream();
     }
 
     @Override
-    public void create(T entity) {
+    public Optional<T> create(T entity) {
         Session session = sessionCreater.getSession();
         session.saveOrUpdate(entity);
+        return Optional.of(entity);
     }
 
     @Override
-    public void update(T entity) {
+    public Optional<T> update(T entity) {
         Session session = sessionCreater.getSession();
         session.merge(entity);
+        return Optional.of(entity);
     }
 
     @Override
     public void delete(T entity) {
         Session session = sessionCreater.getSession();
         session.remove(entity);
+    }
+
+    @Override
+    public void delete(Long id) {
+        get(id).ifPresent(this::delete);
     }
 
     @Override

@@ -1,16 +1,8 @@
 package com.javarush.nikolenko.entity;
 
 import jakarta.persistence.*;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.Cache;
-
-
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,41 +16,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "quest")
 @ToString
-@NamedQueries({
-        @NamedQuery(name = "QUERY_MORE_ID", query = "SELECT q FROM Quest q where id>:id")
-})
-@FetchProfile(
-        name = Quest.FETCH_LAZY_QUESTIONS_AND_JOIN_AUTHOR,
-        fetchOverrides = {
-                @FetchProfile.FetchOverride(
-                        entity = Quest.class,
-                        association = "questions",
-                        mode = FetchMode.JOIN
-                ),
-                @FetchProfile.FetchOverride(
-                        entity = Quest.class,
-                        association = "author",
-                        mode = FetchMode.JOIN
-                )
-        }
-)
-@NamedEntityGraph(
-        name = Quest.GRAPH_LAZY_QUESTIONS_AND_JOIN_AUTHOR,
-        attributeNodes = {
-                @NamedAttributeNode(value = "questions", subgraph = "questions")
-        },
-        subgraphs = {
-                @NamedSubgraph(name = "questions", attributeNodes = {})
-        }
-)
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@OptimisticLocking(type = OptimisticLockType.VERSION)
-public class Quest implements AbstractComponent, Serializable {
-    @Serial
-    private static final long serialVersionUID = -179807072993154676L;
-
-    public static final String GRAPH_LAZY_QUESTIONS_AND_JOIN_AUTHOR = "graphLazyQuestionsAndJoinAuthor";
-    public static final String FETCH_LAZY_QUESTIONS_AND_JOIN_AUTHOR = "fetchLazyQuestionsAndJoinAuthor";
+@Cacheable
+public class Quest implements AbstractComponent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,25 +26,25 @@ public class Quest implements AbstractComponent, Serializable {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_author_id")
     @ToString.Exclude
     private User author;
 
-    @Column(name = "first_question_id")
-    private Long firstQuestionId;
+    @ManyToOne
+    @JoinColumn(name = "first_question_id")
+    private Question firstQuestion;
 
     @Column(name = "description")
+    @ToString.Exclude
     private String description;
-
-    @Version
-    Long version;
 
     @OneToMany(mappedBy = "quest")
     @ToString.Exclude
     private final List<Question> questions = new ArrayList<>();
 
     public void addQuestion(Question question) {
+        question.setQuest(this);
         questions.add(question);
     }
 

@@ -7,13 +7,15 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface Repository<T> {
-    void create(T t);
+    Optional<T> create(T t);
 
-    void update(T t);
+    Optional<T> update(T t);
 
     void delete(T t);
 
-    Collection<T> getAll();
+    void delete(Long id);
+
+    Stream<T> getAll();
 
     Optional<T> get(Long id);
 

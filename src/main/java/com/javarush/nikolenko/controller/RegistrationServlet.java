@@ -1,9 +1,8 @@
 package com.javarush.nikolenko.controller;
 
 import com.javarush.nikolenko.config.NanoSpring;
-import com.javarush.nikolenko.entity.GameState;
-import com.javarush.nikolenko.entity.Role;
-import com.javarush.nikolenko.entity.User;
+import com.javarush.nikolenko.dto.Role;
+import com.javarush.nikolenko.dto.UserTo;
 import com.javarush.nikolenko.service.UserService;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.UrlHelper;
@@ -41,25 +40,23 @@ public class RegistrationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         String login = req.getParameter(Key.LOGIN);
+        String password = req.getParameter(Key.PASSWORD);
+        String name = req.getParameter(Key.NAME);
+        String redirectAddress = UrlHelper.EDIT_USER;
 
-        if (!userService.userExist(login)) {
-            User user = User.builder()
-                    .name(req.getParameter(Key.NAME))
-                    .login(login)
-                    .password(req.getParameter(Key.PASSWORD))
-                    .role(Role.THE_USER)
-                    .build();
+        Optional<UserTo> optionalUser = userService.signIn(login, password, name);
 
-            Optional<User> optionalUser = userService.create(user);
+        if(optionalUser.isPresent()) {
+            UserTo user = optionalUser.get();
 
             session.setAttribute(Key.USER, user);
             session.setAttribute(Key.USER_ID, user.getId());
-            session.setAttribute(Key.IS_AUTHORIZED, optionalUser.isPresent());
-
-            resp.sendRedirect(UrlHelper.EDIT_USER);
+            session.setAttribute(Key.IS_AUTHORIZED, true);
         } else {
-            resp.sendRedirect(UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.REGISTRATION,
-                    Key.ALERT, Key.USER_EXIST));
+            redirectAddress = UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.REGISTRATION,
+                    Key.ALERT, Key.USER_EXIST);
         }
+
+        resp.sendRedirect(redirectAddress);
     }
 }

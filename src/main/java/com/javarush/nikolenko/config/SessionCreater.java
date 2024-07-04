@@ -20,6 +20,8 @@ public class SessionCreater implements Closeable {
 
     @SneakyThrows
     public SessionCreater(ApplicationProperties applicationProperties) {
+        log.info("Start creating SessionFactory with configuration");
+
         Configuration configuration = new Configuration();
         configuration.addProperties(applicationProperties);
 
@@ -30,6 +32,8 @@ public class SessionCreater implements Closeable {
                 .addAnnotatedClass(User.class);
 
         sessionFactory = configuration.buildSessionFactory();
+
+        log.info("Finish creating SessionFactory with configuration");
     }
 
     public Session getSession() {
@@ -39,7 +43,7 @@ public class SessionCreater implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close(){
         sessionFactory.close();
     }
 
@@ -53,29 +57,27 @@ public class SessionCreater implements Closeable {
             sessionBox.set(session);
             session.beginTransaction();
         }
-        log(level.get(), "begin level: {}");
+        log.info(">>> start level: {} session={}", level.get(), sessionBox.get());
     }
 
     public void endTransactional() {
         AtomicInteger level = levelBox.get();
         Session session = sessionBox.get();
-        log(level.get(), "end level: {}");
+        int levelBefourDecrement = level.get();
+
         if (level.decrementAndGet() == 0) {
             try {
                 session.getTransaction().commit();
             } catch (RuntimeException e) {
+                log.warn("<<< on level : {} , session={} is rolledback", levelBefourDecrement, session);
                 session.getTransaction().rollback();
                 throw e;
+            } finally {
+                sessionBox.remove();
+                session.close();
             }
         }
-    }
-
-    private void log(int level, String message) {
-        String simpleName = Thread.currentThread().getStackTrace()[4].toString();
-        String formattedMessage = "%s%d from %s".formatted(message, level, simpleName);
-        System.out.println("t".repeat(level) + formattedMessage);
-        System.out.flush();
-        log.debug(formattedMessage);
+        log.info("<<< end level: {}, session={}", levelBefourDecrement, session);
     }
 
 }

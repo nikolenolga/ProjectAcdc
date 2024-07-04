@@ -14,4 +14,5 @@ public class QuestTo {
     Long firstQuestionId;
     String description;
     List<QuestionTo> questions;
+    String image;
 }

@@ -1,6 +1,5 @@
 package com.javarush.nikolenko.dto;
 
-import com.javarush.nikolenko.entity.GameState;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,4 +12,18 @@ public class AnswerTo {
     GameState gameState;
     Long nextQuestionId;
     Long questionId;
+    String image;
+
+    public boolean isFinal() {
+        return gameState != GameState.GAME;
+    }
+
+    public boolean isWin() {
+        return gameState == GameState.WIN;
+    }
+
+    public boolean isLose() {
+        return gameState == GameState.LOSE;
+    }
+
 }

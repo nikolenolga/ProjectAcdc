@@ -10,11 +10,4 @@ public class QuestRepository extends BaseRepository<Quest> {
     public QuestRepository(SessionCreater sessionCreater) {
         super(sessionCreater, Quest.class);
     }
-
-    public Collection<Quest> getUserQuests(long id) {
-        return getAll()
-                .stream()
-                .filter(quest -> quest.getAuthor().getId() == id)
-                .toList();
-    }
 }

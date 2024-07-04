@@ -1,9 +1,9 @@
 package com.javarush.nikolenko.controller;
 
 import com.javarush.nikolenko.config.NanoSpring;
-import com.javarush.nikolenko.entity.Quest;
-import com.javarush.nikolenko.entity.User;
-import com.javarush.nikolenko.service.QuestModifyService;
+import com.javarush.nikolenko.dto.QuestTo;
+import com.javarush.nikolenko.dto.UserTo;
+import com.javarush.nikolenko.service.QuestEditService;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.RequestHelper;
 import com.javarush.nikolenko.utils.UrlHelper;
@@ -22,17 +22,16 @@ import java.util.Optional;
 
 @WebServlet(urlPatterns = {UrlHelper.QUEST_TEXT_EDITOR})
 public class QuestTextEditorServlet extends HttpServlet {
-    private QuestModifyService questModifyService;
+    private QuestEditService questEditService;
 
     @SneakyThrows
     @Override
     public void init(ServletConfig config) throws ServletException {
-        questModifyService = NanoSpring.find(QuestModifyService.class);
+        questEditService = NanoSpring.find(QuestEditService.class);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String jspPath = UrlHelper.getJspPath(UrlHelper.QUEST_TEXT_EDITOR);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher(jspPath);
         requestDispatcher.forward(req, resp);
@@ -43,12 +42,11 @@ public class QuestTextEditorServlet extends HttpServlet {
         HttpSession session = req.getSession();
         String text = req.getParameter(Key.TEXT);
         session.setAttribute(Key.TEXT, text);
-        long userId = RequestHelper.getLongValue(session, Key.USER_ID);
-        User user = (User) session.getAttribute(Key.USER);
+        UserTo user = (UserTo) session.getAttribute(Key.USER);
         String redirectPath = UrlHelper.QUEST_TEXT_EDITOR;
 
         if (req.getParameter(Key.BUTTON_ADD_QUEST) != null) {
-            Optional<Quest> optionalQuest = questModifyService.parseQuest(user, text);
+            Optional<QuestTo> optionalQuest = questEditService.parseQuest(user, text);
             redirectPath = optionalQuest.isEmpty()
                     ? UrlHelper.TWO_PARAM_TEMPLATE.formatted(UrlHelper.QUEST_TEXT_EDITOR,
                         Key.HAS_ALERTS, true,
