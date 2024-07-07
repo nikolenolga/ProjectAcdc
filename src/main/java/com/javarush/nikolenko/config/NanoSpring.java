@@ -1,16 +1,5 @@
 package com.javarush.nikolenko.config;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.*;
-import java.net.URI;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
-
 import com.javarush.nikolenko.exception.QuestException;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
@@ -19,6 +8,20 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.bind.annotation.*;
 import net.bytebuddy.matcher.ElementMatchers;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
 
@@ -178,7 +181,8 @@ public class NanoSpring {
         return constructor.newInstance(parameters);
     }
 
-    public class Interceptor {
+
+    public static class Interceptor {
         @RuntimeType
         public static Object intercept(@This Object self,
                                        @Origin Method method,

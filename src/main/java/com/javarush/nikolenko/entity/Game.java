@@ -13,7 +13,6 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Slf4j
 @Getter
 @Setter
 @Builder
@@ -22,6 +21,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "game")
 @ToString
+@Cacheable
 public class Game implements AbstractComponent {
 
     @Id
@@ -29,7 +29,7 @@ public class Game implements AbstractComponent {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "game_state")
+    @Column(name = "game_state", nullable = false)
     private GameState gameState;
 
     @ManyToOne
@@ -38,7 +38,7 @@ public class Game implements AbstractComponent {
     private Question currentQuestion;
 
     @ManyToOne
-    @JoinColumn(name = "user_player_id")
+    @JoinColumn(name = "player_id")
     @ToString.Exclude
     private User player;
 
@@ -50,7 +50,6 @@ public class Game implements AbstractComponent {
     public void restart() {
         this.gameState = GameState.GAME;
         this.currentQuestion = this.quest.getFirstQuestion();
-        log.debug("Game restarted, gameId - {}, questId - {}, userId - {}", id, quest.getId(), player.getId());
     }
 
     public boolean isFinished() {

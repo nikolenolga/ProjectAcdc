@@ -37,14 +37,9 @@ public class SessionCreater implements Closeable {
     }
 
     public Session getSession() {
-        return sessionBox.get() == null || sessionBox.get().isOpen()
+        return sessionBox.get() == null || !sessionBox.get().isOpen()
                 ? sessionFactory.openSession()
                 : sessionBox.get();
-    }
-
-    @Override
-    public void close(){
-        sessionFactory.close();
     }
 
     public void beginTransactional() {
@@ -60,24 +55,30 @@ public class SessionCreater implements Closeable {
         log.info(">>> start level: {} session={}", level.get(), sessionBox.get());
     }
 
+
     public void endTransactional() {
         AtomicInteger level = levelBox.get();
         Session session = sessionBox.get();
-        int levelBefourDecrement = level.get();
+        //log.info("\t\tcheck tx: {} session={}", level.get(), session);
+        log.info("<<< end level: {} session={}", level.get(), session);
 
         if (level.decrementAndGet() == 0) {
+            sessionBox.remove();
             try {
                 session.getTransaction().commit();
-            } catch (RuntimeException e) {
-                log.warn("<<< on level : {} , session={} is rolledback", levelBefourDecrement, session);
-                session.getTransaction().rollback();
-                throw e;
-            } finally {
-                sessionBox.remove();
                 session.close();
+            } catch (RuntimeException e) {
+                session.getTransaction().rollback();
+                session.close();
+                throw e;
             }
         }
-        log.info("<<< end level: {}, session={}", levelBefourDecrement, session);
+
+    }
+
+
+    public void close() {
+        sessionFactory.close();
     }
 
 }

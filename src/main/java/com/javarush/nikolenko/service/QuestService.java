@@ -4,15 +4,19 @@ import com.javarush.nikolenko.dto.QuestTo;
 import com.javarush.nikolenko.dto.QuestionTo;
 import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.entity.Question;
+import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.mapping.Dto;
 import com.javarush.nikolenko.repository.QuestRepository;
 import com.javarush.nikolenko.repository.QuestionRepository;
+import com.javarush.nikolenko.repository.UserRepository;
 import com.javarush.nikolenko.utils.Key;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,14 +31,35 @@ import java.util.Optional;
 @AllArgsConstructor
 @Transactional
 public class QuestService {
+    private final UserRepository userRepository;
     private final QuestRepository questRepository;
     private final QuestionRepository questionRepository;
 
-    public boolean create(QuestTo questTo) {
-        if (validateQuest(questTo)) {
-            questRepository.create(Dto.MAPPER.from(questTo));
+    public Optional<QuestTo> create(QuestTo questTo) {
+        Quest quest = Dto.MAPPER.from(questTo);
+        if (validateQuest(quest)) {
+            return questRepository.create(quest).map(Dto.MAPPER::from);
         }
-        return questTo.getAuthorId() != 0L;
+        return Optional.empty();
+    }
+
+    public Optional<QuestTo> createQuest(long authorId, String name, String description) {
+        User author = userRepository.get(authorId).orElseThrow();
+        Question firstQuestion = Question.builder().build();
+        questionRepository.create(firstQuestion);
+
+        Quest quest = Quest.builder()
+                .name(name)
+                .description(description)
+                .firstQuestion(firstQuestion)
+                .author(author)
+                .build();
+        quest.addQuestion(firstQuestion);
+
+        if (validateQuest(quest)) {
+            return questRepository.create(quest).map(Dto.MAPPER::from);
+        }
+        return Optional.empty();
     }
 
 //    public Optional<QuestTo> update(QuestTo questTo) {
@@ -55,6 +80,7 @@ public class QuestService {
 
     public Collection<QuestTo> getAll() {
         return questRepository.getAll()
+                .stream()
                 .map(Dto.MAPPER::from)
                 .toList();
     }
@@ -92,6 +118,7 @@ public class QuestService {
 //    }
 
     public void addNewQuestionToCreatedQuest(long questId, String questionMessage) {
+        if(questionMessage == null || questionMessage.isBlank()) throw new QuestException("questionMessage is null or empty");
         Question question = Question.builder()
                 .questionMessage(questionMessage)
                 .build();
@@ -103,8 +130,16 @@ public class QuestService {
 //        return get(id).map(QuestTo::getFirstQuestionId).orElse(0L);
 //    }
 //
-    private boolean validateQuest(QuestTo questTo) {
-        return questTo != null && ObjectUtils.allNotNull(questTo.getName(), questTo.getAuthorId(), questTo.getFirstQuestionId());
+    private boolean validateQuest(Quest quest) {
+        return quest != null && ObjectUtils.allNotNull(quest.getName());
+    }
+
+    public int countAllQuests() {
+        return questRepository.countAllQuests();
+    }
+
+    public boolean questWithCurrentNameExist(String name) {
+        return questRepository.questWithCurrentNameExist(name);
     }
 
 }

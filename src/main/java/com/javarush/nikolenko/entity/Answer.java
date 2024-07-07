@@ -25,7 +25,7 @@ public class Answer implements AbstractComponent {
     private String finalMessage;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "game_state")
+    @Column(name = "game_state", nullable = false)
     protected GameState gameState;
 
     @ManyToOne
@@ -47,7 +47,7 @@ public class Answer implements AbstractComponent {
     }
 
     public boolean hasFinalMessage() {
-        return !finalMessage.isBlank();
+        return finalMessage != null && !finalMessage.isBlank();
     }
 
     public boolean isWin() {

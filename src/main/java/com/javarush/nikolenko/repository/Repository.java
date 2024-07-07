@@ -1,7 +1,5 @@
 package com.javarush.nikolenko.repository;
 
-import com.javarush.nikolenko.entity.User;
-
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -13,11 +11,11 @@ public interface Repository<T> {
 
     void delete(T t);
 
-    void delete(Long id);
+    void delete(long id);
 
-    Stream<T> getAll();
+    Collection<T> getAll();
 
-    Optional<T> get(Long id);
+    Optional<T> get(long id);
 
     Stream<T> find(T pattern);
 }

@@ -4,6 +4,7 @@ import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.dto.GameState;
 import com.javarush.nikolenko.dto.QuestTo;
 import com.javarush.nikolenko.dto.QuestionTo;
+import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.service.QuestEditService;
 import com.javarush.nikolenko.service.QuestService;
 import com.javarush.nikolenko.utils.Key;
@@ -51,7 +52,7 @@ public class EditQuestServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws QuestException, IOException, ServletException {
         long questId = Long.parseLong(req.getParameter(Key.QUEST_ID));
 
         questEditService.editQuest(req);

@@ -8,18 +8,14 @@ import com.javarush.nikolenko.entity.User;
 import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.mapping.Dto;
 import com.javarush.nikolenko.repository.UserRepository;
-import com.javarush.nikolenko.utils.Key;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Slf4j
 @AllArgsConstructor
@@ -36,10 +32,10 @@ public class UserService {
 //    }
 
     public void update(UserTo userTo, String name, String password) {
-        if (!userTo.getName().equals(name) && !userTo.getPassword().equals(password)) {
+        if (!userTo.getName().equals(name) || !userTo.getPassword().equals(password)) {
             userTo.setName(name);
             userTo.setPassword(password);
-            userRepository.update(Dto.MAPPER.from(userTo)).map(Dto.MAPPER::from);
+            userRepository.update(Dto.MAPPER.from(userTo));
         }
     }
 
@@ -64,7 +60,7 @@ public class UserService {
 
     public Optional<UserTo> signIn(String currentLogin, String currentPassword, String currentName) {
 
-        if(ObjectUtils.anyNull(currentPassword, currentLogin) || userRepository.userExist(currentLogin)) return Optional.empty();
+        if(ObjectUtils.anyNull(currentPassword, currentLogin) || userRepository.userWithCurrentLoginExist(currentLogin)) return Optional.empty();
 
         User user = User.builder()
                 .name(currentName)
@@ -100,12 +96,18 @@ public class UserService {
                 .toList();
     }
 
-    public UserTo createAnonymousUser() {
+    public Optional<UserTo> createAnonymousUser() {
         long count = userRepository.countAllUsers();
         long index = count + (int) (Math.random() * 100);
-//        while (userRepository.userExist("anonymous" + index)) {
-//            index = count + (int) (Math.random() * 100);
-//        }
+
+        int maxTries = 5;
+        boolean userExist;
+        while ((userExist = userRepository.userWithCurrentLoginExist("anonymous" + index)) && maxTries-- > 0) {
+            index = count + (int) (Math.random() * 100);
+        }
+
+        if(userExist) return Optional.empty();
+
         User user = User.builder()
                 .login("anonymous" + index)
                 .role(Role.GUEST)
@@ -115,6 +117,6 @@ public class UserService {
             throw new QuestException("Cannot create anonymous user");
         }
 
-        return optionalUser.map(Dto.MAPPER::from).get();
+        return optionalUser.map(Dto.MAPPER::from);
     }
 }

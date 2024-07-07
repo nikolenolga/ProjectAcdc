@@ -28,7 +28,6 @@ public class ContainerIT {
         properties.setProperty(JAKARTA_JDBC_PASSWORD, CONTAINER.getPassword());
         //fill db
         Configurator configurator = NanoSpring.find(Configurator.class);
-        //configurator.fillStartData();
     }
 
     public ContainerIT() {
@@ -36,12 +35,12 @@ public class ContainerIT {
     }
 
     public static void init() {
-        System.out.println("test container ContainerIt initialized");
+        log.info("test container ContainerIt initialized");
     }
 
-//    @Test
-//    void testSessionCreater() {
-//        SessionCreater sessionCreater = NanoSpring.find(SessionCreater.class);
-//        assertNotNull(sessionCreater);
-//    }
+    @Test
+    void testSessionCreater() {
+        SessionCreater sessionCreater = NanoSpring.find(SessionCreater.class);
+        assertNotNull(sessionCreater);
+    }
 }

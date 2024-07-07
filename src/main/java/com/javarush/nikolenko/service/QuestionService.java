@@ -74,12 +74,40 @@ public class QuestionService {
 //        }
 //    }
 
+//    public void addNewAnswerToCreatedQuestion(long questionId, AnswerTo answerTo, long nextQuestionId) {
+//        Answer answer = Dto.MAPPER.from(answerTo);
+//        answerRepository.create(answer).orElseThrow();
+//
+//        questionRepository.get(nextQuestionId).ifPresent(answer::setNextQuestion);
+//        questionRepository.get(questionId).ifPresent(question -> question.addPossibleAnswer(answer));
+//    }
+
     public void addNewAnswerToCreatedQuestion(long questionId, AnswerTo answerTo, long nextQuestionId) {
-        Answer answer = Dto.MAPPER.from(answerTo);
-        questionRepository.get(questionId).ifPresent(answer::setQuestion);
+        Answer answer = Answer.builder()
+                .answerMessage(answerTo.getAnswerMessage())
+                .finalMessage(answerTo.getFinalMessage())
+                .gameState(answerTo.getGameState())
+                .build();
         answerRepository.create(answer).orElseThrow();
-        questionRepository.get(questionId).ifPresent(question -> question.addPossibleAnswer(answer));
+
+        Question question = questionRepository.get(questionId).orElseThrow();
+        question.addPossibleAnswer(answer);
+
+        Optional<Question> optionalNextQuestion;
+        if(nextQuestionId != 0L && (optionalNextQuestion = questionRepository.get(nextQuestionId)).isPresent()) {
+            Question nextQuestion = optionalNextQuestion.get();
+            if(nextQuestion.getQuest().equals(question.getQuest())) {
+                answer.setNextQuestion(nextQuestion);
+            }
+        }
+
+
     }
+
+//    public void addNewAnswerToQuestion(AnswerTo answerTo) {
+//        Answer answer = Dto.MAPPER.from(answerTo);
+//        answerRepository.create(answer).orElseThrow();
+//    }
 
 //    private boolean validateQuestion(QuestionTo questionTo) {
 //        return questionTo != null && ObjectUtils.allNotNull(questionTo.getQuestionMessage());

@@ -42,14 +42,14 @@ public class QuestTextEditorServlet extends HttpServlet {
         HttpSession session = req.getSession();
         String text = req.getParameter(Key.TEXT);
         session.setAttribute(Key.TEXT, text);
-        UserTo user = (UserTo) session.getAttribute(Key.USER);
+        long userId = RequestHelper.getLongValue(session, Key.USER_ID);
         String redirectPath = UrlHelper.QUEST_TEXT_EDITOR;
 
         if (req.getParameter(Key.BUTTON_ADD_QUEST) != null) {
-            Optional<QuestTo> optionalQuest = questEditService.parseQuest(user, text);
+            Optional<QuestTo> optionalQuest = questEditService.parseQuest(userId, text);
             redirectPath = optionalQuest.isEmpty()
                     ? UrlHelper.TWO_PARAM_TEMPLATE.formatted(UrlHelper.QUEST_TEXT_EDITOR,
-                        Key.HAS_ALERTS, true,
+                        Key.HAS_ALERTS, (Boolean) true,
                         Key.ALERT, Key.PARSE_EXCEPTION)
                     : UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.EDIT_QUEST,
                         Key.QUEST_ID, optionalQuest.get().getId());

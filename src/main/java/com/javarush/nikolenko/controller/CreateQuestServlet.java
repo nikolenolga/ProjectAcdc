@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @WebServlet(urlPatterns = {UrlHelper.CREATE_QUEST})
 public class CreateQuestServlet extends HttpServlet {
@@ -41,15 +42,10 @@ public class CreateQuestServlet extends HttpServlet {
         long authorId = RequestHelper.getLongValue(req.getSession(), Key.USER_ID);
         String description = req.getParameter(Key.DESCRIPTION);
 
-        QuestTo quest = QuestTo.builder()
-                .name(name)
-                .authorId(authorId)
-                .description(description)
-                .firstQuestionId(0L)
-                .build();
+        Optional<QuestTo> optionalQuest = questService.createQuest(authorId, name, description);
 
-        String redirectAdress = questService.create(quest)
-                ? UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.EDIT_QUEST, Key.QUEST_ID, quest.getId())
+        String redirectAdress = optionalQuest.isPresent()
+                ? UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.EDIT_QUEST, Key.QUEST_ID, optionalQuest.get().getId())
                 : UrlHelper.CREATE_QUEST;
 
         resp.sendRedirect(redirectAdress);

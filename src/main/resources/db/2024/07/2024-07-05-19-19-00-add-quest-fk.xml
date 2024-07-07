@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="2024-07-05-19-19-00-add-quest-fk-first_question" author="nikolenko">
+        <addForeignKeyConstraint baseColumnNames="first_question_id"
+                                 baseTableName="quest"
+                                 constraintName="fk_quest_first_question"
+                                 onDelete="SET NULL"
+                                 onUpdate="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="question"/>
+    </changeSet>
+
+    <changeSet id="2024-07-05-19-19-00-add-quest-fk-users" author="nikolenko">
+        <addForeignKeyConstraint baseColumnNames="author_id"
+                                 baseTableName="quest"
+                                 constraintName="fk_quest_users"
+                                 onDelete="SET NULL"
+                                 onUpdate="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+
+</databaseChangeLog>

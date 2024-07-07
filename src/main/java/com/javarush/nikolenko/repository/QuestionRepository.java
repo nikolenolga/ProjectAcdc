@@ -17,8 +17,9 @@ public class QuestionRepository extends BaseRepository<Question> {
     }
 
     public Collection<Answer> getAnswersByQuestionId(long id) {
-        return get(id)
-                .map(Question::getPossibleAnswers)
-                .orElse(new ArrayList<>());
+        Session session = sessionCreater.getSession();
+        Question question = session.find(Question.class, id);
+
+        return question.getPossibleAnswers();
     }
 }

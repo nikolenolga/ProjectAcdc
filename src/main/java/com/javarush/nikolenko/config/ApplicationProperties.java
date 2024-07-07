@@ -22,13 +22,12 @@ public class ApplicationProperties extends Properties {
 
     @SneakyThrows
     public ApplicationProperties() {
-        String pathFor = CLASSES_ROOT + File.separator + "application.properties";
-        System.out.println(pathFor);
-        log.info(pathFor);
+        String pathFor = CLASSES_ROOT + File.separator + APPLICATION_PROPERTIES_FILE;
+        log.info("search {} file at {} path", APPLICATION_PROPERTIES_FILE, pathFor);
         String driver = "NOT SETTED";
 
         try {
-            this.load(new FileReader(CLASSES_ROOT + File.separator + "application.properties"));
+            this.load(new FileReader(pathFor));
             driver = this.getProperty(JAKARTA_JDBC_DRIVER);
             Class.forName(driver);
         } catch (ClassNotFoundException e) {

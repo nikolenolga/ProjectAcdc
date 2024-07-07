@@ -46,7 +46,7 @@
                             <input id="password"
                                    name="password"
                                    type="password"
-                                   value="admin-admin"
+                                   value="admin"
                                    placeholder="your password"
                                    class="login-input"
                                    required="">

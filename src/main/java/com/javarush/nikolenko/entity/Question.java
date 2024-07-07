@@ -31,7 +31,8 @@ public class Question implements AbstractComponent {
     @ToString.Exclude
     private Quest quest;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany
+    @JoinColumn(name = "question_id")
     @ToString.Exclude
     private final List<Answer> possibleAnswers = new ArrayList<>();
 

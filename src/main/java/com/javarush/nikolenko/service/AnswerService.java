@@ -45,10 +45,12 @@ public class AnswerService {
         Optional<Question> nextQuestion = questionRepository.get(nextQuestionId);
         if (optionalAnswer.isPresent()) {
             Answer answer = optionalAnswer.get();
-            nextQuestion.ifPresent(answer::setNextQuestion);
-            answer.setNextQuestion(nextQuestion.orElse(null));
+            if(nextQuestion.isPresent() && answer.getQuestion().getQuest().equals(nextQuestion.get().getQuest())) {
+                answer.setNextQuestion(nextQuestion.get());
+            }
             answer.setFinalMessage(finalMessage);
             answer.setGameState(gameState);
+            answer.setAnswerMessage(answerMessage);
         }
     }
 

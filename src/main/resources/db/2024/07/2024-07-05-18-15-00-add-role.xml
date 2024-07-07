@@ -5,15 +5,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-<!--    CREATE TABLE IF NOT EXISTS role-->
-<!--    (-->
-<!--    value VARCHAR(128) NOT NULL,-->
-<!--    PRIMARY KEY (value)-->
-<!--    );-->
-
-    <changeSet id="2024-04-23-20-53-50-add-role" author="nikolenko">
+    <changeSet id="2024-07-05-18-15-00-add-role" author="nikolenko">
         <createTable tableName="role">
-            <column name="value" type="varchar(128)">
+            <column name="value" type="varchar(64)">
                 <constraints nullable="false"
                              primaryKey="true"
                              primaryKeyName="pk_role"/>
@@ -21,7 +15,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="2024-04-23-20-53-50-add-role-value" author="nikolenko">
+    <changeSet id="2024-07-05-18-15-00-add-role-values" author="nikolenko">
         <insert tableName="role">
             <column name="value">ADMIN</column>
         </insert>

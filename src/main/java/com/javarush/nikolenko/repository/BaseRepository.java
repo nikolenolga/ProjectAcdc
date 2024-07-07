@@ -1,16 +1,14 @@
 package com.javarush.nikolenko.repository;
 
-import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.config.SessionCreater;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import java.lang.reflect.Field;
@@ -20,16 +18,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public abstract class BaseRepository<T> implements Repository<T> {
-    protected SessionCreater sessionCreater;
+    protected final SessionCreater sessionCreater;
     private final Class<T> entityClass;
 
     @Override
-    public Stream<T> getAll() {
+    public Collection<T> getAll() {
         Session session = sessionCreater.getSession();
-        Query<T> query = session.createQuery("SELECT entity FROM %s entity".formatted(entityClass.getName()), entityClass);
-        return query.getResultList().stream();
+        Query<T> query = session.createQuery("SELECT entity FROM %s entity".formatted(entityClass.getName()),
+                entityClass);
+        return query.list();
     }
 
     @Override
@@ -53,15 +52,15 @@ public abstract class BaseRepository<T> implements Repository<T> {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(long id) {
         get(id).ifPresent(this::delete);
     }
 
     @Override
-    public Optional<T> get(Long id) {
+    public Optional<T> get(long id) {
         Session session = sessionCreater.getSession();
-        T entity = session.find(entityClass, id);
-        return  Optional.of(entity);
+        T entity = session.find(entityClass, (Long) id);
+        return  Optional.ofNullable(entity);
     }
 
     @Override

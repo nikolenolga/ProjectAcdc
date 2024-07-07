@@ -1,428 +1,84 @@
 package com.javarush.nikolenko.service;
 
-import com.javarush.nikolenko.entity.Answer;
+import com.javarush.nikolenko.dto.AnswerTo;
 import com.javarush.nikolenko.dto.GameState;
+import com.javarush.nikolenko.entity.Answer;
+import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.entity.Question;
 import com.javarush.nikolenko.mapping.Dto;
 import com.javarush.nikolenko.repository.AnswerRepository;
+import com.javarush.nikolenko.repository.QuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
-import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class AnswerServiceTest {
-//    @Mock
-//    private AnswerRepository answerRepository;
-//
-//    @InjectMocks
-//    private AnswerService answerService;
-//
-//    @BeforeEach
-//    void setUp() {
-//        MockitoAnnotations.openMocks(this);
-//    }
-//
-//    @Test
-//    void givenNullAnswer_whenCreate_thenReturnEmptyOptional() {
-//        //given
-//        Answer answer = null;
-//
-//        //when
-//        Optional<Answer> actual = answerService.create(answer);
-//
-//        //then
-//        Optional<Answer> expected = Optional.empty();
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void givenNullAnswerMessage_whenCreate_thenReturnEmptyOptional() {
-//        //given
-//        String answerMessage = null;
-//        Answer answer = Answer.builder()
-//                .id(0L)
-//                .answerMessage(answerMessage)
-//                .finalMessage("finalMessage")
-//                .gameState(GameState.GAME)
-//                .nextQuestionId(1L)
-//                .question(new Question())
-//                .build();
-//
-//        //when
-//        Optional<Answer> actual = answerService.create(answer);
-//
-//        //then
-//        Optional<Answer> expected = Optional.empty();
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void givenNullGameState_whenCreate_thenReturnEmptyOptional() {
-//        //given
-//        GameState gameState = null;
-//        Answer answer = Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage("finalMessage")
-//                .gameState(gameState)
-//                .nextQuestionId(1L)
-//                .question(new Question())
-//                .build();
-//
-//        //when
-//        Optional<Answer> actual = answerService.create(answer);
-//
-//        //then
-//        Optional<Answer> expected = Optional.empty();
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void givenNullFinalMessage_whenCreate_thenReturnEmptyOptional() {
-//        //given
-//        String finalMessage = null;
-//        Answer answer = Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage(finalMessage)
-//                .gameState(GameState.GAME)
-//                .nextQuestionId(1L)
-//                .question(new Question())
-//                .build();
-//
-//        //when
-//        Optional<Answer> actual = answerService.create(answer);
-//
-//        //then
-//        Optional<Answer> expected = Optional.empty();
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void givenValidAnswer_whenCreate_thenReturnOptional() {
-//        //given
-//        Answer answer = Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage("finalMessage")
-//                .gameState(GameState.GAME)
-//                .nextQuestionId(3L)
-//                .question(new Question())
-//                .build();
-//
-//        //when
-//        Optional<Answer> actual = answerService.create(answer);
-//
-//        //then
-//        Optional<Answer> expected = Optional.of(answer);
-//        assertTrue(actual.isPresent());
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void givenNullAnswer_whenUpdate_thenReturnEmptyOptional() {
-//        //given
-//        Answer answer = null;
-//
-//        //when
-//        Optional<Answer> actual = answerService.update(answer);
-//
-//        //then
-//        Optional<Answer> expected = Optional.empty();
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void givenNullAnswerMessage_whenUpdate_thenReturnEmptyOptional() {
-//        //given
-//        String answerMessage = null;
-//        Answer answer = Answer.builder()
-//                .id(0L)
-//                .answerMessage(answerMessage)
-//                .finalMessage("finalMessage")
-//                .gameState(GameState.GAME)
-//                .nextQuestionId(3L)
-//                .question(new Question())
-//                .build();
-//
-//        //when
-//        Optional<Answer> actual = answerService.update(answer);
-//
-//        //then
-//        Optional<Answer> expected = Optional.empty();
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void givenNullGameState_whenUpdate_thenReturnEmptyOptional() {
-//        //given
-//        GameState gameState = null;
-//        Answer answer = Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage("finalMessage")
-//                .gameState(gameState)
-//                .nextQuestionId(3L)
-//                .question(new Question())
-//                .build();
-//
-//        //when
-//        Optional<Answer> actual = answerService.update(answer);
-//
-//        //then
-//        Optional<Answer> expected = Optional.empty();
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void givenNullFinalMessage_whenUpdate_thenReturnEmptyOptional() {
-//        //given
-//        String finalMessage = null;
-//        Answer answer = Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage(finalMessage)
-//                .gameState(GameState.GAME)
-//                .nextQuestionId(3L)
-//                .question(new Question())
-//                .build();
-//
-//        //when
-//        Optional<Answer> actual = answerService.update(answer);
-//
-//        //then
-//        Optional<Answer> expected = Optional.empty();
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void givenValidAnswer_whenUpdate_thenReturn() {
-//        //given
-//        Answer expected = Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage("finalMessage")
-//                .gameState(GameState.GAME)
-//                .nextQuestionId(3L)
-//                .question(new Question())
-//                .build();
-//        //when
-//        Optional<Answer> actual = answerService.update(expected);
-//
-//        //then
-//        assertTrue(actual.isPresent());
-//        assertEquals(expected, actual.get());
-//    }
-//
-//    @Test
-//    void givenAnswer_whenAnswerServiceDelete_thenAnswerRepositoryDelete() {
-//        //given
-//        Answer answer = Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage("finalMessage")
-//                .gameState(GameState.GAME)
-//                .nextQuestionId(3L)
-//                .question(new Question())
-//                .build();
-//        //when
-//        answerService.delete(Dto.MAPPER.from(answer));
-//        //then
-//        verify(answerRepository, times(1)).delete(answer);
-//    }
-//
-//    @Test
-//    void givenAnswersInRepository_whenGetAll_thenEqualCollections() {
-//        //given
-//        Collection<Answer> expectedAnswers = Stream.generate(() ->
-//                Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage("finalMessage")
-//                .gameState(GameState.GAME)
-//                .nextQuestionId((long) (Math.random() * 35))
-//                .question(new Question())
-//                .build())
-//                        .limit(30)
-//                        .collect(Collectors.toList());
-//        when(answerRepository.getAll()).thenReturn(expectedAnswers);
-//
-//        //when
-//        Collection<Answer> actualAnswers = answerService.getAll();
-//        //then
-//        assertEquals(expectedAnswers, actualAnswers);
-//    }
-//
-//    @Test
-//    void givenValidAnswerIdInRepository_whenGet_thenPresentValue() {
-//        //given
-//        Answer expectedAnswer = Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage("finalMessage")
-//                .gameState(GameState.GAME)
-//                .nextQuestionId(3L)
-//                .question(new Question())
-//                .build();
-//        when(answerRepository.get(5L)).thenReturn(Optional.of(expectedAnswer));
-//
-//        //when
-//        Optional<Answer> actualAnswer = answerService.get(5L);
-//
-//        //then
-//        assertTrue(actualAnswer.isPresent());
-//        assertEquals(expectedAnswer, actualAnswer.get());
-//    }
-//
-//    @Test
-//    void givenInValidAnswerIdInRepository_whenGet_thenEmptyValue() {
-//        //given
-//        when(answerRepository.get(2L)).thenReturn(Optional.empty());
-//        //when
-//        Optional<Answer> actualAnswer = answerService.get(2L);
-//        //then
-//        assertFalse(actualAnswer.isPresent());
-//    }
-//
-//    @Test
-//    void givenValidAnswerWithFinalMessage_whenHasFinalMessage_thenCorrect() {
-//        //given
-//        String finalMessage = "finalMessage";
-//        Answer answer = Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage(finalMessage)
-//                .gameState(GameState.GAME)
-//                .nextQuestionId(3L)
-//                .question(new Question())
-//                .build();
-//        //when
-//        when(answerRepository.get(2L)).thenReturn(Optional.of(answer));
-//        //then
-//        assertTrue(answerService.hasFinalMessage(2L));
-//    }
-//
-//    @Test
-//    void givenNullAnswer_whenHasFinalMessage_thenFalse() {
-//        //given //when
-//        when(answerRepository.get(2L)).thenReturn(Optional.empty());
-//        //then
-//        assertFalse(answerService.hasFinalMessage(2L));
-//    }
-//
-//    @Test
-//    void givenValidAnswerWithEmptyFinalMessage_whenHasFinalMessage_thenFalse() {
-//        //given
-//        String finalMessage = "";
-//        Answer answer = Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage(finalMessage)
-//                .gameState(GameState.GAME)
-//                .nextQuestionId(3L)
-//                .question(new Question())
-//                .build();
-//        //when
-//        when(answerRepository.get(2L)).thenReturn(Optional.of(answer));
-//        //then
-//        assertFalse(answerService.hasFinalMessage(2L));
-//    }
-//
-//    @Test
-//    void givenWinAnswer_whenIsFinal_thenTrue() {
-//        //given
-//        Answer answer = Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage("finalMessage")
-//                .gameState(GameState.GAME)
-//                .nextQuestionId(3L)
-//                .question(new Question())
-//                .build();
-//        //when
-//        when(answerRepository.get(1L)).thenReturn(Optional.of(answer));
-//        //then
-//        assertTrue(answerService.isFinal(1L));
-//    }
-//
-//    @Test
-//    void givenLoseAnswer_whenIsFinal_thenTrue() {
-//        //given
-//        Answer answer = Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage("finalMessage")
-//                .gameState(GameState.GAME)
-//                .nextQuestionId(3L)
-//                .question(new Question())
-//                .build();
-//        //when
-//        when(answerRepository.get(1L)).thenReturn(Optional.of(answer));
-//        //then
-//        assertTrue(answerService.isFinal(1L));
-//    }
-//
-//    @Test
-//    void givenGameAnswer_whenIsFinal_thenFalse() {
-//        //given
-//        Answer answer = Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage("finalMessage")
-//                .gameState(GameState.GAME)
-//                .nextQuestionId(3L)
-//                .question(new Question())
-//                .build();
-//        //when
-//        when(answerRepository.get(1L)).thenReturn(Optional.of(answer));
-//        //then
-//        assertFalse(answerService.isFinal(1L));
-//    }
-//
-//    @Test
-//    void givenNullAnswer_whenIsFinal_thenFalse() {
-//        //given //when
-//        when(answerRepository.get(1L)).thenReturn(Optional.empty());
-//        //then
-//        assertFalse(answerService.isFinal(1L));
-//    }
-//
-//    @Test
-//    void givenValidAnswerWithNextQuestion_whenGetNextQuestionId_thenGetValidId() {
-//        //given
-//        long expected  = 3L;
-//        Answer answer = Answer.builder()
-//                .id(0L)
-//                .answerMessage("answerMessage")
-//                .finalMessage("finalMessage")
-//                .gameState(GameState.GAME)
-//                .nextQuestionId(expected)
-//                .question(new Question())
-//                .build();
-//        when(answerRepository.get(2L)).thenReturn(Optional.of(answer));
-//        //when
-//        long actual= answerService.getNextQuestionId(2L);
-//        //then
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void givenEmptyAnswer_whenGetNextQuestionId_thenGetZero() {
-//        //given
-//        long expected  = 0L;
-//        when(answerRepository.get(2L)).thenReturn(Optional.empty());
-//        //when
-//        long actual = answerService.getNextQuestionId(2L);
-//        //then
-//        assertEquals(expected, actual);
-//    }
+
+    private AnswerRepository answerRepositoryMock;
+    private QuestionRepository questionRepositoryMock;
+    private AnswerService answerService;
+    private Answer answer;
+    private AnswerTo answerTo;
+
+    @BeforeEach
+    void setUp() {
+        answer = Answer.builder()
+                .id((Long) 3L)
+                .gameState(GameState.GAME)
+                .answerMessage("answer message")
+                .finalMessage("final message")
+                .build();
+        answerTo = Dto.MAPPER.from(answer);
+        answerRepositoryMock = mock(AnswerRepository.class);
+        questionRepositoryMock = mock(QuestionRepository.class);
+        answerService = new AnswerService(answerRepositoryMock, questionRepositoryMock);
+    }
+
+    @Test
+    void givenTestAnswerAndDataForAupdate_whenUpdateAnswer_thenReturnAnswerWithUpdatedData() {
+        //given
+        long nextQuestionId = 7L;
+        Question question = Question.builder().id(nextQuestionId).quest(Quest.builder().id(1L).build()).build();
+        answer.setQuestion(question);
+        when(answerRepositoryMock.get(answer.getId())).thenReturn(Optional.of(answer));
+        when(questionRepositoryMock.get(any(Long.class))).thenReturn(Optional.of(question));
+
+        //when
+        String answerMessage = "expected answer message";
+        String finalMessage = "final answer message";
+        GameState gameState = GameState.WIN;
+        answerService.updateAnswer(answer.getId(), answerMessage, gameState, nextQuestionId, finalMessage);
+
+        //then
+        assertEquals(answerMessage, answer.getAnswerMessage());
+        assertEquals(gameState, answer.getGameState());
+        assertEquals(question, answer.getNextQuestion());
+        assertEquals(finalMessage, answer.getFinalMessage());
+    }
+
+    @Test
+    void givenTestAnswerTo_whenDelete_thenVerifeyAnswerRepositoryDeleteAnswer() {
+        //when
+        answerService.delete(answerTo);
+
+        //then
+        verify(answerRepositoryMock).delete(answer);
+    }
+
+    @Test
+    void givenTestAnswerId_whenDelete_thenVerifeyAnswerRepositoryDeleteAnswer() {
+        //given
+        long answerId = answerTo.getId();
+        when(answerRepositoryMock.get(answerId)).thenReturn(Optional.of(answer));
+
+        //when
+        answerService.delete((Long) answerId);
+
+        //then
+        verify(answerRepositoryMock).delete(answer);
+    }
 }

@@ -1,5 +1,7 @@
 package com.javarush.nikolenko.utils;
 
+import java.io.File;
+
 public final class UrlHelper {
     public static final String INDEX = "";
     public static final String PLAY = "/play";
@@ -23,8 +25,8 @@ public final class UrlHelper {
     public static final String ERROR_HANDLER = "/errorHandler";
     public static final String ERROR = "/error";
 
-
-    public static final String QUEST_DIRECTORY = "quests";
+    public static final String CLASSES = "classes";
+    public static final String QUEST_DIRECTORY = CLASSES + File.separator + "quests";
     public static final String IMAGE_DIRECTORY = "images";
     public static final String JSP_DIRECTORY = "WEB-INF/views";
     public static final String ONE_PARAM_TEMPLATE = "%s?%s=%s";

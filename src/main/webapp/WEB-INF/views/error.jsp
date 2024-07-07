@@ -16,8 +16,9 @@
         <div class="base-left">
             <h1 class="block-h1">Exception Report</h1>
             <h2 class="block-h2">${requestScope.errorCode}</h2>
-            <h2 class="block-h2">${requestScope.description}</h2>
-            <h2 class="block-h2">${requestScope.errorMessage}</h2>
+            <c:if test="${requestScope.errorMessage != null}">
+                <h2 class="block-h2">${requestScope.errorMessage}</h2>
+            </c:if>
         </div>
     </div>
     <div class="base-right">

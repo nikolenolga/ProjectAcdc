@@ -12,13 +12,13 @@ public class UserRepository extends BaseRepository<User> {
         super(sessionCreater, User.class);
     }
 
-    public boolean userExist(String currentLogin) {
+    public boolean userWithCurrentLoginExist(String currentLogin) {
         Session session = sessionCreater.getSession();
         String hql = "select u from User u where u.login = :currentLogin";
         Query<User> query = session.createQuery(hql, User.class);
         query.setParameter("currentLogin", currentLogin);
         query.setMaxResults(1);
-        return query.list().isEmpty();
+        return !query.list().isEmpty();
     }
 
     public Optional<User> getUser(String currentLogin, String currentPassword) {

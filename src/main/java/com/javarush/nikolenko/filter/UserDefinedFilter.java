@@ -37,7 +37,8 @@ public class UserDefinedFilter extends HttpFilter {
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpSession session = req.getSession();
         if (session.getAttribute(Key.USER) == null) {
-            UserTo anonymous = userService.createAnonymousUser();
+
+            UserTo anonymous = userService.createAnonymousUser().orElseThrow();
             session.setAttribute(Key.USER, anonymous);
             session.setAttribute(Key.USER_ID, anonymous.getId());
             session.setAttribute(Key.IS_AUTHORIZED, false);

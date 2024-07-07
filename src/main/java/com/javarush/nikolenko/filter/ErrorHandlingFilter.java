@@ -30,8 +30,13 @@ public class ErrorHandlingFilter extends HttpFilter {
                 req.setAttribute(Key.ERROR_CODE, errorCode);
                 log.error("Error occurred while processing request: {}", t.toString());
             }
-            req.setAttribute(Key.DESCRIPTION, t.toString());
-            req.setAttribute(Key.ERROR_MESSAGE, t.getMessage());
+            //req.setAttribute(Key.DESCRIPTION, t.toString());
+
+            String errorMessage = (String) req.getAttribute(Key.ALERT);
+
+            if(errorMessage != null) {
+                req.setAttribute(Key.ERROR_MESSAGE, errorMessage);
+            }
 
             String jspPath = UrlHelper.getJspPath(UrlHelper.ERROR);
             req.getRequestDispatcher(jspPath).forward(req, res);

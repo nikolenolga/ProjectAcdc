@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="2024-07-05-19-38-00-add-answer" author="nikolenko">
+        <createTable tableName="answer">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_answer"/>
+            </column>
+
+            <column name="answer_message" type="varchar(1024)"/>
+            <column name="final_message" type="varchar(512)"/>
+            <column name="game_state" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="next_question_id" type="BIGINT"/>
+            <column name="question_id" type="BIGINT"/>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2024-07-05-19-38-00-add-answer-fk" author="nikolenko">
+        <addForeignKeyConstraint baseColumnNames="game_state"
+                                 baseTableName="answer"
+                                 constraintName="fk_answer_game_state"
+                                 onDelete="RESTRICT"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="value"
+                                 referencedTableName="game_state"/>
+
+        <addForeignKeyConstraint baseColumnNames="next_question_id"
+                                 baseTableName="answer"
+                                 constraintName="fk_answer_next_question"
+                                 onDelete="SET NULL"
+                                 onUpdate="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="question"/>
+
+        <addForeignKeyConstraint baseColumnNames="question_id"
+                                 baseTableName="answer"
+                                 constraintName="fk_answer_question"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="question"/>
+    </changeSet>
+</databaseChangeLog>

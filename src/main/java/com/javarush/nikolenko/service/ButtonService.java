@@ -34,5 +34,4 @@ public class ButtonService {
     public QuestEditOperation getOperation(String key) {
         return operationMap.get(key);
     }
-
 }

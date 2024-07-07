@@ -25,11 +25,11 @@ import java.util.Optional;
 @AllArgsConstructor
 @Transactional
 public class GameService {
-    private final GameRepository gameRepository;
-    private final QuestRepository questRepository;
     private final UserRepository userRepository;
-    private final AnswerService answerService;
     private final AnswerRepository answerRepository;
+    private final QuestRepository questRepository;
+    private final GameRepository gameRepository;
+    private final AnswerService answerService;
     private final QuestService questService;
 
 //    public Optional<GameTo> create(GameTo gameTo) {
@@ -74,21 +74,23 @@ public class GameService {
                 .gameState(GameState.GAME)
                 .currentQuestion(quest.getFirstQuestion())
                 .build();
+
         return gameRepository.create(game)
                 .map(Dto.MAPPER::from)
                 .orElse(null);
     }
 
     public QuestionTo getCurrentQuestionWithAnswers(long id) {
-        Question question = gameRepository.get(id).map(Game::getCurrentQuestion).get();
+        Question question = gameRepository.get(id).map(Game::getCurrentQuestion).orElseThrow();
         question.getPossibleAnswers();
         return Dto.MAPPER.from(question);
     }
 
     public boolean processAnswer(long answerId, long gameId) {
         Answer answer = answerRepository.get(answerId).get();
-        Question nextQuestion = answer.getQuestion();
-        gameRepository.get(gameId).ifPresent(game -> game.setCurrentQuestion(nextQuestion));
+        Question nextQuestion = answer.getNextQuestion();
+        Game game = gameRepository.get(gameId).orElseThrow();
+        game.setCurrentQuestion(nextQuestion);
 
         return answer.hasFinalMessage() || answer.isFinal();
     }
@@ -116,7 +118,7 @@ public class GameService {
         return Dto.MAPPER.from(answer);
     }
 
-    private boolean validateGame(GameTo gameTo) {
-        return gameTo != null && ObjectUtils.allNotNull(gameTo.getQuestId());
-    }
+//    private boolean validateGame(GameTo gameTo) {
+//        return gameTo != null && ObjectUtils.allNotNull(gameTo.getQuestId());
+//    }
 }

@@ -26,8 +26,8 @@ public class RequestHelper {
     public static long getLongValue(HttpSession currentSession, String name) {
         try {
             Long value = (Long) currentSession.getAttribute(name);
-            return value != null ? value : 0L;
-        } catch (NumberFormatException e) {
+            return (value == null) ? 0L : value;
+        } catch (NumberFormatException | ClassCastException e) {
             log.error("Current session does not contain Long attribute [{}], {}", name, e.getMessage());
             throw new QuestException(Key.CANT_EXT_REQUEST);
         }
@@ -35,9 +35,7 @@ public class RequestHelper {
 
     public static long getLong(String value) {
         try {
-            return value != null && !value.isBlank()
-                    ? Long.parseLong(value)
-                    : 0L;
+            return (value == null) ? 0L : Long.parseLong(value);
         } catch (NumberFormatException e) {
             log.error("{}, while parsing [{}] attribute to Long", e.getMessage(), value);
             throw new QuestException(Key.CANT_EXT_REQUEST);

@@ -26,20 +26,21 @@ public class Quest implements AbstractComponent {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "user_author_id")
+    @Column(name = "description")
     @ToString.Exclude
-    private User author;
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "first_question_id")
     private Question firstQuestion;
 
-    @Column(name = "description")
+    @ManyToOne
+    @JoinColumn(name = "author_id")
     @ToString.Exclude
-    private String description;
+    private User author;
 
-    @OneToMany(mappedBy = "quest")
+    @OneToMany
+    @JoinColumn(name = "quest_id")
     @ToString.Exclude
     private final List<Question> questions = new ArrayList<>();
 

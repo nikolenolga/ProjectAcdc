@@ -134,6 +134,12 @@
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.10.2</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
@@ -233,5 +239,6 @@
                 </configuration>
             </plugin>
         </plugins>
+
     </build>
 </project>

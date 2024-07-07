@@ -22,20 +22,22 @@ public class User implements AbstractComponent {
 
     @Column(name = "name")
     private String name;
-    @Column(name = "login")
+    @Column(name = "login", nullable = false)
     private String login;
     @Column(name = "password")
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany
+    @JoinColumn(name = "author_id")
     @ToString.Exclude
     private final List<Quest> quests = new ArrayList<>();
 
-    @OneToMany(mappedBy = "player")
+    @OneToMany
+    @JoinColumn(name = "player_id")
     @ToString.Exclude
     private final List<Game> games = new ArrayList<>();
 
