@@ -1,7 +1,6 @@
 package com.javarush.nikolenko.service;
 
 import com.javarush.nikolenko.dto.QuestTo;
-import com.javarush.nikolenko.dto.QuestionTo;
 import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.entity.Question;
 import com.javarush.nikolenko.entity.User;
@@ -10,20 +9,12 @@ import com.javarush.nikolenko.mapping.Dto;
 import com.javarush.nikolenko.repository.QuestRepository;
 import com.javarush.nikolenko.repository.QuestionRepository;
 import com.javarush.nikolenko.repository.UserRepository;
-import com.javarush.nikolenko.utils.Key;
+import com.javarush.nikolenko.utils.LoggerConstants;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -62,20 +53,12 @@ public class QuestService {
         return Optional.empty();
     }
 
-//    public Optional<QuestTo> update(QuestTo questTo) {
-//        if (validateQuest(questTo)) {
-//            return questRepository.update(Dto.MAPPER.from(questTo)).map(Dto.MAPPER::from);
-//        }
-//        log.debug("Quest updating failed, quest - {}", questTo);
-//        return Optional.empty();
-//    }
-
     public void delete(QuestTo questTo) {
         questRepository.delete(Dto.MAPPER.from(questTo));
     }
 
-    public void delete(long questId) {
-        questRepository.get(questId).ifPresent(questRepository::delete);
+    public boolean delete(long questId) {
+        return questRepository.delete(questId);
     }
 
     public Collection<QuestTo> getAll() {
@@ -107,29 +90,20 @@ public class QuestService {
         }
     }
 
-//    public void addQuestion(long questId, long questionId) {
-//        Optional<Quest> optionalQuest = questRepository.get(questId);
-//        Optional<Question> optionalQuestion = questionRepository.get(questionId);
-//        if (optionalQuest.isPresent() && optionalQuestion.isPresent()) {
-//            Quest quest = optionalQuest.get();
-//            quest.addQuestion(optionalQuestion.get());
-//            log.info("Question {} added to quest {}, name - {}", questionId, quest.getId(), quest.getName());
-//        }
-//    }
-
     public void addNewQuestionToCreatedQuest(long questId, String questionMessage) {
-        if(questionMessage == null || questionMessage.isBlank()) throw new QuestException("questionMessage is null or empty");
+        Quest quest = questRepository.get(questId).orElseThrow();
+        if (questionMessage == null || questionMessage.isBlank()) {
+            log.error(LoggerConstants.QUESTION_MESSAGE_IS_NULL_OR_EMPTY);
+            throw new QuestException("QuestionMessage is null or empty");
+        }
+
         Question question = Question.builder()
                 .questionMessage(questionMessage)
                 .build();
         questionRepository.create(question);
-        questRepository.get(questId).ifPresent(quest -> quest.addQuestion(question));
+        quest.addQuestion(question);
     }
 
-//    public Long getFirstQuestionId(long id) {
-//        return get(id).map(QuestTo::getFirstQuestionId).orElse(0L);
-//    }
-//
     private boolean validateQuest(Quest quest) {
         return quest != null && ObjectUtils.allNotNull(quest.getName());
     }
@@ -137,9 +111,4 @@ public class QuestService {
     public int countAllQuests() {
         return questRepository.countAllQuests();
     }
-
-    public boolean questWithCurrentNameExist(String name) {
-        return questRepository.questWithCurrentNameExist(name);
-    }
-
 }

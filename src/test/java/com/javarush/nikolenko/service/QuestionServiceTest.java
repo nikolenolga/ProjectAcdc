@@ -45,6 +45,7 @@ class QuestionServiceTest {
 
         savedQuestion = Question.builder()
                 .id(14L)
+                .quest(Quest.builder().id(7L).build())
                 .questionMessage("First Message")
                 .build();
 
@@ -123,13 +124,12 @@ class QuestionServiceTest {
     void qivenQuestionTo_whenDeleteById_thenVerifyDelete() {
         //given
         long questionId = savedQuestion.getId();
-        when(questionRepositoryMock.get(questionId)).thenReturn(Optional.of(savedQuestion));
+
         // when
         questionService.delete(questionId);
 
         // then
-        verify(questionRepositoryMock).get(questionId);
-        verify(questionRepositoryMock).delete(savedQuestion);
+        verify(questionRepositoryMock).delete(questionId);
     }
 
     @Test
@@ -140,7 +140,7 @@ class QuestionServiceTest {
         Quest savedQuest = Quest.builder().id(2L).build();
         savedQuest.addQuestion(savedQuestion);
 
-        when(answerRepositoryMock.create(answer)).thenReturn(Optional.of(savedAnswer));
+        when(answerRepositoryMock.create(any(Answer.class))).thenReturn(Optional.of(savedAnswer));
         when(questionRepositoryMock.get(questionId)).thenReturn(Optional.of(savedQuestion));
         when(questionRepositoryMock.get(nextQuestionId)).thenReturn(Optional.of(savedQuestion));
 
@@ -155,6 +155,7 @@ class QuestionServiceTest {
     @Test
     void whenAddAnswerToCreatedQuestion_thenVerifyCreate() {
         //given
+        when(answerRepositoryMock.create(any(Answer.class))).thenReturn(Optional.of(savedAnswer));
         when(questionRepositoryMock.get(any(Long.class))).thenReturn(Optional.of(savedQuestion));
         when(answerRepositoryMock.create(answer)).thenReturn(Optional.of(savedAnswer));
         Quest savedQuest = Quest.builder().id(2L).build();
@@ -183,7 +184,7 @@ class QuestionServiceTest {
         Quest savedQuest = Quest.builder().id(2L).build();
         savedQuest.addQuestion(savedQuestion);
 
-        when(answerRepositoryMock.create(answer)).thenReturn(Optional.of(savedAnswer));
+        when(answerRepositoryMock.create(any(Answer.class))).thenReturn(Optional.of(savedAnswer));
         when(questionRepositoryMock.get(questionId)).thenReturn(Optional.of(savedQuestion));
         when(questionRepositoryMock.get(nextQuestionId)).thenReturn(Optional.of(savedQuestion));
 
@@ -202,7 +203,7 @@ class QuestionServiceTest {
         long nextQuestionId = savedQuestion.getId();
         Quest savedQuest = Quest.builder().id(2L).build();
         savedQuest.addQuestion(savedQuestion);
-        when(answerRepositoryMock.create(answer)).thenReturn(Optional.of(savedAnswer));
+        when(answerRepositoryMock.create(any(Answer.class))).thenReturn(Optional.of(savedAnswer));
         when(questionRepositoryMock.get(questionId)).thenReturn(Optional.of(savedQuestion));
         when(questionRepositoryMock.get(nextQuestionId)).thenReturn(Optional.of(savedQuestion));
 
@@ -221,7 +222,7 @@ class QuestionServiceTest {
         Quest savedQuest = Quest.builder().id(2L).build();
         savedQuest.addQuestion(savedQuestion);
 
-        when(answerRepositoryMock.create(answer)).thenReturn(Optional.of(savedAnswer));
+        when(answerRepositoryMock.create(any(Answer.class))).thenReturn(Optional.of(savedAnswer));
         when(questionRepositoryMock.get(questionId)).thenReturn(Optional.of(savedQuestion));
         when(questionRepositoryMock.get(nextQuestionId)).thenReturn(Optional.of(savedQuestion));
 

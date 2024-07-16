@@ -3,7 +3,6 @@ package com.javarush.nikolenko.service;
 import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.dto.GameState;
 import com.javarush.nikolenko.dto.QuestTo;
-import com.javarush.nikolenko.dto.UserTo;
 import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.entity.Question;
@@ -15,6 +14,7 @@ import com.javarush.nikolenko.repository.QuestRepository;
 import com.javarush.nikolenko.repository.QuestionRepository;
 import com.javarush.nikolenko.repository.UserRepository;
 import com.javarush.nikolenko.utils.Key;
+import com.javarush.nikolenko.utils.LoggerConstants;
 import com.javarush.nikolenko.utils.RequestHelper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +30,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Stream;
 
 import static com.javarush.nikolenko.utils.Key.QUEST_EDIT_BUTTONS;
 
@@ -74,11 +73,11 @@ public class QuestEditService {
         Optional<Quest> quest = questRepository.get(questId);
 
         if(question.isEmpty() || quest.isEmpty()) {
-            req.setAttribute(Key.ALERT, "Can't find current quest entities");
+            req.setAttribute(Key.ALERT, Key.CAN_T_FIND_CURRENT_QUEST_ENTITIES);
             throw new QuestException("Can't find current quest entities");
         }
         if(question.get().equals(quest.get().getFirstQuestion())) {
-            req.setAttribute(Key.ALERT, "Can't delete quest first question. Declare new quest first question before deleting.");
+            req.setAttribute(Key.ALERT, Key.CAN_T_DELETE_QUEST_FIRST_QUESTION_DECLARE_NEW_QUEST_FIRST_QUESTION_BEFORE_DELETING);
             throw new QuestException("Can't delete quest first question. Declare new quest first question before deleting.");
         }
         questionRepository.delete(questionId);
@@ -132,10 +131,8 @@ public class QuestEditService {
         StringBuilder name = new StringBuilder();
         StringBuilder description = new StringBuilder();
 
-        Quest quest = Quest.builder()
-                .build();
+        Quest quest = Quest.builder().build();
         questRepository.create(quest).orElseThrow();
-
         author.addQuest(quest);
 
         Map<Long, Question> questions = new HashMap<>();
@@ -215,7 +212,7 @@ public class QuestEditService {
             return Optional.of(quest).map(Dto.MAPPER::from);
         } catch (Exception e) {
             log.error("Quest {} loading failed: {}", name, e.getMessage());
-            throw new QuestException("Quest %s loading failed: %s".formatted(quest.getName(), e.getMessage()));
+            throw new QuestException(e);
         }
     }
 
@@ -224,8 +221,8 @@ public class QuestEditService {
         try {
             parseQuest(authorId, text);
         } catch (Exception e) {
-            log.error("Quests parsing from path {}, caused exception - {}", path, e.getMessage());
-            throw new QuestException("Can't parse current quest %s, message %s".formatted(path, e.getMessage()));
+            log.error(LoggerConstants.QUESTS_PARSING_FROM_PATH_CAUSED_EXCEPTION, path, e.getMessage());
+            throw new QuestException(e);
         }
     }
 
@@ -235,12 +232,9 @@ public class QuestEditService {
             Path path = Paths.get(sPath);
             List<String> fileTextLines = Files.readAllLines(path);
             fileText = String.join("\n", fileTextLines);
-        } catch (FileNotFoundException e) {
-            log.error("Loading text failed, can't find file {}", sPath);
-            throw new QuestException(Key.FILE_NOT_FOUND);
         } catch (IOException e) {
-            log.error("Can't load file {}", sPath);
-            throw new QuestException(Key.FILE_LOAD_ERROR);
+            log.error(LoggerConstants.CAN_T_LOAD_FILE, sPath);
+            throw new QuestException(e);
         }
         return fileText;
     }

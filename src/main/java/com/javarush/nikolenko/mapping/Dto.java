@@ -10,7 +10,6 @@ import org.mapstruct.factory.Mappers;
 public interface Dto {
     Dto MAPPER = Mappers.getMapper(Dto.class);
 
-    //методы для преобразования entity в dto
     @Mapping(target = "image", source = "image")
     UserTo from(User user);
 
@@ -34,7 +33,6 @@ public interface Dto {
     GameTo from(Game game);
 
 
-    //методы для преобразования dto в entity
     User from(UserTo userTo);
 
     @Mapping(target = "author.id", source = "authorId")

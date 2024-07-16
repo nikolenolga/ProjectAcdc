@@ -1,5 +1,7 @@
 package com.javarush.nikolenko.config;
+
 import com.javarush.nikolenko.exception.QuestException;
+import com.javarush.nikolenko.utils.LoggerConstants;
 import liquibase.Scope;
 import liquibase.command.CommandScope;
 import liquibase.resource.ClassLoaderResourceAccessor;
@@ -15,7 +17,7 @@ public class ValidatorDataBase {
     public static final String CLASSPATH_DB_CHANGELOG_XML = "db/changelog.xml";
 
     public void start() {
-        log.info("Running Liquibase...");
+        log.info(LoggerConstants.RUNNING_LIQUIBASE);
 
         try {
             Scope.child(Scope.Attr.resourceAccessor, new ClassLoaderResourceAccessor(), () -> {
@@ -29,10 +31,11 @@ public class ValidatorDataBase {
                 update.execute();
             });
         } catch (Exception e) {
+            log.error(LoggerConstants.RUNNING_LIQUIBASE_FAILED);
             throw new QuestException(e);
         }
 
-        log.info("Running Liquibase...DONE");
+        log.info(LoggerConstants.RUNNING_LIQUIBASE_DONE);
     }
 
     private String getProperty(String value) {

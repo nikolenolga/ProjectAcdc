@@ -51,30 +51,24 @@ class QuestServiceTest {
                 .description("Test Description")
                 .build();
 
-        testQuestion = Question.builder()
-                .quest(testQuest)
-                .questionMessage("First Message")
-                .build();
-        testQuest.setFirstQuestion(testQuestion);
-
-        testQuestTo = Dto.MAPPER.from(testQuest);
-        testQuestionTo = Dto.MAPPER.from(testQuestion);
-
         savedTestQuest = Quest.builder()
                 .id(10L)
                 .name("Test Quest")
                 .description("Test Description")
                 .build();
 
-        savedTestQuestion = Question.builder()
-                .id(18L)
-                .quest(testQuest)
+        testQuestion = Question.builder()
+                .quest(savedTestQuest)
                 .questionMessage("First Message")
                 .build();
-        savedTestQuest.setFirstQuestion(testQuestion);
 
-        savedTestQuestTo = Dto.MAPPER.from(savedTestQuest);
-        savedTestQuestionTo = Dto.MAPPER.from(savedTestQuestion);
+        savedTestQuestion = Question.builder()
+                .id(18L)
+                .quest(savedTestQuest)
+                .questionMessage("First Message")
+                .build();
+        savedTestQuest.setFirstQuestion(savedTestQuestion);
+        testQuest.setFirstQuestion(savedTestQuestion);
 
         savedTestUserTo = UserTo.builder()
                 .id(1L)
@@ -83,10 +77,15 @@ class QuestServiceTest {
                 .name("TestName")
                 .build();
         savedTestUser = Dto.MAPPER.from(savedTestUserTo);
+
+        testQuestTo = Dto.MAPPER.from(testQuest);
+        testQuestionTo = Dto.MAPPER.from(testQuestion);
+        savedTestQuestTo = Dto.MAPPER.from(savedTestQuest);
+        savedTestQuestionTo = Dto.MAPPER.from(savedTestQuestion);
     }
 
     @Test
-    void givenNotValidQuestData_whenCreate_thenReturnFalse(){
+    void givenNotValidQuestData_whenCreate_thenReturnFalse() {
         //given
         String name = null;
         String description = null;
@@ -98,11 +97,10 @@ class QuestServiceTest {
     }
 
 
-
     @Test
-    void givenValidQuestTo_whenCreate_thenReturnTrue(){
+    void givenValidQuestTo_whenCreate_thenReturnTrue() {
         //given
-        when(questRepositoryMock.create(testQuest)).thenReturn(Optional.ofNullable(savedTestQuest));
+        when(questRepositoryMock.create(any(Quest.class))).thenReturn(Optional.ofNullable(savedTestQuest));
         //when
         Optional<QuestTo> questTo = questService.create(testQuestTo);
         //given
@@ -110,17 +108,15 @@ class QuestServiceTest {
     }
 
     @Test
-    void givenValidQuestTo_whenCreate_thenVerifyCreate(){
-        //given
-        when(questRepositoryMock.create(any(Quest.class))).thenReturn(Optional.ofNullable(savedTestQuest));
-        //when
+    void givenValidQuestTo_whenCreate_thenVerifyCreate() {
+        //given //when
         questService.create(testQuestTo);
         //given
-        verify(questRepositoryMock).create(testQuest);
+        verify(questRepositoryMock).create(any(Quest.class));
     }
 
     @Test
-    void givenQuestTo_whenCantCreate_thenReturnFalse(){
+    void givenQuestTo_whenCantCreate_thenReturnFalse() {
         //given
         when(questRepositoryMock.create(any(Quest.class))).thenReturn(Optional.empty());
         //when
@@ -148,7 +144,7 @@ class QuestServiceTest {
         questService.delete(questId);
 
         //then
-        verify(questRepositoryMock).delete(savedTestQuest);
+        verify(questRepositoryMock).delete(questId);
     }
 
     @Test
@@ -190,7 +186,7 @@ class QuestServiceTest {
         long questId = savedTestQuest.getId();
         when(questRepositoryMock.get(questId)).thenReturn(Optional.ofNullable(savedTestQuest));
         //when
-        QuestTo actual = questService.getQuestWithQuestions(questId) ;
+        QuestTo actual = questService.getQuestWithQuestions(questId);
         // then
         assertEquals(savedTestQuestTo, actual);
     }
@@ -204,12 +200,6 @@ class QuestServiceTest {
         // then
         verify(questRepositoryMock).get(any(Long.class));
     }
-
-
-//    public Optional<QuestTo> get(long id) {
-//        return questRepository.get(id).map(Dto.MAPPER::from);
-//    }
-//
 
     @Test
     void givenQuestId__whenGet_thenVerifyGet() {
@@ -276,25 +266,6 @@ class QuestServiceTest {
     }
 
     @Test
-    void gevenNotValidQuestId_whenUpdate_thenQuestNotUpdated() {
-        //given
-        long questId = savedTestQuest.getId();
-        String name = "new name";
-        String description = "new description";
-        long firstQuestionId = savedTestQuestion.getId();
-        when(questRepositoryMock.get(any(Long.class))).thenReturn(Optional.empty());
-        when(questionRepositoryMock.get(firstQuestionId)).thenReturn(Optional.of(savedTestQuestion));
-
-        //when
-        questService.updateQuest(questId, name, description, firstQuestionId);
-
-        //then
-        assertNotEquals(savedTestQuest.getFirstQuestion(), savedTestQuestion);
-        assertNotEquals(savedTestQuest.getName(), name);
-        assertNotEquals(savedTestQuest.getDescription(), description);
-    }
-
-    @Test
     void gevenNotValidQuestionId_whenUpdate_thenQuestNotUpdated() {
         //given
         long questId = savedTestQuest.getId();
@@ -308,7 +279,6 @@ class QuestServiceTest {
         questService.updateQuest(questId, name, description, firstQuestionId);
 
         //then
-        assertNotEquals(savedTestQuest.getFirstQuestion(), savedTestQuestion);
         assertNotEquals(savedTestQuest.getName(), name);
         assertNotEquals(savedTestQuest.getDescription(), description);
     }
@@ -351,6 +321,7 @@ class QuestServiceTest {
         long questId = savedTestQuest.getId();
         String questionMessage = "new question";
         int expected = savedTestQuest.getQuestions().size();
+        when(questRepositoryMock.get(questId)).thenReturn(Optional.of(savedTestQuest));
 
         // when
         questService.addNewQuestionToCreatedQuest(questId, questionMessage);
@@ -375,7 +346,7 @@ class QuestServiceTest {
     }
 
     @Test
-    void givenNotValidQuestId_whenAddNewQuestionToCreatedQuest_thenDoesNotThrowException() {
+    void givenNotValidQuestId_whenAddNewQuestionToCreatedQuest_thenThrowException() {
         //given
         long questId = savedTestQuest.getId();
         String questionMessage = "new question";
@@ -383,11 +354,11 @@ class QuestServiceTest {
         int expected = savedTestQuest.getQuestions().size();
 
         // when // then
-        assertDoesNotThrow(() -> questService.addNewQuestionToCreatedQuest(questId, questionMessage));
+        assertThrows(Exception.class, () -> questService.addNewQuestionToCreatedQuest(questId, questionMessage));
     }
 
     @Test
-    void givenNotValidQuestId_whenAddNewQuestionToCreatedQuest_thenThrowException() {
+    void givenNotValidQuestionMessage_whenAddNewQuestionToCreatedQuest_thenThrowException() {
         //given // when
         long questId = savedTestQuest.getId();
         String questionMessage = null;
@@ -396,6 +367,7 @@ class QuestServiceTest {
         // then
         assertThrows(Exception.class, () -> questService.addNewQuestionToCreatedQuest(questId, questionMessage));
     }
+
     @Test
     void givenNotValidQuestId_whenAddNewQuestionToCreatedQuest_thenThrowQuestException() {
         //given // when

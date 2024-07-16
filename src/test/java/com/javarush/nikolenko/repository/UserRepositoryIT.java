@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class UserRepositoryIT extends ContainerIT {
     private static final SessionCreater sessionCreater = NanoSpring.find(SessionCreater.class);
@@ -32,15 +33,15 @@ class UserRepositoryIT extends ContainerIT {
 
     @Test
     void givenCreatedTestUser_whenGetId_thenIdNotNullAndNot0L() {
-        Assertions.assertTrue(testUser.getId() != null && testUser.getId() != 0L);
+        assertTrue(testUser.getId() != null && testUser.getId() != 0L);
     }
 
     @Test
     void givenCreatedTestUser_whenGetUserWithId_thenEqualUser() {
         Optional<User> optionalUser = userRepository.get(testUser.getId());
-        Assertions.assertTrue(optionalUser.isPresent());
+        assertTrue(optionalUser.isPresent());
         User user = optionalUser.get();
-        Assertions.assertEquals(testUser, user);
+        assertEquals(testUser, user);
     }
 
     @Test
@@ -48,18 +49,20 @@ class UserRepositoryIT extends ContainerIT {
         testUser.setLogin("newLogin");
         userRepository.update(testUser);
         Optional<User> optionalUser = userRepository.get(testUser.getId());
-        Assertions.assertTrue(optionalUser.isPresent());
+        assertTrue(optionalUser.isPresent());
         User user = optionalUser.get();
-        Assertions.assertEquals(testUser, user);
+        assertEquals(testUser, user);
     }
 
     @Test
     void givenCreatedTestUser_whenFindUserWithThisNameAndLogin_thenGetEqualUser() {
         User user = User.builder()
+                .name(testUser.getName())
                 .login(testUser.getLogin())
                 .build();
-        Stream<User> userStream = userRepository.find(user);
-        Assertions.assertEquals(testUser, userStream.findFirst().orElseThrow());
+        Optional<User> optionalUser = userRepository.find(user);
+        assertTrue(optionalUser.isPresent());
+        assertEquals(testUser, optionalUser.get());
     }
 
     @Test
@@ -74,7 +77,7 @@ class UserRepositoryIT extends ContainerIT {
 
         userRepository.delete(testUserForDelete);
         Optional<User> optionalUser = userRepository.get(testUserForDelete.getId());
-        Assertions.assertTrue(optionalUser.isEmpty());
+        assertTrue(optionalUser.isEmpty());
     }
 
     @Test
@@ -89,7 +92,7 @@ class UserRepositoryIT extends ContainerIT {
 
         userRepository.delete(testUserForDelete.getId());
         Optional<User> optionalUser = userRepository.get(testUserForDelete.getId());
-        Assertions.assertTrue(optionalUser.isEmpty());
+        assertTrue(optionalUser.isEmpty());
     }
 
     @Test
@@ -98,30 +101,38 @@ class UserRepositoryIT extends ContainerIT {
             userRepository.create(User.builder().login("newTestLogin" + i).name("newTestNeme" + i).password("newTestPassword").role(Role.THE_USER).build());
         }
         Collection<User> users = userRepository.getAll();
-        Assertions.assertFalse(users.isEmpty());
+        assertFalse(users.isEmpty());
     }
 
     @Test
-    void givenGetAllUsersCount_whenDeleteOneUser_thenGetAllUsersDeltaIsOne() {
-        for (int i = 0; i < 15; i++) {
-            userRepository.create(User.builder().login("newTestLogin" + i).name("newTestNeme" + i).password("newTestPassword").role(Role.THE_USER).build());
+    void givenCountGetAllUsers_whenAddNewUsersAndCountAgain_thenDeltaIsExpected() {
+        //given
+        int expected = 15;
+        int countBefore = userRepository.getAll().size();
+        List<User> users = new ArrayList<>();
+
+        //when
+        for (int i = 0; i < expected; i++) {
+            Optional<User> optionalUser = userRepository.create(User.builder()
+                    .login("newTestLogin" + i)
+                    .name("newTestNeme" + i)
+                    .password("newTestPassword")
+                    .role(Role.THE_USER)
+                    .build());
+            optionalUser.ifPresent(users::add);
         }
-        Collection<User> users = userRepository.getAll();
-        int expected = users.size();
+        int countAfter = userRepository.getAll().size();
+        users.forEach(userRepository::delete);
 
-        User user = users.stream().toList().get((int) (Math.random() * users.size()));
-        userRepository.delete(user);
-
-        Collection<User> usersAfterDelete = userRepository.getAll();
-        int actual = usersAfterDelete.size();
-
-        Assertions.assertEquals(expected - actual, 1);
+        //then
+        int actual = countAfter - countBefore;
+        assertEquals(expected, actual);
     }
 
     @Test
     void givenCreatedTestUser_whenCheckUserExistWithTestUserLogin_thenTrue() {
         boolean expected = userRepository.userWithCurrentLoginExist(testUser.getLogin());
-        Assertions.assertTrue(expected);
+        assertTrue(expected);
     }
 
     @Test
@@ -138,14 +149,14 @@ class UserRepositoryIT extends ContainerIT {
             logins.add("newTestLogin" + i);
         }
 
-        logins.forEach(login -> Assertions.assertTrue(userRepository.userWithCurrentLoginExist(login)));
+        logins.forEach(login -> assertTrue(userRepository.userWithCurrentLoginExist(login)));
     }
 
     @Test
     void givenCreatedTestUser_whenGetUserWithLoginAndPassword_thenGetUserEqualToTestUser() {
         Optional<User> optionalUser = userRepository.getUser(testUser.getLogin(), testUser.getPassword());
-        Assertions.assertTrue(optionalUser.isPresent());
-        Assertions.assertEquals(optionalUser.get(), testUser);
+        assertTrue(optionalUser.isPresent());
+        assertEquals(optionalUser.get(), testUser);
     }
 
     @Test
@@ -161,23 +172,12 @@ class UserRepositoryIT extends ContainerIT {
 
         long countAfter = userRepository.countAllUsers();
 
-        Assertions.assertEquals(1L, countAfter - countBefore);
+        assertEquals(1L, countAfter - countBefore);
     }
 
     @AfterEach
     void tearDown() {
         userRepository.delete(testUser);
         sessionCreater.endTransactional();
-    }
-
-    @AfterAll
-    static void checkTestUsersDeleted() {
-        User user = User.builder()
-                .login("testLogin")
-                .name("TestName")
-                .build();
-
-        List<User> users = userRepository.find(user).toList();
-        Assertions.assertTrue(users.isEmpty());
     }
 }

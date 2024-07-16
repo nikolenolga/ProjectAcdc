@@ -11,7 +11,8 @@ import org.junit.jupiter.api.*;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class GameRepositoryIT extends ContainerIT {
     private static final SessionCreater sessionCreater = NanoSpring.find(SessionCreater.class);
@@ -44,15 +45,15 @@ class GameRepositoryIT extends ContainerIT {
 
     @Test
     void givenCreatedTestGame_whenGetId_thenIdNotNullAndNot0L() {
-        Assertions.assertTrue(testGame.getId() != null && testGame.getId() != 0L);
+        assertTrue(testGame.getId() != null && testGame.getId() != 0L);
     }
 
     @Test
     void givenCreatedTestGame_whenGetGameWithId_thenEqualGame() {
         Optional<Game> optionalGame = gameRepository.get(testGame.getId());
-        Assertions.assertTrue(optionalGame.isPresent());
+        assertTrue(optionalGame.isPresent());
         Game game = optionalGame.get();
-        Assertions.assertEquals(testGame, game);
+        assertEquals(testGame, game);
     }
 
     @Test
@@ -60,20 +61,9 @@ class GameRepositoryIT extends ContainerIT {
         testGame.setGameState(testGame.isFinished() ? GameState.GAME : GameState.LOSE);
         gameRepository.update(testGame);
         Optional<Game> optionalGame = gameRepository.get(testGame.getId());
-        Assertions.assertTrue(optionalGame.isPresent());
+        assertTrue(optionalGame.isPresent());
         Game game = optionalGame.get();
-        Assertions.assertEquals(testGame, game);
-    }
-
-    @Test
-    void givenCreatedTestGame_whenFindGameWithThisUserAndGameState_thenGetEqualGame() {
-        Game game = Game.builder()
-                .player(testUser)
-                .gameState(testGame.getGameState())
-                .id(testGame.getId())
-                .build();
-        Stream<Game> gameStream = gameRepository.find(game);
-        Assertions.assertEquals(testGame, gameStream.findFirst().orElseThrow());
+        assertEquals(testGame, game);
     }
 
     @Test
@@ -86,14 +76,14 @@ class GameRepositoryIT extends ContainerIT {
 
         gameRepository.delete(testGameForDelete);
         Optional<Game> optionalGame = gameRepository.get(testGameForDelete.getId());
-        Assertions.assertTrue(optionalGame.isEmpty());
+        assertTrue(optionalGame.isEmpty());
     }
 
     @Test
     void givenCreatedTestGame_whenDeleteGameById_thenGetEmptyOptionalGame() {
         gameRepository.delete(testGame.getId());
         Optional<Game> optionalGame = gameRepository.get(testGame.getId());
-        Assertions.assertTrue(optionalGame.isEmpty());
+        assertTrue(optionalGame.isEmpty());
     }
 
     @Test
@@ -108,7 +98,7 @@ class GameRepositoryIT extends ContainerIT {
                     .build());
         }
         Collection<Game> games = gameRepository.getAll();
-        Assertions.assertFalse(games.isEmpty());
+        assertFalse(games.isEmpty());
     }
 
     @Test
@@ -131,7 +121,7 @@ class GameRepositoryIT extends ContainerIT {
         Collection<Game> gamesAfterDelete = gameRepository.getAll();
         int actual = gamesAfterDelete.size();
 
-        Assertions.assertEquals(expected - actual, 1);
+        assertEquals(expected - actual, 1);
     }
 
     @AfterEach

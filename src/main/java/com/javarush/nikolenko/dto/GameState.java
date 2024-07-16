@@ -1,5 +1,5 @@
 package com.javarush.nikolenko.dto;
 
 public enum GameState {
-    GAME, WIN, LOSE;
+    GAME, WIN, LOSE
 }

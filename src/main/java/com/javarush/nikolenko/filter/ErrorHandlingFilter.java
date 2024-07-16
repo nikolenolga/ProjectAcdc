@@ -1,6 +1,7 @@
 package com.javarush.nikolenko.filter;
 
 import com.javarush.nikolenko.utils.Key;
+import com.javarush.nikolenko.utils.LoggerConstants;
 import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,6 +21,7 @@ import java.io.IOException;
         UrlHelper.QUEST_TEXT_EDITOR, UrlHelper.USER_QUESTS, UrlHelper.IMAGES_X,
         UrlHelper.UPLOAD_IMAGE, UrlHelper.RANDOM_ERROR, UrlHelper.ERROR_HANDLER})
 public class ErrorHandlingFilter extends HttpFilter {
+
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         try {
@@ -28,15 +30,12 @@ public class ErrorHandlingFilter extends HttpFilter {
             if (t instanceof ServletException) {
                 int errorCode = res.getStatus();
                 req.setAttribute(Key.ERROR_CODE, errorCode);
-                log.error("Error occurred while processing request: {}", t.toString());
+                log.error(LoggerConstants.ERROR_OCCURRED_WHILE_PROCESSING_REQUEST, t.toString());
             }
-            //req.setAttribute(Key.DESCRIPTION, t.toString());
 
             String errorMessage = (String) req.getAttribute(Key.ALERT);
 
-            if(errorMessage != null) {
-                req.setAttribute(Key.ERROR_MESSAGE, errorMessage);
-            }
+            req.setAttribute(Key.ERROR_MESSAGE, errorMessage != null ? errorMessage : t.getMessage());
 
             String jspPath = UrlHelper.getJspPath(UrlHelper.ERROR);
             req.getRequestDispatcher(jspPath).forward(req, res);

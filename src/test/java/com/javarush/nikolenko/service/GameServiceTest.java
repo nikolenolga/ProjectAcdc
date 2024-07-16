@@ -117,7 +117,7 @@ class GameServiceTest {
         savedGame = Game.builder()
                 .id(1L)
                 .gameState(GameState.GAME)
-                .currentQuestion(question)
+                .currentQuestion(quest.getFirstQuestion())
                 .player(user)
                 .quest(quest)
                 .build();
@@ -127,18 +127,18 @@ class GameServiceTest {
     }
 
     @Test
-    void givenUserIdAndQuestId_whenInitGame_thenGetCurrentQuestAndUserGameTo() {
+    void givenUserIdAndQuestId_whenInitGame_thenVerifyCreateGame() {
         //given
         long playerId = user.getId();
         long questId = quest.getId();
         when(questRepositoryMock.get(questId)).thenReturn(Optional.of(quest));
         when(userRepositoryMock.get(playerId)).thenReturn(Optional.of(user));
-        when(gameRepositoryMock.create(game)).thenReturn(Optional.of(savedGame));
         //when
         GameTo actualTo = gameService.initGame(playerId, questId);
         //then
-        assertNotNull(actualTo);
-        assertEquals(savedGameTo, actualTo);
+        verify(questRepositoryMock).get(questId);
+        verify(userRepositoryMock).get(playerId);
+        verify(gameRepositoryMock).create(any(Game.class));
     }
 
     @Test

@@ -7,13 +7,12 @@ import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 @Setter
-@Builder
-@Entity
-@Table(name = "users")
 @ToString
-@Cacheable
+@Entity
+@Table(name = "users", schema = "public")
 public class User implements AbstractComponent {
 
     @Id
@@ -54,7 +53,7 @@ public class User implements AbstractComponent {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id);
+        return id != null && Objects.equals(id, user.id);
     }
 
     @Override

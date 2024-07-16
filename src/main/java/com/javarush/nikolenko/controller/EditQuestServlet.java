@@ -3,7 +3,6 @@ package com.javarush.nikolenko.controller;
 import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.dto.GameState;
 import com.javarush.nikolenko.dto.QuestTo;
-import com.javarush.nikolenko.dto.QuestionTo;
 import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.service.QuestEditService;
 import com.javarush.nikolenko.service.QuestService;
@@ -21,7 +20,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
-import java.util.Collection;
 
 @MultipartConfig
 @WebServlet(urlPatterns = {UrlHelper.EDIT_QUEST})

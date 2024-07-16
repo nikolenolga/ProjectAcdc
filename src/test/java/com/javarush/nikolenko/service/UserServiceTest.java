@@ -5,6 +5,7 @@ import com.javarush.nikolenko.dto.Role;
 import com.javarush.nikolenko.dto.UserTo;
 import com.javarush.nikolenko.entity.Quest;
 import com.javarush.nikolenko.entity.User;
+import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.mapping.Dto;
 import com.javarush.nikolenko.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -56,45 +57,45 @@ class UserServiceTest {
     }
 
     @Test
-    void givenUserToAndNewData_whenUpdate_thenVerifyUpdate() {
+    void givenUserToAndNewData_whenUpdate_thenVerifyUpdateUser() {
         //given
         String name = "new name";
         String password = "new password";
         //when
-        userService.update(savedUserTo, name, password);
+        userService.updateUser(savedUserTo, name, password);
         //then
         verify(userRepositoryMock).update(any(User.class));
     }
 
     @Test
-    void givenUserToAndNewPassword_whenUpdate_thenVerifyUpdate() {
+    void givenUserToAndNewPassword_whenUpdate_thenVerifyUpdateUser() {
         //given
         String name = savedUserTo.getName();
         String password = "new password";
         //when
-        userService.update(savedUserTo, name, password);
+        userService.updateUser(savedUserTo, name, password);
         //then
         verify(userRepositoryMock).update(any(User.class));
     }
 
     @Test
-    void givenUserToAndNewName_whenUpdate_thenVerifyUpdate() {
+    void givenUserToAndNewName_whenUpdate_thenVerifyUpdateUser() {
         //given
         String name = "new name";
         String password = savedUserTo.getPassword();
         //when
-        userService.update(savedUserTo, name, password);
+        userService.updateUser(savedUserTo, name, password);
         //then
         verify(userRepositoryMock).update(any(User.class));
     }
 
     @Test
-    void givenUserToAndNewData_whenUpdate_thenUserToUpdated() {
+    void givenUserToAndNewData_whenUpdate_User_thenUserToUpdated() {
         //given
         String name = "new name";
         String password = "new password";
         //when
-        userService.update(savedUserTo, name, password);
+        userService.updateUser(savedUserTo, name, password);
         //then
         assertEquals(savedUserTo.getName(), name);
         assertEquals(savedUserTo.getPassword(), password);
@@ -107,13 +108,14 @@ class UserServiceTest {
         String currentPassword = "password";
         String currentName = "name";
         User tempUser = User.builder()
+                .id(8L)
                 .name(currentName)
                 .login(currentLogin)
                 .password(currentPassword)
                 .role(Role.THE_USER)
                 .build();
 
-        when(userRepositoryMock.create(tempUser)).thenReturn(Optional.of(tempUser));
+        when(userRepositoryMock.create(any(User.class))).thenReturn(Optional.of(tempUser));
 
         //when
         Optional<UserTo> optionalTempUserTo = userService.signIn(currentLogin, currentPassword, currentName);
@@ -213,7 +215,7 @@ class UserServiceTest {
     @Test
     void givenSavedUserTo_whenfindOrCreateUser_thenReturnSameUser() {
         //given
-        when(userRepositoryMock.find(savedUser)).thenReturn(Stream.of(savedUser));
+        when(userRepositoryMock.find(savedUser)).thenReturn(Optional.of(savedUser));
         // when
         Optional<UserTo> optionalUserTo = userService.findOrCreateUser(savedUserTo);
         //then
@@ -225,7 +227,7 @@ class UserServiceTest {
     @Test
     void givenNewUserTo_whenfindOrCreateUser_thenVerifyCreateUser() {
         //given
-        when(userRepositoryMock.find(user)).thenReturn(Stream.of());
+        when(userRepositoryMock.find(user)).thenReturn(Optional.empty());
         // when
         Optional<UserTo> optionalUserTo = userService.findOrCreateUser(userTo);
         //then
@@ -238,8 +240,8 @@ class UserServiceTest {
     @Test
     void givenNewUserTo_whenfindOrCreateUser_thenReturnSavedUser() {
         //given
-        when(userRepositoryMock.find(user)).thenReturn(Stream.of());
-        when(userRepositoryMock.create(user)).thenReturn(Optional.of(savedUser));
+        when(userRepositoryMock.find(any(User.class))).thenReturn(Optional.empty());
+        when(userRepositoryMock.create(any(User.class))).thenReturn(Optional.of(savedUser));
         // when
         Optional<UserTo> optionalUserTo = userService.findOrCreateUser(userTo);
         //then
@@ -336,14 +338,12 @@ class UserServiceTest {
     }
 
     @Test
-    void givenCantFindUnUsedLogin_whenCreateAnonymousUser_thenVerifyCountAllUsers() {
+    void givenCantFindUnUsedLogin_whenCreateAnonymousUser_thenThrowQuestException() {
         //given
         when(userRepositoryMock.countAllUsers()).thenReturn(5L);
         when(userRepositoryMock.userWithCurrentLoginExist(any(String.class))).thenReturn(true);
-        //when
-        Optional<UserTo> optionalUserTo = userService.createAnonymousUser();
-        //then
-        assertTrue(optionalUserTo.isEmpty());
+        //when //then
+        assertThrows(QuestException.class, () -> userService.createAnonymousUser());
     }
 
     @Test
@@ -351,7 +351,7 @@ class UserServiceTest {
         //given
         when(userRepositoryMock.countAllUsers()).thenReturn(5L);
         when(userRepositoryMock.userWithCurrentLoginExist(any(String.class))).thenReturn(false);
-        when(userRepositoryMock.create(user)).thenReturn(Optional.ofNullable(savedUser));
+        when(userRepositoryMock.create(any(User.class))).thenReturn(Optional.ofNullable(savedUser));
         //when
         Optional<UserTo> optionalUserTo = userService.createAnonymousUser();
         //then

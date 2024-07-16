@@ -4,11 +4,8 @@ import com.javarush.nikolenko.entity.Answer;
 import com.javarush.nikolenko.entity.Question;
 import com.javarush.nikolenko.config.SessionCreater;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 public class QuestionRepository extends BaseRepository<Question> {
 
@@ -18,8 +15,7 @@ public class QuestionRepository extends BaseRepository<Question> {
 
     public Collection<Answer> getAnswersByQuestionId(long id) {
         Session session = sessionCreater.getSession();
-        Question question = session.find(Question.class, id);
-
+        Question question = get(id).orElseThrow();
         return question.getPossibleAnswers();
     }
 }

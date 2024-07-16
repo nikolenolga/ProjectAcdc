@@ -5,13 +5,13 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-        <include file="/db/2024/07/2024-07-05-18-13-00-add-game-state.xml" relativeToChangelogFile="false"/>
-        <include file="/db/2024/07/2024-07-05-18-15-00-add-role.xml" relativeToChangelogFile="false"/>
-        <include file="/db/2024/07/2024-07-05-18-17-00-add-users.xml" relativeToChangelogFile="false"/>
-        <include file="/db/2024/07/2024-07-05-19-19-00-add-quest.xml" relativeToChangelogFile="false"/>
-        <include file="/db/2024/07/2024-07-05-19-34-00-add-question.xml" relativeToChangelogFile="false"/>
-        <include file="/db/2024/07/2024-07-05-19-19-00-add-quest-fk.xml" relativeToChangelogFile="false"/>
-        <include file="/db/2024/07/2024-07-05-19-38-00-add-answer.xml" relativeToChangelogFile="false"/>
-        <include file="/db/2024/07/2024-07-05-20-41-00-add-game.xml" relativeToChangelogFile="false"/>
+    <include file="/db/2024/07/2024-07-05-18-13-00-add-game-state.xml" relativeToChangelogFile="false"/>
+    <include file="/db/2024/07/2024-07-05-18-15-00-add-role.xml" relativeToChangelogFile="false"/>
+    <include file="/db/2024/07/2024-07-05-18-17-00-add-users.xml" relativeToChangelogFile="false"/>
+    <include file="/db/2024/07/2024-07-05-19-19-00-add-quest.xml" relativeToChangelogFile="false"/>
+    <include file="/db/2024/07/2024-07-05-19-34-00-add-question.xml" relativeToChangelogFile="false"/>
+    <include file="/db/2024/07/2024-07-05-19-19-00-add-quest-fk.xml" relativeToChangelogFile="false"/>
+    <include file="/db/2024/07/2024-07-05-19-38-00-add-answer.xml" relativeToChangelogFile="false"/>
+    <include file="/db/2024/07/2024-07-05-20-41-00-add-game.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

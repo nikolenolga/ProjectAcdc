@@ -1,7 +1,6 @@
 package com.javarush.nikolenko.controller;
 
 import com.javarush.nikolenko.config.NanoSpring;
-import com.javarush.nikolenko.dto.Role;
 import com.javarush.nikolenko.dto.UserTo;
 import com.javarush.nikolenko.service.UserService;
 import com.javarush.nikolenko.utils.Key;
@@ -46,7 +45,7 @@ public class RegistrationServlet extends HttpServlet {
 
         Optional<UserTo> optionalUser = userService.signIn(login, password, name);
 
-        if(optionalUser.isPresent()) {
+        if (optionalUser.isPresent()) {
             UserTo user = optionalUser.get();
 
             session.setAttribute(Key.USER, user);

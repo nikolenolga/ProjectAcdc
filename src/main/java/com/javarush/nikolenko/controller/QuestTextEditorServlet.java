@@ -2,7 +2,6 @@ package com.javarush.nikolenko.controller;
 
 import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.dto.QuestTo;
-import com.javarush.nikolenko.dto.UserTo;
 import com.javarush.nikolenko.service.QuestEditService;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.RequestHelper;
@@ -49,10 +48,10 @@ public class QuestTextEditorServlet extends HttpServlet {
             Optional<QuestTo> optionalQuest = questEditService.parseQuest(userId, text);
             redirectPath = optionalQuest.isEmpty()
                     ? UrlHelper.TWO_PARAM_TEMPLATE.formatted(UrlHelper.QUEST_TEXT_EDITOR,
-                        Key.HAS_ALERTS, (Boolean) true,
-                        Key.ALERT, Key.PARSE_EXCEPTION)
+                    Key.HAS_ALERTS, true,
+                    Key.ALERT, Key.PARSE_EXCEPTION)
                     : UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.EDIT_QUEST,
-                        Key.QUEST_ID, optionalQuest.get().getId());
+                    Key.QUEST_ID, optionalQuest.get().getId());
         } else if (req.getParameter(Key.BUTTON_RESET) != null) {
             session.removeAttribute(Key.TEXT);
         }

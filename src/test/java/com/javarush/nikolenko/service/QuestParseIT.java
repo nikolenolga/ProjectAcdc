@@ -27,17 +27,17 @@ public class QuestParseIT extends BaseControllerIT {
     private static final SessionCreater sessionCreater = NanoSpring.find(SessionCreater.class);
 
     private static final String TEST_QUEST_TEXT = """
-                : name : Default quest - Космопорт.
-                : description : Пролог
-                ? : 1 : Ты потерял память. Принять вызов НЛО?
-                = : 2 : Принять вызов :
-                < : 0 : Отклонить вызов : Ты отклонил вызов.
-                ? : 2 : Ты принял вызов. Поднимаешься на мостик к капитану?
-                = : 3 : Подняться на мостик :
-                < : 0 : Отказаться подниматься на мостик : Ты не пошел на переговоры.
-                ? : 3 : Ты поднялся на мостик. Ты кто?
-                > : 0 : Рассказать правду о себе : Тебя вернули домой.
-                < : 0 : Солгать о себе : Твою ложь разоблачили.""";
+            : name : Default quest - Космопорт.
+            : description : Пролог
+            ? : 1 : Ты потерял память. Принять вызов НЛО?
+            = : 2 : Принять вызов :
+            < : 0 : Отклонить вызов : Ты отклонил вызов.
+            ? : 2 : Ты принял вызов. Поднимаешься на мостик к капитану?
+            = : 3 : Подняться на мостик :
+            < : 0 : Отказаться подниматься на мостик : Ты не пошел на переговоры.
+            ? : 3 : Ты поднялся на мостик. Ты кто?
+            > : 0 : Рассказать правду о себе : Тебя вернули домой.
+            < : 0 : Солгать о себе : Твою ложь разоблачили.""";
     private static final Path CLASSES_ROOT = Paths.get(URI.create(
             Objects.requireNonNull(
                     QuestParseIT.class.getResource("/")
@@ -78,7 +78,7 @@ public class QuestParseIT extends BaseControllerIT {
         Optional<QuestTo> questTo = questEditService.parseQuest(userId, TEST_QUEST_TEXT);
 
         //then
-        Optional<QuestionTo> optionalQuestionTo =  questTo.get()
+        Optional<QuestionTo> optionalQuestionTo = questTo.get()
                 .getQuestions()
                 .stream()
                 .filter(questionTo -> questionTo.getQuestionMessage()

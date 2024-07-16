@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 
@@ -52,8 +51,8 @@ public class EditUserServlet extends HttpServlet {
 
         if (req.getParameter(Key.BUTTON_USER_IMG_LOAD) != null) {
             imageService.uploadImage(req, user.getImage());
-        } else if (req.getParameter(Key.BUTTON_SUBMIT) != null && !StringUtils.isAnyBlank(password)) {
-            userService.update(user, name, password);
+        } else if (req.getParameter(Key.BUTTON_SUBMIT) != null) {
+            userService.updateUser(user, name, password);
             session.setAttribute(Key.USER, user);
         } else {
             redirectPath = UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.EDIT_USER,

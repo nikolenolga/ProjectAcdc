@@ -1,26 +1,37 @@
 package com.javarush.nikolenko.config;
 
 import com.javarush.nikolenko.entity.*;
+import com.javarush.nikolenko.exception.QuestException;
+import com.javarush.nikolenko.utils.LoggerConstants;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import java.io.Closeable;
-import java.io.IOException;
+import java.io.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-//SessionCreater is always single
+import static org.hibernate.cfg.JdbcSettings.JAKARTA_JDBC_DRIVER;
+
 @Slf4j
 public class SessionCreater implements Closeable {
+    public static final String TRY_END_LEVEL_SESSION = "<<< try end level: {} session={}";
     private final SessionFactory sessionFactory;
     private final ThreadLocal<AtomicInteger> levelBox = new ThreadLocal<>();
     private final ThreadLocal<Session> sessionBox = new ThreadLocal<>();
 
     @SneakyThrows
     public SessionCreater(ApplicationProperties applicationProperties) {
-        log.info("Start creating SessionFactory with configuration");
+        log.info(LoggerConstants.START_CREATING_SESSION_FACTORY_WITH_CONFIGURATION);
+
+        String driver = applicationProperties.getProperty(JAKARTA_JDBC_DRIVER);
+        try {
+            Class.forName(driver);
+        } catch (ClassNotFoundException e) {
+            log.error(LoggerConstants.DRIVER_CLASS_NOT_FOUND, driver, e);
+            throw new QuestException(e);
+        }
 
         Configuration configuration = new Configuration();
         configuration.addProperties(applicationProperties);
@@ -33,7 +44,7 @@ public class SessionCreater implements Closeable {
 
         sessionFactory = configuration.buildSessionFactory();
 
-        log.info("Finish creating SessionFactory with configuration");
+        log.info(LoggerConstants.FINISH_CREATING_SESSION_FACTORY_WITH_CONFIGURATION);
     }
 
     public Session getSession() {
@@ -52,28 +63,26 @@ public class SessionCreater implements Closeable {
             sessionBox.set(session);
             session.beginTransaction();
         }
-        log.info(">>> start level: {} session={}", level.get(), sessionBox.get());
+        log.info(LoggerConstants.START_LEVEL_SESSION, level.get(), sessionBox.get());
     }
-
 
     public void endTransactional() {
         AtomicInteger level = levelBox.get();
         Session session = sessionBox.get();
-        //log.info("\t\tcheck tx: {} session={}", level.get(), session);
-        log.info("<<< end level: {} session={}", level.get(), session);
+        log.info(TRY_END_LEVEL_SESSION, level.get(), session);
 
         if (level.decrementAndGet() == 0) {
-            sessionBox.remove();
             try {
                 session.getTransaction().commit();
-                session.close();
             } catch (RuntimeException e) {
                 session.getTransaction().rollback();
+                throw new QuestException(e);
+            } finally {
+                sessionBox.remove();
                 session.close();
-                throw e;
             }
         }
-
+        log.info(LoggerConstants.END_LEVEL_SUCCEED);
     }
 
 

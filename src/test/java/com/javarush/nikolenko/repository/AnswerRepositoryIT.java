@@ -8,9 +8,7 @@ import com.javarush.nikolenko.entity.Answer;
 import org.junit.jupiter.api.*;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 class AnswerRepositoryIT extends ContainerIT {
     private static final SessionCreater sessionCreater = NanoSpring.find(SessionCreater.class);
@@ -51,15 +49,6 @@ class AnswerRepositoryIT extends ContainerIT {
         Assertions.assertTrue(optionalAnswer.isPresent());
         Answer answer = optionalAnswer.get();
         Assertions.assertEquals(testAnswer, answer);
-    }
-
-    @Test
-    void givenCreatedTestAnswer_whenFindAnswerWithThisNameAndLogin_thenGetEqualAnswer() {
-        Answer answer = Answer.builder()
-                .answerMessage(testAnswer.getAnswerMessage())
-                .build();
-        Stream<Answer> answerStream = answerRepository.find(answer);
-        Assertions.assertEquals(testAnswer, answerStream.findFirst().orElseThrow());
     }
 
     @Test
@@ -130,14 +119,6 @@ class AnswerRepositoryIT extends ContainerIT {
     void tearDown() {
         answerRepository.delete(testAnswer);
         sessionCreater.endTransactional();
-    }
-
-    @AfterAll
-    static void checkTestUsersDeleted() {
-        Answer answer = Answer.builder().answerMessage("Answer message").build();
-
-        List<Answer> answers = answerRepository.find(answer).toList();
-        Assertions.assertTrue(answers.isEmpty());
     }
 
 }

@@ -1,11 +1,10 @@
 package com.javarush.nikolenko.filter;
 
-import com.javarush.nikolenko.config.Configurator;
 import com.javarush.nikolenko.config.NanoSpring;
-import com.javarush.nikolenko.dto.Role;
 import com.javarush.nikolenko.dto.UserTo;
 import com.javarush.nikolenko.service.UserService;
 import com.javarush.nikolenko.utils.Key;
+import com.javarush.nikolenko.utils.LoggerConstants;
 import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -42,7 +41,7 @@ public class UserDefinedFilter extends HttpFilter {
             session.setAttribute(Key.USER, anonymous);
             session.setAttribute(Key.USER_ID, anonymous.getId());
             session.setAttribute(Key.IS_AUTHORIZED, false);
-            log.info("Default [{}] user is set", anonymous.getName());
+            log.info(LoggerConstants.DEFAULT_USER_IS_SET, anonymous.getName());
         }
 
         chain.doFilter(req, res);

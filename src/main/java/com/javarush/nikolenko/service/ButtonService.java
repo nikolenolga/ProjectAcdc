@@ -1,11 +1,10 @@
 package com.javarush.nikolenko.service;
 
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.javarush.nikolenko.utils.Key.*;
 import static com.javarush.nikolenko.utils.Key.BUTTON_DELETE_QUESTION;
@@ -13,7 +12,7 @@ import static com.javarush.nikolenko.utils.Key.BUTTON_DELETE_QUESTION;
 @Slf4j
 @Transactional
 public class ButtonService {
-    private final Map<String, QuestEditOperation> operationMap = new HashMap<>();;
+    private final Map<String, QuestEditOperation> operationMap = new ConcurrentHashMap<>();
     private final QuestEditService questEditService;
 
     public ButtonService(QuestEditService questEditService) {

@@ -2,26 +2,17 @@ package com.javarush.nikolenko.entity;
 
 import com.javarush.nikolenko.dto.GameState;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cache;
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.OptimisticLockType;
-import org.hibernate.annotations.OptimisticLocking;
-
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.Objects;
 
-@Getter
-@Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "game")
+@Builder
+@Getter
+@Setter
 @ToString
-@Cacheable
+@Entity
+@Table(name = "game", schema = "public")
 public class Game implements AbstractComponent {
 
     @Id
@@ -47,6 +38,19 @@ public class Game implements AbstractComponent {
     @ToString.Exclude
     private Quest quest;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return id != null && Objects.equals(id, game.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 18;
+    }
+
     public void restart() {
         this.gameState = GameState.GAME;
         this.currentQuestion = this.quest.getFirstQuestion();
@@ -54,18 +58,5 @@ public class Game implements AbstractComponent {
 
     public boolean isFinished() {
         return this.gameState != GameState.GAME;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Game game = (Game) o;
-        return Objects.equals(id, game.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 18;
     }
 }

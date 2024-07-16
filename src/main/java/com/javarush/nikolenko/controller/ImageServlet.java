@@ -32,9 +32,8 @@ public class ImageServlet extends HttpServlet {
         String requestURI = req.getRequestURI();
         String target = req.getContextPath() + UrlHelper.IMAGES;
         String nameImage = requestURI.replace(target, "");
+
         Path path = imageService.getImagePath(nameImage);
         Files.copy(path, resp.getOutputStream());
     }
-
-
 }

@@ -5,16 +5,16 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.Objects;
 
-@Builder
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "answer")
+@Builder
+@Getter
+@Setter
 @ToString
-@Cacheable
+@Entity
+@Table(name = "answer", schema = "public")
 public class Answer implements AbstractComponent {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,8 +38,17 @@ public class Answer implements AbstractComponent {
     @ToString.Exclude
     private Question question;
 
-    public boolean isFinal() {
-        return gameState != GameState.GAME;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Answer answer = (Answer) o;
+        return id != null && Objects.equals(id, answer.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 38;
     }
 
     public boolean hasNextQuestion() {
@@ -54,24 +63,7 @@ public class Answer implements AbstractComponent {
         return gameState == GameState.WIN;
     }
 
-    public boolean isLose() {
-        return gameState == GameState.LOSE;
-    }
-
-    public boolean hasOnlyNextQuestionLogic() {
-        return !hasFinalMessage() && !isFinal() && hasNextQuestion();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Answer answer = (Answer) o;
-        return Objects.equals(id, answer.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 38;
+    public boolean isFinal() {
+        return gameState != GameState.GAME;
     }
 }

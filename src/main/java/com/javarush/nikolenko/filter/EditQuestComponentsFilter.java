@@ -1,6 +1,7 @@
 package com.javarush.nikolenko.filter;
 
 import com.javarush.nikolenko.config.NanoSpring;
+import com.javarush.nikolenko.exception.QuestException;
 import com.javarush.nikolenko.service.QuestService;
 import com.javarush.nikolenko.utils.Key;
 import com.javarush.nikolenko.utils.RequestHelper;
@@ -17,7 +18,7 @@ import lombok.SneakyThrows;
 import java.io.IOException;
 
 @WebFilter(urlPatterns = {UrlHelper.EDIT_QUEST})
-public class AddQuestComponentsFilter extends HttpFilter {
+public class EditQuestComponentsFilter extends HttpFilter {
     private QuestService questService;
 
     @SneakyThrows
@@ -31,35 +32,41 @@ public class AddQuestComponentsFilter extends HttpFilter {
         boolean needToAddQuestion = req.getParameter(Key.BUTTON_ADD_QUESTION) != null;
         boolean needToAddAnswer = req.getParameter(Key.BUTTON_ADD_ANSWER) != null;
         boolean needToDeleteQuest = req.getParameter(Key.BUTTON_DELETE_QUEST) != null;
+        boolean isPostMethod = req.getMethod().equalsIgnoreCase("post");
 
-
-        if (req.getMethod().equalsIgnoreCase("post")
-                && (needToAddAnswer || needToAddQuestion || needToDeleteQuest)) {
+        if (isPostMethod && (needToAddAnswer || needToAddQuestion || needToDeleteQuest)) {
             long questId = RequestHelper.getLongValue(req, Key.QUEST_ID);
-            String redirectAdress = null;
 
             if (needToDeleteQuest) {
-                questService.delete(questId);
-                redirectAdress = UrlHelper.USER_QUESTS;
+                if (!questService.delete(questId)) {
+                    throw new QuestException("Can't delete quest %s".formatted(questId));
+                }
             }
 
-            if (needToAddQuestion) {
-                redirectAdress = UrlHelper.ONE_PARAM_TEMPLATE.formatted(
-                        UrlHelper.ADD_QUESTION,
-                        Key.QUEST_ID, questId);
-            }
-
-            if (needToAddAnswer) {
-                long questionId = RequestHelper.getLongValue(req, Key.QUESTION_ID);
-                redirectAdress = UrlHelper.TWO_PARAM_TEMPLATE.formatted(
-                        UrlHelper.ADD_ANSWER,
-                        Key.QUEST_ID, questId,
-                        Key.QUESTION_ID, questionId);
-            }
-
+            String redirectAdress = getRedirectAdress(req, questId, needToDeleteQuest, needToAddQuestion, needToAddAnswer);
             res.sendRedirect(redirectAdress);
         } else {
             chain.doFilter(req, res);
         }
+    }
+
+    private String getRedirectAdress(HttpServletRequest req, long questId,
+                                     boolean needToDeleteQuest, boolean needToAddQuestion, boolean needToAddAnswer) {
+
+        if (needToAddQuestion) {
+            return UrlHelper.ONE_PARAM_TEMPLATE.formatted(
+                    UrlHelper.ADD_QUESTION,
+                    Key.QUEST_ID, questId);
+        }
+
+        if (needToAddAnswer) {
+            long questionId = RequestHelper.getLongValue(req, Key.QUESTION_ID);
+            return UrlHelper.TWO_PARAM_TEMPLATE.formatted(
+                    UrlHelper.ADD_ANSWER,
+                    Key.QUEST_ID, questId,
+                    Key.QUESTION_ID, questionId);
+        }
+
+        return UrlHelper.USER_QUESTS;
     }
 }

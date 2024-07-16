@@ -1,10 +1,8 @@
 package com.javarush.nikolenko.utils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class Key {
+public final class Key {
     public static final String USER = "user";
     public static final String GAME = "game";
     public static final String GAMESTATE = "gameState";
@@ -76,12 +74,10 @@ public class Key {
     public static final String WRONG_SYNTAX_QUESTION = "Question line wrong syntax";
     public static final String WRONG_SYNTAX_ANSWER = "Answer line wrong syntax";
     public static final String WRONG_IMPL = "Not found impl for %s (type=%s)";
+    public static final String CAN_T_FIND_CURRENT_QUEST_ENTITIES = "Can't find current quest entities";
+    public static final String CAN_T_DELETE_QUEST_FIRST_QUESTION_DECLARE_NEW_QUEST_FIRST_QUESTION_BEFORE_DELETING = "Can't delete quest first question. Declare new quest first question before deleting.";
 
     public static final List<String> QUEST_EDIT_BUTTONS = List.of(new String[]{BUTTON_LOAD_QUEST_IMAGE, BUTTON_EDIT_QUEST,
             BUTTON_DELETE_QUESTION, BUTTON_EDIT_QUESTION, BUTTON_LOAD_QUESTION_IMAGE,
             BUTTON_DELETE_ANSWER, BUTTON_EDIT_ANSWER, BUTTON_LOAD_ANSWER_IMAGE});
-
-    public static boolean nullOrEquals(Object first, Object second) {
-        return (first == null && second == null) || (first != null && first.equals(second));
-    }
 }

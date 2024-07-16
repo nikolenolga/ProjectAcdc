@@ -8,15 +8,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
-@Table(name = "quest")
 @ToString
-@Cacheable
+@Entity
+@Table(name = "quest", schema = "public")
 public class Quest implements AbstractComponent {
 
     @Id
@@ -44,29 +43,25 @@ public class Quest implements AbstractComponent {
     @ToString.Exclude
     private final List<Question> questions = new ArrayList<>();
 
-    public void addQuestion(Question question) {
-        question.setQuest(this);
-        questions.add(question);
-    }
-
-    public void deleteQuestion(Question question) {
-        questions.remove(question);
-    }
-
-    public List<Question> getQuestions() {
-        return Collections.unmodifiableList(questions);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Quest quest = (Quest) o;
-        return Objects.equals(id, quest.id);
+        return id != null && Objects.equals(id, quest.id);
     }
 
     @Override
     public int hashCode() {
         return 7;
+    }
+
+    public void addQuestion(Question question) {
+        question.setQuest(this);
+        questions.add(question);
+    }
+
+    public List<Question> getQuestions() {
+        return Collections.unmodifiableList(questions);
     }
 }

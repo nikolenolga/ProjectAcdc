@@ -1,6 +1,7 @@
 package com.javarush.nikolenko.config;
 
 import com.javarush.nikolenko.exception.QuestException;
+import com.javarush.nikolenko.utils.LoggerConstants;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
 @Slf4j
 public class NanoSpring {
     private static final Map<Class<?>, Object> components = new ConcurrentHashMap<>();
-    // add support abstraction<?>
+
     private static final List<Class<?>> beanDefinitions = new ArrayList<>();
     private static final String CLASSES = File.separator + "classes" + File.separator;
     private static final String EXT = ".class";
@@ -37,22 +38,16 @@ public class NanoSpring {
     private static final String GENERIC_START = "<";
     private static final String GENERIC_END = ">";
     private static final String EMPTY = "";
+    public static final String[] NANOSPRING_INIT_EXCLUDES = {"Controller", "Servlet", "Filter", "controller", "servlet", "filter"};
 
     @SneakyThrows
     public static <T> T find(Class<T> clazz) {
-        if(beanDefinitions.isEmpty()){
+        if (beanDefinitions.isEmpty()) {
             init();
         }
         Object component = components.get(clazz);
         if (component == null) {
-            Constructor<?> constructor = null;
-            try {
-                constructor = clazz.getConstructors()[0];
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println(constructor);
-                System.out.println("In block " + clazz.getSimpleName());
-                throw new RuntimeException(e + " in block " + clazz.getSimpleName());
-            }
+            Constructor<?> constructor = clazz.getConstructors()[0];
             Class<?>[] parameterTypes = constructor.getParameterTypes();
             Type[] genericParameterTypes = constructor.getGenericParameterTypes();
             Object[] parameters = new Object[parameterTypes.length];
@@ -62,20 +57,14 @@ public class NanoSpring {
                     parameters[i] = find(impl);
                 }
             } catch (IndexOutOfBoundsException e) {
-                String message = "IndexOutOfBoundsException in: %s".formatted(clazz.getSimpleName());
-                log.error(message);
-                System.out.println(message);
-                System.out.println("constructor " + constructor);
-                System.out.println("parameterTypes " + parameterTypes);
-                System.out.println("genericParameterTypes " + genericParameterTypes);
-                System.out.println("parameters " + parameters);
-                throw new RuntimeException(e + message);
+                log.error(LoggerConstants.INDEX_OUT_OF_BOUNDS_EXCEPTION_IN, clazz.getSimpleName());
+                throw new QuestException(clazz.getSimpleName(), e);
             }
             Object newInstance = checkTransactional(clazz)
                     ? constructProxyInstance(clazz, parameterTypes, parameters)
                     : constructor.newInstance(parameters);
             components.put(clazz, newInstance);
-            log.debug("NanoSpring created new instance of {}", clazz);
+            log.debug(LoggerConstants.NANO_SPRING_CREATED_NEW_INSTANCE_OF, clazz);
         }
 
         return (T) components.get(clazz);
@@ -86,23 +75,23 @@ public class NanoSpring {
         URL resource = NanoSpring.class.getResource("NanoSpring.class");
         URI uri = Objects.requireNonNull(resource).toURI();
         Path appRoot = Path.of(uri).getParent().getParent();
-        scanPackages(appRoot,"Controller", "Servlet", "Filter", "controller", "servlet", "filter");
+        scanPackages(appRoot, NANOSPRING_INIT_EXCLUDES);
     }
 
     public static void scanPackages(Path appPackage, String... excludes) {
-        try(Stream<Path> walk = Files.walk(appPackage)) {                               // в папке
-            List<String> names = walk.map(Path::toString)                               // рекурсия по
-                    .filter(o -> o.endsWith(EXT))                                       // всем классам
-                    .filter(o -> Arrays.stream(excludes).noneMatch(o::contains))        // кроме запрещенных
-                    .map(s -> s.substring(s.indexOf(CLASSES) + CLASSES.length()))        // del ".../classes/"
-                    .map(s -> s.replace(EXT, EMPTY))                           // и ".class"
-                    .map(s -> s.replace(File.separator, DOT))               // через точки
-                    .toList();                                                     // собранные как строки
-            for (String name : names) {                                                 // которые переведем
-                beanDefinitions.add(Class.forName(name));                               // в классы
-            }                                                                           // готово
+        try (Stream<Path> walk = Files.walk(appPackage)) {
+            List<String> names = walk.map(Path::toString)
+                    .filter(o -> o.endsWith(EXT))
+                    .filter(o -> Arrays.stream(excludes).noneMatch(o::contains))
+                    .map(s -> s.substring(s.indexOf(CLASSES) + CLASSES.length()))
+                    .map(s -> s.replace(EXT, EMPTY))
+                    .map(s -> s.replace(File.separator, DOT))
+                    .toList();
+            for (String name : names) {
+                beanDefinitions.add(Class.forName(name));
+            }
         } catch (IOException | ClassNotFoundException e) {
-            log.error("NanoSpring scanPackages caused exeption {}, bean is not in excludes list: {}", e.getMessage(), excludes);
+            log.error(LoggerConstants.NANO_SPRING_SCAN_PACKAGES_CAUSED_EXEPTION_BEAN_IS_NOT_IN_EXCLUDES_LIST, e.getMessage(), excludes);
             throw new QuestException(e);
         }
     }
@@ -118,8 +107,8 @@ public class NanoSpring {
                 return beanDefinition;
             }
         }
-        log.info("Not found impl for {} (type={})", aClass, type);
-        throw new RuntimeException("Not found impl for %s (type=%s)".formatted(aClass, type));
+        log.info(LoggerConstants.NOT_FOUND_IMPL_FOR_TYPE, aClass, type);
+        throw new QuestException("Not found impl for %s (type=%s)".formatted(aClass, type));
     }
 
     private static boolean checkGenerics(Type type, Class<?> impl) {
@@ -150,18 +139,13 @@ public class NanoSpring {
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
-            log.error("{} not found}", className);
+            log.error(LoggerConstants.NOT_FOUND, className, e);
             return null;
         }
     }
 
     //add proxy
     private static <T> boolean checkTransactional(Class<T> type) {
-        //в данном примере сделано просто и тупо:
-        // если класс или любой метод Transactional
-        // - заворачиваем все без проверки что отмечено, а что нет
-        //нужно в динамике проверять каждый метод если класса не отмечен
-        //и запускать прокси только в нужных местах
         return type.isAnnotationPresent(Transactional.class)
                 || Arrays.stream(type.getMethods())
                 .anyMatch(method -> method.isAnnotationPresent(Transactional.class));

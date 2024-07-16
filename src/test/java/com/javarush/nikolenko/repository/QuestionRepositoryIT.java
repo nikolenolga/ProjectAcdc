@@ -10,6 +10,8 @@ import org.junit.jupiter.api.*;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class QuestionRepositoryIT extends ContainerIT {
     private static final SessionCreater sessionCreater = NanoSpring.find(SessionCreater.class);
     private static final QuestionRepository questionRepository = new QuestionRepository(sessionCreater);
@@ -30,15 +32,15 @@ class QuestionRepositoryIT extends ContainerIT {
 
     @Test
     void givenCreatedTestQuestion_whenGetId_thenIdNotNullAndNot0L() {
-        Assertions.assertTrue(testQuestion.getId() != null && testQuestion.getId() != 0L);
+        assertTrue(testQuestion.getId() != null && testQuestion.getId() != 0L);
     }
 
     @Test
     void givenCreatedTestQuestion_whenGetQuestionWithId_thenEqualQuestion() {
         Optional<Question> optionalQuestion = questionRepository.get(testQuestion.getId());
-        Assertions.assertTrue(optionalQuestion.isPresent());
+        assertTrue(optionalQuestion.isPresent());
         Question question = optionalQuestion.get();
-        Assertions.assertEquals(testQuestion, question);
+        assertEquals(testQuestion, question);
     }
 
     @Test
@@ -47,20 +49,10 @@ class QuestionRepositoryIT extends ContainerIT {
         questionRepository.update(testQuestion);
 
         Optional<Question> optionalQuestion = questionRepository.get(testQuestion.getId());
-        Assertions.assertTrue(optionalQuestion.isPresent());
+        assertTrue(optionalQuestion.isPresent());
         Question question = optionalQuestion.get();
-        Assertions.assertEquals(testQuestion, question);
-        Assertions.assertEquals(testQuestion.getQuestionMessage(), question.getQuestionMessage());
-    }
-
-
-    @Test
-    void givenCreatedTestQuestion_whenFindQuestionWithThisMessage_thenGetEqualQuestion() {
-        Question searchedQuestion = Question.builder()
-                .questionMessage("First Message")
-                .build();
-        Question actualQuestion = questionRepository.find(searchedQuestion).findFirst().orElse(null);
-        Assertions.assertEquals(testQuestion, actualQuestion);
+        assertEquals(testQuestion, question);
+        assertEquals(testQuestion.getQuestionMessage(), question.getQuestionMessage());
     }
 
     @Test
@@ -72,7 +64,7 @@ class QuestionRepositoryIT extends ContainerIT {
 
         questionRepository.delete(testQuestionForDelete);
         Optional<Question> optionalQuestion = questionRepository.get(testQuestionForDelete.getId());
-        Assertions.assertTrue(optionalQuestion.isEmpty());
+        assertTrue(optionalQuestion.isEmpty());
     }
 
     @Test
@@ -84,7 +76,7 @@ class QuestionRepositoryIT extends ContainerIT {
 
         questionRepository.delete(testQuestionForDelete.getId());
         Optional<Question> optionalQuestion = questionRepository.get(testQuestionForDelete.getId());
-        Assertions.assertTrue(optionalQuestion.isEmpty());
+        assertTrue(optionalQuestion.isEmpty());
     }
 
     @Test
@@ -96,14 +88,15 @@ class QuestionRepositoryIT extends ContainerIT {
             );
         }
         Collection<Question> questions = questionRepository.getAll();
-        Assertions.assertFalse(questions.isEmpty());
+        assertFalse(questions.isEmpty());
     }
+
     @Test
     void givenGetAllQuestionsCount_whenCreateFiveQuestions_thenGetAllQuestionsDeltaIsFive() {
         Collection<Question> questions = questionRepository.getAll();
         int before = questions.size();
 
-        for  (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             questionRepository.create(Question.builder()
                     .questionMessage("First Message " + i)
                     .build()
@@ -111,7 +104,7 @@ class QuestionRepositoryIT extends ContainerIT {
         }
         int actual = questionRepository.getAll().size() - before;
 
-        Assertions.assertEquals(5, actual);
+        assertEquals(5, actual);
     }
 
     @Test
@@ -134,25 +127,15 @@ class QuestionRepositoryIT extends ContainerIT {
         Collection<Answer> actualAnswers = questionRepository.getAnswersByQuestionId(testQuestion.getId());
 
         //then
-        Assertions.assertFalse(actualAnswers.isEmpty());
-        Assertions.assertFalse(expectedAnswers.isEmpty());
-        Assertions.assertEquals(expectedAnswers.size(), actualAnswers.size());
-        Assertions.assertEquals(expectedAnswers, actualAnswers);
+        assertFalse(actualAnswers.isEmpty());
+        assertFalse(expectedAnswers.isEmpty());
+        assertEquals(expectedAnswers.size(), actualAnswers.size());
+        assertEquals(expectedAnswers, actualAnswers);
     }
 
     @AfterEach
     void tearDown() {
         questionRepository.delete(testQuestion);
         sessionCreater.endTransactional();
-    }
-
-    @AfterAll
-    static void checkTestUsersDeleted() {
-        Question question = Question.builder()
-                .questionMessage("First Message")
-                .build();
-
-        List<Question> questions = questionRepository.find(question).toList();
-        Assertions.assertTrue(questions.isEmpty());
     }
 }

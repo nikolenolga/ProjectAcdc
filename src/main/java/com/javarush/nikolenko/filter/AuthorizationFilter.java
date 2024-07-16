@@ -3,6 +3,7 @@ package com.javarush.nikolenko.filter;
 import com.javarush.nikolenko.config.Configurator;
 import com.javarush.nikolenko.config.NanoSpring;
 import com.javarush.nikolenko.utils.Key;
+import com.javarush.nikolenko.utils.LoggerConstants;
 import com.javarush.nikolenko.utils.UrlHelper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -29,7 +30,7 @@ public class AuthorizationFilter extends HttpFilter {
         if (authorized) {
             chain.doFilter(req, res);
         } else {
-            log.info("User is not authorized, request {} rejected", req.getRequestURI());
+            log.info(LoggerConstants.USER_IS_NOT_AUTHORIZED_REQUEST_REJECTED, req.getRequestURI());
             res.sendRedirect(UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.LOGIN,
                     Key.ALERT, Key.NEED_TO_LOGIN));
         }

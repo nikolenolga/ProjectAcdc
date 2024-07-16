@@ -8,8 +8,9 @@ import com.javarush.nikolenko.entity.Question;
 import org.junit.jupiter.api.*;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class QuestRepositoryIT extends ContainerIT {
     private static final SessionCreater sessionCreater = NanoSpring.find(SessionCreater.class);
@@ -40,16 +41,16 @@ class QuestRepositoryIT extends ContainerIT {
 
     @Test
     void givenCreatedTestQuest_whenGetId_thenIdNotNullAndNot0L() {
-        Assertions.assertTrue(testQuest.getId() != null && testQuest.getId() != 0L);
-        Assertions.assertTrue(testQuest.getFirstQuestion().getId() != null && testQuest.getFirstQuestion().getId() != 0L);
+        assertTrue(testQuest.getId() != null && testQuest.getId() != 0L);
+        assertTrue(testQuest.getFirstQuestion().getId() != null && testQuest.getFirstQuestion().getId() != 0L);
     }
 
     @Test
     void givenCreatedTestQuest_whenGetQuestWithId_thenEqualQuest() {
         Optional<Quest> optionalQuest = questRepository.get(testQuest.getId());
-        Assertions.assertTrue(optionalQuest.isPresent());
+        assertTrue(optionalQuest.isPresent());
         Quest quest = optionalQuest.get();
-        Assertions.assertEquals(testQuest, quest);
+        assertEquals(testQuest, quest);
     }
 
     @Test
@@ -58,20 +59,10 @@ class QuestRepositoryIT extends ContainerIT {
         questRepository.update(testQuest);
 
         Optional<Quest> optionalQuest = questRepository.get(testQuest.getId());
-        Assertions.assertTrue(optionalQuest.isPresent());
+        assertTrue(optionalQuest.isPresent());
         Quest quest = optionalQuest.get();
-        Assertions.assertEquals(testQuest, quest);
-        Assertions.assertEquals(testQuest.getName(), quest.getName());
-    }
-
-
-@Test
-    void givenCreatedTestQuest_whenFindQuestWithThisName_thenGetEqualQuest() {
-        Quest searchedQuest = Quest.builder()
-            .name("Test Quest")
-            .build();
-        Quest actualQuest = questRepository.find(searchedQuest).findFirst().orElse(null);
-        Assertions.assertEquals(testQuest, actualQuest);
+        assertEquals(testQuest, quest);
+        assertEquals(testQuest.getName(), quest.getName());
     }
 
     @Test
@@ -84,7 +75,7 @@ class QuestRepositoryIT extends ContainerIT {
 
         questRepository.delete(testQuestForDelete);
         Optional<Quest> optionalQuest = questRepository.get(testQuestForDelete.getId());
-        Assertions.assertTrue(optionalQuest.isEmpty());
+        assertTrue(optionalQuest.isEmpty());
     }
 
     @Test
@@ -97,7 +88,7 @@ class QuestRepositoryIT extends ContainerIT {
 
         questRepository.delete(testQuestForDelete.getId());
         Optional<Quest> optionalQuest = questRepository.get(testQuestForDelete.getId());
-        Assertions.assertTrue(optionalQuest.isEmpty());
+        assertTrue(optionalQuest.isEmpty());
     }
 
     @Test
@@ -111,8 +102,9 @@ class QuestRepositoryIT extends ContainerIT {
             );
         }
         Collection<Quest> quests = questRepository.getAll();
-        Assertions.assertFalse(quests.isEmpty());
+        assertFalse(quests.isEmpty());
     }
+
     @Test
     void givenGetAllQuestsCount_whenDeleteOneQuest_thenGetAllQuestsDeltaIsOne() {
         int expected = questRepository.getAll().size();
@@ -128,22 +120,12 @@ class QuestRepositoryIT extends ContainerIT {
 
         int actual = questRepository.getAll().size();
 
-        Assertions.assertEquals(15, actual - expected);
+        assertEquals(15, actual - expected);
     }
 
     @AfterEach
     void tearDown() {
         questRepository.delete(testQuest);
         sessionCreater.endTransactional();
-    }
-
-    @AfterAll
-    static void checkTestUsersDeleted() {
-        Quest quest = Quest.builder()
-                .name("Test Quest")
-                .build();
-
-        List<Quest> quests = questRepository.find(quest).toList();
-        Assertions.assertTrue(quests.isEmpty());
     }
 }

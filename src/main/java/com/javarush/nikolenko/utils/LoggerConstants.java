@@ -1,0 +1,40 @@
+package com.javarush.nikolenko.utils;
+
+public class LoggerConstants {
+    public static final String CANT_T_FIND_OR_READ_FILE_AT = "Cant't find or read {} file at {}";
+    public static final String START_CONFIGURATOR = "Start Configurator";
+    public static final String FINISH_CONFIGURATOR = "Finish Configurator";
+    public static final String USER_PICKED_UP = "User picked up: {}";
+    public static final String START_CONFIGURATE_DEFAULT_QUESTS = "Start configurate default quests";
+    public static final String DATA_BASE_ALLREADY_CONTAINS_QUESTS_CONFIGURATOR_SKIPED_QUESTS_PARSING = "DataBase allready contains quests configurator skiped quests parsing";
+    public static final String CONFIG_DEFAULT_QUESTS_FROM_DIRECTORY_CAUSED_EXCEPTION = "Config Default Quests from directory {}, caused exception - {}";
+    public static final String FINISH_CONFIG_DEFAULT_QUESTS = "Finish config default quests";
+    public static final String INDEX_OUT_OF_BOUNDS_EXCEPTION_IN = "IndexOutOfBoundsException in: {}";
+    public static final String NANO_SPRING_CREATED_NEW_INSTANCE_OF = "NanoSpring created new instance of {}";
+    public static final String NANO_SPRING_SCAN_PACKAGES_CAUSED_EXEPTION_BEAN_IS_NOT_IN_EXCLUDES_LIST = "NanoSpring scanPackages caused exeption {}, bean is not in excludes list: {}";
+    public static final String NOT_FOUND_IMPL_FOR_TYPE = "Not found impl for {} (type={})";
+    public static final String NOT_FOUND = "{} not found, {}";
+    public static final String DRIVER_CLASS_NOT_FOUND = "Driver class {} not found, {}";
+    public static final String START_CREATING_SESSION_FACTORY_WITH_CONFIGURATION = "Start creating SessionFactory with configuration";
+    public static final String FINISH_CREATING_SESSION_FACTORY_WITH_CONFIGURATION = "Finish creating SessionFactory with configuration";
+    public static final String START_LEVEL_SESSION = ">>> start level: {} session={}";
+    public static final String END_LEVEL_SUCCEED = "<<< end level succeed";
+    public static final String RUNNING_LIQUIBASE = "Running Liquibase...";
+    public static final String RUNNING_LIQUIBASE_FAILED = "Running Liquibase...FAILED";
+    public static final String RUNNING_LIQUIBASE_DONE = "Running Liquibase...DONE";
+    public static final String USER_IS_NOT_AUTHORIZED_REQUEST_REJECTED = "User is not authorized, request {} rejected";
+    public static final String ERROR_OCCURRED_WHILE_PROCESSING_REQUEST = "Error occurred while processing request: {}";
+    public static final String USER_LOGGED_OUT = "User {} logged out";
+    public static final String DEFAULT_USER_IS_SET = "Default [{}] user is set";
+    public static final String QUEST_WITH_NOT_FOUND = "Quest with {} not found";
+    public static final String GAME_RESTARTED = "Game {} restarted.";
+    public static final String GAME_FINISHED = "Game {} finished {}.";
+    public static final String IMAGE_UPLOADED = "Image uploaded: {}";
+    public static final String DELETING_OLD_FILE_FAILED = "Deleting old file: {} failed";
+    public static final String QUESTS_PARSING_FROM_PATH_CAUSED_EXCEPTION = "Quests parsing from path {}, caused exception - {}";
+    public static final String CAN_T_LOAD_FILE = "Can't load file {}";
+    public static final String QUESTION_MESSAGE_IS_NULL_OR_EMPTY = "QuestionMessage is null or empty";
+    public static final String CAN_T_CREATE_ANONYMOUS_USER = "Can't create anonymous user";
+    public static final String CURRENT_SESSION_DOES_NOT_CONTAIN_LONG_ATTRIBUTE = "Current session does not contain Long attribute [{}], {}";
+    public static final String WHILE_PARSING_ATTRIBUTE_TO_LONG = "{}, while parsing [{}] attribute to Long";
+}

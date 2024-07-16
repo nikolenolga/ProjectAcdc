@@ -27,7 +27,7 @@ class AnswerServiceTest {
     @BeforeEach
     void setUp() {
         answer = Answer.builder()
-                .id((Long) 3L)
+                .id(3L)
                 .gameState(GameState.GAME)
                 .answerMessage("answer message")
                 .finalMessage("final message")
@@ -76,9 +76,9 @@ class AnswerServiceTest {
         when(answerRepositoryMock.get(answerId)).thenReturn(Optional.of(answer));
 
         //when
-        answerService.delete((Long) answerId);
+        answerService.delete(answerId);
 
         //then
-        verify(answerRepositoryMock).delete(answer);
+        verify(answerRepositoryMock).delete(answerId);
     }
 }

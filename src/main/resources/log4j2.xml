@@ -1,37 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration xmlns="http://logging.apache.org/log4j/2.0/config"
-               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="http://logging.apache.org/log4j/2.0/config
-               https://raw.githubusercontent.com/apache/logging-log4j2/master/log4j-core/src/main/resources/Log4j-config.xsd"
-               strict="true"
-               status="WARN"
-               monitorInterval="30">
-
-    <Properties>
-        <Property name="LOG"
-                  value="%-5p %d{yyyy-MM-dd HH:mm:ss,SSS} %c{1.}.%M (%F:%L): %msg%n"/>
-        <Property name="LOG_COLOR"
-                  value="%highlight{${sys:LOG}}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=black, DEBUG=green bold, TRACE=blue}"/>
-        <Property name="SPRING"
-                  value="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}.%M(%F:%L): %msg%n%throwable"/>
-    </Properties>
-    <Appenders>
-        <Console name="ColorConsole" target="SYSTEM_ERR">
-            <PatternLayout pattern="${sys:LOG_COLOR}"/>
-        </Console>
-
-        <Console name="SpringConsole" target="SYSTEM_OUT">
-            <PatternLayout pattern="${sys:SPRING}"/>
-        </Console>
-    </Appenders>
-
-    <Loggers>
-        <Root level="info">
-<!--            <AppenderRef ref="SpringConsole"/>-->
-            <AppenderRef ref="ColorConsole"/>
-            <!--<AppenderRef ref="BigFile"/>-->
-        </Root>
-<!--        <Logger name="org.hibernate.SQL" level="DEBUG"/>-->
-<!--        <Logger name="org.hibernate.type" level="TRACE"/>-->
-    </Loggers>
+<Configuration status="WARN">
+<Properties>
+    <Property name="baseDir">logs</Property>
+</Properties>
+<Appenders>
+    <RollingFile name="RollingFile" fileName="${baseDir}/quest.log"
+                 filePattern="${baseDir}/quest.%d{yyyy-MM-dd}.log">
+        <PatternLayout pattern="%d %p %c{1}: %msg%n" />
+        <TimeBasedTriggeringPolicy />
+        <DefaultRolloverStrategy>
+            <Delete basePath="${baseDir}" maxDepth="2" >
+                <IfFileName glob="*/quest.*.log" />
+                <IfLastModified age="P7D" />
+            </Delete>
+        </DefaultRolloverStrategy>
+    </RollingFile>
+</Appenders>
+<Loggers>
+    <Root level="debug">
+        <AppenderRef ref="RollingFile"/>
+    </Root>
+</Loggers>
 </Configuration>

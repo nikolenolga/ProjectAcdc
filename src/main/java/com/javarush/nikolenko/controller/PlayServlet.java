@@ -46,10 +46,10 @@ public class PlayServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String redirectAddress;
         long questId = RequestHelper.getLongValue(req, Key.QUEST_ID);
+        String redirectAddress = UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.PLAY, Key.QUEST_ID, questId);
 
-        if(req.getParameter(Key.BUTTON_START) != null) {
+        if (req.getParameter(Key.BUTTON_START) != null) {
             HttpSession session = req.getSession(false);
             long userId = RequestHelper.getLongValue(session, Key.USER_ID);
 
@@ -58,8 +58,6 @@ public class PlayServlet extends HttpServlet {
             session.setAttribute(Key.GAME_ID, game.getId());
 
             redirectAddress = UrlHelper.QUESTION;
-        } else {
-            redirectAddress = UrlHelper.ONE_PARAM_TEMPLATE.formatted(UrlHelper.PLAY, Key.QUEST_ID, questId);
         }
 
         resp.sendRedirect(redirectAddress);
